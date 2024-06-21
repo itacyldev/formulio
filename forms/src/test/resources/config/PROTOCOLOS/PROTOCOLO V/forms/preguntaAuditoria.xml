@@ -1,0 +1,164 @@
+<main name="Preguntas protocolo V" description="Preguntas Auditoria" id="idPreguntaAuditoria" repo="preguntaAuditoriaRepo">
+    <edit id="editPreguntaAuditoria">
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PROTOCOLO DE CONTROL DE INFORMACIÓN AL CONSUMIDOR EN PRODUCTOS VÍNICOS Y BEBIDAS ESPIRITUOSAS CON CALIDAD DIFERENCIADA: DENOMINACIÓN DE ORIGEN (DOP) E INDICACIÓN GEOGRÁFICA (IGP)" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p value=""/>
+        <table headerText=" Id. Auditoria., Nº Expediente, Fecha" >
+            <row>
+                <input id="auditoriaId" value="${entity.auditoria_id}" placeHolder="${params.auditoria_id}" readonly="true"/>
+                <input value="${entity.auditoria.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                <input value="${entity.auditoria.fecha}" placeHolder="${params.fecha}" readonly="true"/>
+            </row>
+        </table>
+        <p value=""/>
+            <tab>
+                <tabitem label="CONTROL ETIQUETADO: VINOS " id="controlEtiquetadoVinos">
+                    <p value=""/>
+                    <p bold="true" value="VINOS CON INDICACIONES RELATIVAS A DENOMINACIONES DE ORIGEN E INDICACIONES GEOGRÁFICAS PROTEGIDA (REGLAMENTO (UE) Nº 1308/2013)"/>
+                    <p value=""/>
+                    <p italic="true" value="El operador que comercializa el producto conforme al pliego de condiciones del régimen de calidad que le sea aplicable, incluye en el etiquetado:"/>
+                    <p value=""/>
+                    <datalist id="datalistControlEtiquetadoVinos">
+                        <repofilter>
+                            <and>
+                                <eq property="auditoria_id" value="${params.auditoria_id}"/>
+                                <eq property="tab_id" value="controlEtiquetadoVinos"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+                            <divisor color="#00766C" strokeWidth="2" />
+                            <radio label="${entity.pregunta.texto_pregunta}" value="${entity.respuesta}" orientation="horizontal"  hint="${entity.pregunta.desc_pregunta}" validator="required">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                    <option label="NP" value="NP" />
+                                </options>
+                            </radio>
+                            <table border="false" weights="30, 20, 50">
+                                <row>
+                                    <p bold="true" value="Observaciones y adjuntar imagen"/>
+                                    <switcher id="switcherControlEtiquetadoVinos" value="${not empty(entity.image_thumb) or not empty(entity.observaciones)?1:0}"/>
+                                    <p value=""/>
+                                </row>
+                            </table>
+                            <textarea label="Observaciones: " value="${entity.observaciones}" render="${view.switcherControlEtiquetadoVinos eq 'true'}" hasDeleteButton="false" />
+                            <image converter="b64Image" embedded="true" label="Imagen: " value="${entity.image_thumb}" render="${view.switcherControlEtiquetadoVinos eq 'true'}" hasDeleteButton="false" />
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+
+                <tabitem label="NOMBRE REGISTRADO: VINOS" id="controlNombreRegistradoVinos">
+                    <p value=""/>
+                    <p bold="true" value="VINOS CON INDICACIONES RELATIVAS A DENOMINACIONES DE ORIGEN E INDICACIONES GEOGRÁFICAS PROTEGIDA (REGLAMENTO (UE) Nº 1308/2013)"/>
+                    <p value=""/>
+                    <p italic="true" value="En la inspección visual de la información que se facilita a los consumidores en el etiquetado, en la oferta comercial, en la publicidad y en los propios alimentos:"/>
+                    <p value=""/>
+                    <datalist id="datalistControlNombreRegistradoVinos">
+                        <repofilter>
+                            <and>
+                                <eq property="auditoria_id" value="${params.auditoria_id}"/>
+                                <eq property="tab_id" value="controlNombreRegistradoVinos"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+                            <divisor color="#00766C" strokeWidth="2" />
+                            <radio label="${entity.pregunta.texto_pregunta}" value="${entity.respuesta}" orientation="horizontal"  hint="${entity.pregunta.desc_pregunta}" validator="required">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                    <option label="NP" value="NP" />
+                                </options>
+                            </radio>
+                            <table border="false" weights="30, 20, 50">
+                                <row>
+                                    <p bold="true" value="Observaciones y adjuntar imagen"/>
+                                    <switcher id="switcherControlNombreRegistradoVinos" value="${not empty(entity.image_thumb) or not empty(entity.observaciones)?1:0}"/>
+                                    <p value=""/>
+                                </row>
+                            </table>
+                            <textarea label="Observaciones: " value="${entity.observaciones}" render="${view.switcherControlNombreRegistradoVinos eq 'true'}" hasDeleteButton="false" />
+                            <image converter="b64Image" embedded="true" label="Imagen: " value="${entity.image_thumb}" render="${view.switcherControlNombreRegistradoVinos eq 'true'}" hasDeleteButton="false" />
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+                <tabitem label="CONTROL ETIQQUETADO: BEBIDAS ESPIRITUOSAS" id="controlEtiquetadoBebidasEspirituosas">
+                    <p value=""/>
+                    <p bold="true" value="BEBIDAS ESPIRITUOSAS CON INDICACIONES RELATIVAS A INDICACIONES GEOGRÁFICAS (REGLAMENTO (CE) Nº 110/2008 Y REGLAMENTO DE EJECUCIÓN (UE) Nº 716/2013)"/>
+                    <p value=""/>
+                    <p italic="true" value="El operador que comercializa el producto conforme al pliego de condiciones del régimen de calidad que le sea aplicable, incluye en el etiquetado:"/>
+                    <p value=""/>
+                    <datalist id="datalistControlEtiquetadoBebidasEspirituosas">
+                        <repofilter>
+                            <and>
+                                <eq property="auditoria_id" value="${params.auditoria_id}"/>
+                                <eq property="tab_id" value="controlEtiquetadoBebidasEspirituosas"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+                            <divisor color="#00766C" strokeWidth="2" />
+                            <radio label="${entity.pregunta.texto_pregunta}" value="${entity.respuesta}" orientation="horizontal"  hint="${entity.pregunta.desc_pregunta}" validator="required">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                    <option label="NP" value="NP" />
+                                </options>
+                            </radio>
+                            <table border="false" weights="30, 20, 50">
+                                <row>
+                                    <p bold="true" value="Observaciones y adjuntar imagen"/>
+                                    <switcher id="switcherControlEtiquetadoBebidasEspirituosas" value="${not empty(entity.image_thumb) or not empty(entity.observaciones)?1:0}"/>
+                                    <p value=""/>
+                                </row>
+                            </table>
+                            <textarea label="Observaciones: " value="${entity.observaciones}" render="${view.switcherControlEtiquetadoBebidasEspirituosas eq 'true'}" hasDeleteButton="false" />
+                            <image converter="b64Image" embedded="true" label="Imagen: " value="${entity.image_thumb}" render="${view.switcherControlEtiquetadoBebidasEspirituosas eq 'true'}" hasDeleteButton="false" />
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+                <tabitem label="NOMBRE REGISTRADO: BEBIDAS ESPIRITUOSAS" id="controlNombreRegistradoEspirituosas">
+                    <p value=""/>
+                    <p bold="true" value="BEBIDAS ESPIRITUOSAS CON INDICACIONES RELATIVAS A INDICACIONES GEOGRÁFICAS (REGLAMENTO (CE) Nº 110/2008 Y REGLAMENTO DE EJECUCIÓN (UE) Nº 716/2013)"/>
+                    <p value=""/>
+                    <p italic="true" value="En la inspección visual de la información que se facilita a los consumidores en el etiquetado, en la oferta comercial, en la publicidad y en los propios alimentos:"/>
+                    <p value=""/>
+                    <datalist id="datalistControlNombreRegistradoEspirituosas">
+                        <repofilter>
+                            <and>
+                                <eq property="auditoria_id" value="${params.auditoria_id}"/>
+                                <eq property="tab_id" value="controlNombreRegistradoEspirituosas"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+                            <divisor color="#00766C" strokeWidth="2" />
+                            <radio label="${entity.pregunta.texto_pregunta}" value="${entity.respuesta}" orientation="horizontal"  hint="${entity.pregunta.desc_pregunta}" validator="required">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                    <option label="NP" value="NP" />
+                                </options>
+                            </radio>
+                            <table border="false" weights="30, 20, 50">
+                                <row>
+                                    <p bold="true" value="Observaciones y adjuntar imagen"/>
+                                    <switcher id="switcherControlNombreRegistradoEspirituosas" value="${not empty(entity.image_thumb) or not empty(entity.observaciones)?1:0}"/>
+                                    <p value=""/>
+                                </row>
+                            </table>
+                            <textarea label="Observaciones: " value="${entity.observaciones}" render="${view.switcherControlNombreRegistradoEspirituosas eq 'true'}" hasDeleteButton="false" />
+                            <image converter="b64Image" embedded="true" label="Imagen: " value="${entity.image_thumb}" render="${view.switcherControlNombreRegistradoEspirituosas eq 'true'}" hasDeleteButton="false" />
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+            </tab>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action route="back" type="save" registerInHistory="false" controller="datalistControlEtiquetadoVinos, datalistControlNombreRegistradoVinos, datalistControlEtiquetadoBebidasEspirituosas, datalistControlNombreRegistradoEspirituosas">
+                    <param name="entityId" value="${view.auditoriaId}"/>
+                </action>
+            </button>
+            <button label="Cancel" route="back"/>
+        </buttonbar>
+    </edit>
+</main>

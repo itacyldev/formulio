@@ -1,0 +1,69 @@
+<main name="ProdMarca" description="Producto-Marca" id="idProdMarca" repo="pmInspeccionRepo" mainForm="false">
+    <list id="listProdMarca" name="PRODUCTOS - MARCA">
+        <datatable  route="idProdMarca-ProdMarca"/>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editProdMarca">
+        <script src="scripts/control.js"/>
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="8" />
+        <p bold="true" value="Cuestionario del producto-marca ${entity.d_producto} (${entity.c_pm_inspeccion_id})"/>
+        <divisor color="#00766C" strokeWidth="8" />
+
+        <table border="false">
+            <row colspan="50, 25, 25">
+                <p value=""/>
+                <button label="Todos SI" render="${params.b_firmado != 1}">
+                    <action type="js" controller="datalistControlProductoMarca">
+                        <param name="method" value="todosSi" />
+                    </action>
+                </button>
+                <button label="Todos NO" render="${params.b_firmado != 1}">
+                    <action type="js" controller="datalistControlProductoMarca">
+                        <param name="method" value="todosNo" />
+                    </action>
+                </button>
+            </row>
+
+        </table>
+
+        <datalist id="datalistControlProductoMarca" repo="respuestaRespondidaRepo" allowsPartialRestore="false">
+            <repofilter>
+                <and>
+                    <eq property="c_cuestionario_respondido" value="${entity.c_cuestionario_respondido}" />
+                </and>
+            </repofilter>
+            <datalistitem id="datalistitemProductoMarca">
+                <radio id="respuestaLabel" orientation="horizontal" label="${entity.respuesta.pregunta.d_pregunta}" validator="required"
+                    value="${entity.d_respuesta}" readonly="${params.b_firmado == 1}">
+                    <options>
+                        <option label="SI" value="1" />
+                        <option label="NO" value="0" />
+                        <option label="N/A" value="2" />
+                    </options>
+                </radio>
+                <textarea label="Observaciones: " value="${entity.d_observaciones}" readonly="${params.b_firmado == 1}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+            </datalistitem>
+        </datalist>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action id="compositeAction">
+                    <action type="save" controller="datalistControlProductoMarca">
+                        <param name="entityId" value="${params.c_accion_singra_id}" />
+                    </action>
+                    <action type="js" route="back" registerInHistory="false" restoreView="true">
+                        <param name="method" value="setInspeccionadoProductoMarca" />
+                        <param name="c_pm_inspeccion_id" value="${entity.c_pm_inspeccion_id}" />
+                    </action>
+                </action>
+            </button>
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.c_accion_singra_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

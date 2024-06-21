@@ -1,0 +1,117 @@
+{
+  "description": "Acta Toma de Muestras",
+  "requiredContexts": [
+    "user",
+    "job"
+  ],
+  "globalParams": {
+    "endpoint": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/files/",
+    "apikey": "USER-MUNGARRO-UQSERV",
+    "jobType": "FormicGenerarActaTomaMuestra",
+    "endpointActa": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/jobs/"
+  },
+  "executionMode": "FG_ASYNC",
+  "tasks": [
+    {
+      "name": "t1",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT acta_toma_muestra.acta_id ACTA_ID, acta_toma_muestra.acta ACTA, formato || ' ' || revision FORMATO, ifnull(operador.razon_social,'') RAZON_SOCIAL, ifnull(operador.tipo_via_operador,'') || ' ' || ifnull(operador.via_operador,'') || ' ' || ifnull(localidad_operador.d_exten_loca,'') || ', ' || ifnull(provincia_operador.d_exten_prov,'') || ' ' || ifnull(operador.codigo_postal_operador,'') || '-' || ifnull(operador.pais,'') DOMICILIO_SOCIAL, ifnull(operador.direccion_instalacion,'') || ' ' || ifnull(localidad_instalacion.d_exten_loca,'') || ', ' || ifnull(provincia_instalacion.d_exten_prov,'') || ' ' || ifnull(operador.codigo_postal_instalacion,'') || '-' || ifnull(operador.pais,'') DIRECCION_INSTALACION, ifnull(operador.nif_operador,'') NIF_OPERADOR, ifnull(acta_toma_muestra.nif_representante,'') NIF_REPRESENTANTE, ifnull(acta_toma_muestra.representante,'') NOMBRE_REPRESENTANTE, ifnull(acta_toma_muestra.nombre_toma_muestra,'') NOMBRE, ifnull(acta_toma_muestra.apellidos_toma_muestra,'') APELLIDOS, ifnull(acta_toma_muestra.dni_toma_muestra,'') DNI, ifnull(acta_toma_muestra.operador_renuncia,'') OPERADOR_RENUNCIA, ifnull(acta_toma_muestra.entrega_inspeccionado,'') ENTREGA_INSPECCIONADO, ifnull(acta_toma_muestra.observaciones_entrega_inspeccionado,'') OBSERVACIONES_ENTREGA_INSPECCIONADO, ifnull('A ' || strftime('%d',acta_toma_muestra.fecha_firma) || ' de ' || case strftime('%m',acta_toma_muestra.fecha_firma) when '01' then 'enero' when '02' then 'febrero' when '03' then 'marzo' when '04' then 'abril' when '05' then 'mayo' when '06' then 'junio' when '07' then 'julio' when '08' then 'agosto' when '09' then 'septiembre' when '10' then 'octubre' when '11' then 'noviembre' when '12' then 'diciembre' end || ' de ' || strftime('%Y',acta_toma_muestra.fecha_firma),'') FECHA_FIRMA, ifnull(acta_toma_muestra.auditor,'') AUDITOR, ifnull(acta_toma_muestra.auditor2,'') AUDITOR2, ifnull(acta_toma_muestra.auditado,'') AUDITADO FROM acta_toma_muestra LEFT OUTER JOIN expediente ON acta_toma_muestra.expediente_id = expediente.expediente_id LEFT OUTER JOIN operador ON expediente.operador_id = operador.operador_id LEFT OUTER JOIN comu_localidad_21 localidad_operador ON operador.localidad_operador_id = localidad_operador.c_localidad_id LEFT OUTER JOIN comu_provincia provincia_operador ON operador.provincia_operador_id = provincia_operador.c_provincia LEFT OUTER JOIN comu_localidad_21 localidad_instalacion ON operador.localidad_instalacion_id = localidad_instalacion.c_localidad_id LEFT OUTER JOIN comu_provincia provincia_instalacion ON operador.provincia_instalacion_id = provincia_instalacion.c_provincia WHERE acta_toma_muestra.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "cabecera.csv"
+      }
+    },
+    {
+      "name": "t2",
+      "processor": {
+        "inputFile": "${t1.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t3",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(muestra, '') as muestra, ifnull(tipo_muestra,'') as tipo_muestra, ifnull(dispuesta_comercializacion, '') as dispuesta_comercializacion, ifnull(denominacion_venta, '') as denominacion_venta, ifnull(marca_comercial, '') as marca_comercial, ifnull(lote, '') as lote, ifnull(fecha_consumo_preferente, '') as fecha_consumo_preferente, ifnull(cantidad_producto_muestreado, '') as cantidad_producto_muestreado, ifnull(determinacion_realizar_inicial_fq_1, '') as determinacion_realizar_inicial_fq_1, ifnull(determinacion_realizar_inicial_fq_2, '') as determinacion_realizar_inicial_fq_2, ifnull(determinacion_realizar_inicial_fq_3, '') as determinacion_realizar_inicial_fq_3, ifnull(determinacion_realizar_inicial_morf_1, '') as determinacion_realizar_inicial_morf_1, ifnull(determinacion_realizar_inicial_morf_2, '') as determinacion_realizar_inicial_morf_2, ifnull(determinacion_realizar_inicial_morf_3, '') as determinacion_realizar_inicial_morf_3, ifnull(determinacion_realizar_inicial_org_1, '') as determinacion_realizar_inicial_org_1, ifnull(determinacion_realizar_inicial_org_2, '') as determinacion_realizar_inicial_org_2, ifnull(determinacion_realizar_inicial_org_3, '') as determinacion_realizar_inicial_org_3, ifnull(determinacion_realizar_dirimente_fq_1, '') as determinacion_realizar_dirimente_fq_1, ifnull(determinacion_realizar_dirimente_fq_2, '') as determinacion_realizar_dirimente_fq_2, ifnull(determinacion_realizar_dirimente_fq_3, '') as determinacion_realizar_dirimente_fq_3, ifnull(determinacion_realizar_dirimente_morf_1, '') as determinacion_realizar_dirimente_morf_1, ifnull(determinacion_realizar_dirimente_morf_2, '') as determinacion_realizar_dirimente_morf_2, ifnull(determinacion_realizar_dirimente_morf_3, '') as determinacion_realizar_dirimente_morf_3, ifnull(determinacion_realizar_dirimente_org_1, '') as determinacion_realizar_dirimente_org_1, ifnull(determinacion_realizar_dirimente_org_2, '') as determinacion_realizar_dirimente_org_2, ifnull(determinacion_realizar_dirimente_org_3, '') as determinacion_realizar_dirimente_org_3, ifnull(determinacion_realizar_contradictorio_fq_1, '') as determinacion_realizar_contradictorio_fq_1, ifnull(determinacion_realizar_contradictorio_fq_2, '') as determinacion_realizar_contradictorio_fq_2, ifnull(determinacion_realizar_contradictorio_fq_3, '') as determinacion_realizar_contradictorio_fq_3, ifnull(determinacion_realizar_contradictorio_morf_1, '') as determinacion_realizar_contradictorio_morf_1, ifnull(determinacion_realizar_contradictorio_morf_2, '') as determinacion_realizar_contradictorio_morf_2, ifnull(determinacion_realizar_contradictorio_morf_3, '') as determinacion_realizar_contradictorio_morf_3, ifnull(determinacion_realizar_contradictorio_org_1, '') as determinacion_realizar_contradictorio_org_1, ifnull(determinacion_realizar_contradictorio_org_2, '') as determinacion_realizar_contradictorio_org_2, ifnull(determinacion_realizar_contradictorio_org_3, '') as determinacion_realizar_contradictorio_org_3, ifnull(num_contraetiqueta_dirimente_1, '') as num_contraetiqueta_dirimente_1, ifnull(num_precinto_dirimente_1, '') as num_precinto_dirimente_1, ifnull(num_contraetiqueta_dirimente_2, '') as num_contraetiqueta_dirimente_2, ifnull(num_precinto_dirimente_2, '') as num_precinto_dirimente_2, ifnull(num_contraetiqueta_dirimente_3, '') as num_contraetiqueta_dirimente_3, ifnull(num_precinto_dirimente_3, '') as num_precinto_dirimente_3, ifnull(num_contraetiqueta_inicial_1, '') as num_contraetiqueta_inicial_1, ifnull(num_precinto_inicial_1, '') as num_precinto_inicial_1, ifnull(num_contraetiqueta_inicial_2, '') as num_contraetiqueta_inicial_2, ifnull(num_precinto_inicial_2, '') as num_precinto_inicial_2, ifnull(num_contraetiqueta_inicial_3, '') as num_contraetiqueta_inicial_3, ifnull(num_precinto_inicial_3, '') as num_precinto_inicial_3, ifnull(num_contraetiqueta_contradictorio_1, '') as num_contraetiqueta_contradictorio_1, ifnull(num_precinto_contradictorio_1, '') as num_precinto_contradictorio_1, ifnull(num_contraetiqueta_contradictorio_2, '') as num_contraetiqueta_contradictorio_2, ifnull(num_precinto_contradictorio_2, '') as num_precinto_contradictorio_2, ifnull(num_contraetiqueta_contradictorio_3, '') as num_contraetiqueta_contradictorio_3, ifnull(num_precinto_contradictorio_3, '') as num_precinto_contradictorio_3 FROM muestra LEFT JOIN acta_toma_muestra ON muestra.acta_id = acta_toma_muestra.acta_id WHERE acta_toma_muestra.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "muestras.csv"
+      }
+    },
+    {
+      "name": "t4",
+      "processor": {
+        "inputFile": "${t3.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t5",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(firma_auditor,'iVBORw0KGgoAAAANSUhEUgAAAyAAAAJYCAYAAACadoJwAAAgAElEQVR4XsS9WZClaXIldO6') firma1, ifnull(firma_auditor2,'iVBORw0KGgoAAAANSUhEUgAAAyAAAAJYCAYAAACadoJwAAAgAElEQVR4XsS9WZClaXIldO6') firma2, ifnull(firma_auditado,'iVBORw0KGgoAAAANSUhEUgAAAyAAAAJYCAYAAACadoJwAAAgAElEQVR4XsS9WZClaXIldO6') firma3 FROM acta_toma_muestra WHERE acta_toma_muestra.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "firmas.csv"
+      }
+    },
+    {
+      "name": "t6",
+      "processor": {
+        "inputFile": "${t5.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t7",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "url": "${gparams.endpointActa}?jobType=${gparams.jobType}&apikey=${gparams.apikey}&inputFile=${t2.responseHeaders['Location']}&inputFile=${t4.responseHeaders['Location']}&inputFile=${t6.responseHeaders['Location']}"
+      }
+    },
+    {
+      "name": "t8",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t7.responseHeaders['Location']}?apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t9",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t8.outputJson['resources'][0]}?apikey=${gparams.apikey}",
+        "outputFile": "Acta_Toma_Muestras.docx",
+        "outputFileExtension": "docx"
+      }
+    }
+  ]
+}

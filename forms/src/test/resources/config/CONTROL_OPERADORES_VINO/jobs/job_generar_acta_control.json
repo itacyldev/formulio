@@ -1,0 +1,449 @@
+{
+  "description": "Acta de Control",
+  "requiredContexts": [
+    "user",
+    "job"
+  ],
+  "globalParams": {
+    "endpoint": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/files/",
+    "apikey": "USER-MUNGARRO-UQSERV",
+    "jobType": "FormicGenerarActaControl",
+    "endpointActa": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/jobs/"
+  },
+  "executionMode": "FG_ASYNC",
+  "tasks": [
+    {
+      "name": "t1",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(expediente.num_expediente,'') NUM_EXPEDIENTE, ifnull(strftime('%d-%m-%Y', fecha_inspeccion),'') FECHA_INSPECCION, ifnull(operador.razon_social,'') RAZON_SOCIAL, ifnull(operador.direccion_instalacion,'') || ' ' || ifnull(localidad_instalacion.d_exten_loca,'') || ', ' || ifnull(provincia_instalacion.d_exten_prov,'') || ' ' || ifnull(operador.codigo_postal_instalacion,'') || '-' || ifnull(operador.pais,'') DIRECCION_INSTALACION, ifnull(expediente.auditor,'') AUDITOR, ifnull(case expediente.auditor when 'Inmaculada Saez González' then '51916045P' when 'Ruth Mirian Franco Fernández' then '12768631C' when 'Cristina Rebollo Acebes' then '09338763G' end,'') DNI_AUDITOR, ifnull(expediente.auditor2,'') AUDITOR2, ifnull(case expediente.auditor2 when 'Inmaculada Saez González' then '51916045P' when 'Ruth Mirian Franco Fernández' then '12768631C' when 'Cristina Rebollo Acebes' then '09338763G' end ,'') DNI_AUDITOR2, ifnull(operador.nif_representante,'') NIF_REPRESENTANTE, ifnull(operador.nombre_representante || ' ' || operador.apellidos_representante,'') NOMBRE_REPRESENTANTE, ifnull('A ' || strftime('%d',expediente.fecha_firma) || ' de ' || case strftime('%m',expediente.fecha_firma) when '01' then 'enero' when '02' then 'febrero' when '03' then 'marzo' when '04' then 'abril' when '05' then 'mayo' when '06' then 'junio' when '07' then 'julio' when '08' then 'agosto' when '09' then 'septiembre' when '10' then 'octubre' when '11' then 'noviembre' when '12' then 'diciembre' end || ' de ' || strftime('%Y',expediente.fecha_firma),'') FECHA_FIRMA, dop.dop as DOP, ifnull(expediente.conforme,'') as CONFORME, ifnull(expediente.auditor,'') AUDITOR, ifnull(expediente.auditor2,'') AUDITOR2, ifnull(expediente.auditado,'') AUDITADO, ifnull(expediente.alegaciones_auditado, '') ALEGACIONES_AUDITADO, ifnull(expediente.observaciones_adicionales, '') OBSERVACIONES_ADICIONALES, case when expediente.auditor is not null then 'Auditor' else '' end CARGO, case when expediente.auditor2 is not null then 'Auditor' else '' end CARGO2, ifnull(expediente.cargo_representante,'') CARGO_REPRESENTANTE, case when expediente.auditor is not null then 'Instituto Tecnológico Agrario de Castilla y León' else '' end EMPRESA, case when expediente.auditor2 is not null then 'Instituto Tecnológico Agrario de Castilla y León' else '' end EMPRESA2 FROM expediente LEFT OUTER JOIN dop ON expediente.dop_id = dop.dop_id LEFT OUTER JOIN operador ON expediente.operador_id = operador.operador_id LEFT OUTER JOIN comu_localidad_21 localidad_operador ON operador.localidad_operador_id = localidad_operador.c_localidad_id LEFT OUTER JOIN comu_provincia provincia_operador ON operador.provincia_operador_id = provincia_operador.c_provincia LEFT OUTER JOIN comu_localidad_21 localidad_instalacion ON operador.localidad_instalacion_id = localidad_instalacion.c_localidad_id LEFT OUTER JOIN comu_provincia provincia_instalacion ON operador.provincia_instalacion_id = provincia_instalacion.c_provincia WHERE expediente.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "control.csv"
+      }
+    },
+    {
+      "name": "t2",
+      "processor": {
+        "inputFile": "${t1.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t3",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(requisito, '') REQUISITO FROM desviacion where desviacion.expediente_id='${params.expediente_id}' and desviacion.dop_id='${params.dop_id}' and cumple='SI' and apartado='revision_documental'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "documentacion.csv"
+      }
+    },
+    {
+      "name": "t4",
+      "processor": {
+        "inputFile": "${t3.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t5",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(requisito, '') REQUISITO FROM desviacion where desviacion.expediente_id='${params.expediente_id}' and desviacion.dop_id='${params.dop_id}' and (cumple='SI' or cumple='NO') and apartado='revision_documental'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "revisiondocumental.csv"
+      }
+    },
+    {
+      "name": "t6",
+      "processor": {
+        "inputFile": "${t5.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t7",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(requisito, '') REQUISITO, ifnull(CASE WHEN SUBSTR(desviacion_id, INSTR(desviacion_id,'_')+1, LENGTH(desviacion_id)) in ('13','105') THEN (SELECT num_reovi FROM OPERADOR WHERE OPERADOR_ID='${params.operador_id}') WHEN SUBSTR(desviacion_id, INSTR(desviacion_id,'_')+1, LENGTH(desviacion_id)) in ('14','106') THEN (SELECT num_reg_envasadores_embotelladores FROM OPERADOR WHERE OPERADOR_ID='${params.operador_id}') WHEN SUBSTR(desviacion_id, INSTR(desviacion_id,'_')+1, LENGTH(desviacion_id)) in ('15','107') THEN (SELECT num_reg_empresas_actividades FROM OPERADOR WHERE OPERADOR_ID='${params.operador_id}') WHEN SUBSTR(desviacion_id, INSTR(desviacion_id,'_')+1, LENGTH(desviacion_id)) in ('16','108') THEN (SELECT num_cae FROM OPERADOR WHERE OPERADOR_ID='${params.operador_id}') ELSE '' END, '') AS NUMERO, CASE WHEN SUBSTR(desviacion_id, INSTR(desviacion_id,'_')+1, LENGTH(desviacion_id)) in ('13','105') THEN 'Número de registro general de operadores del sector vitivinícola (REOVI)' WHEN SUBSTR(desviacion_id, INSTR(desviacion_id,'_')+1, LENGTH(desviacion_id)) in ('14','106') THEN 'Número de registro de envasadores y embotelladores de vinos y bebidas alcohólicas' WHEN SUBSTR(desviacion_id, INSTR(desviacion_id,'_')+1, LENGTH(desviacion_id)) in ('15','107') THEN 'Número de registro de empresas y actividades alimentaria' WHEN SUBSTR(desviacion_id, INSTR(desviacion_id,'_')+1, LENGTH(desviacion_id)) in ('16','108') THEN 'Número de código de actividad y del establecimiento (CAE)' ELSE '' END AS DESCRIPCION FROM desviacion where desviacion.expediente_id='${params.expediente_id}' and desviacion.dop_id='${params.dop_id}' and (cumple='SI' or cumple='NO') and apartado='documentacion_registro'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "documentacionregistro.csv"
+      }
+    },
+    {
+      "name": "t8",
+      "processor": {
+        "inputFile": "${t7.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+
+    {
+      "name": "t9",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(requisito, '') REQUISITO FROM desviacion where desviacion.expediente_id='${params.expediente_id}' and desviacion.dop_id='${params.dop_id}' and (cumple='SI' or cumple='NO') and apartado='documentos_oficiales'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "documentosoficiales.csv"
+      }
+    },
+    {
+      "name": "t10",
+      "processor": {
+        "inputFile": "${t9.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t11",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(requisito, '') REQUISITO, ifnull(observaciones, '') OBSERVACIONES FROM desviacion where desviacion.expediente_id='${params.expediente_id}' and desviacion.dop_id='${params.dop_id}' and (cumple='SI' or cumple='NO') and apartado='verificacion_pliego_condiciones'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "verificacionpliegocondiciones.csv"
+      }
+    },
+    {
+      "name": "t12",
+      "processor": {
+        "inputFile": "${t11.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t13",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(requisito, '') REQUISITO, CASE WHEN REQUISITO == 'Capacidad' THEN ifnull((SELECT capacidad_instalada FROM operador WHERE operador_id='${params.operador_id}'), '') ELSE '' END CAPACIDAD_INSTALADA, CASE WHEN REQUISITO == 'Capacidad' THEN ifnull((SELECT capacidad_produccion FROM operador WHERE operador_id='${params.operador_id}'), '') ELSE '' END CAPACIDAD_PRODUCCION FROM desviacion where desviacion.expediente_id='${params.expediente_id}' and desviacion.dop_id='${params.dop_id}' and (cumple='SI' or cumple='NO') and apartado='verificacion_instalacion'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "verificacioninstalacion.csv"
+      }
+    },
+    {
+      "name": "t14",
+      "processor": {
+        "inputFile": "${t13.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t15",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(texto_pregunta, '') REQUISITO FROM revision_documental LEFT OUTER JOIN pregunta ON revision_documental.pregunta_id = pregunta.pregunta_id where revision_documental.expediente_id='${params.expediente_id}' and (aportada='SI' and revision='SI')"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "revisiondocumental.csv"
+      }
+    },
+    {
+      "name": "t16",
+      "processor": {
+        "inputFile": "${t15.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+
+    {
+      "name": "t17",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "select ifnull('Ejercicio/s de trazabilidad completa, que permite verificar: condiciones de envasado y cierre, indicaciones obligatorias y facultativas de etiquetado, correcto uso de contraetiquetas, condiciones de elaboración y envejecimiento, autocontrol. Para ello se ha seleccionado la/s partidas: ' || (select group_concat(partida)) || ' con número de contraetiqueta: ' || (select group_concat(num_contraetiqueta)), '') REQUISITO FROM trazabilidad WHERE trazabilidad.expediente_id='${params.expediente_id}' GROUP BY trazabilidad.expediente_id"
+       },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "trazabilidad.csv"
+      }
+    },
+    {
+      "name": "t18",
+      "processor": {
+        "inputFile": "${t17.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+
+    {
+      "name": "t19",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull('Se ha llevado a cabo el aforo de producto existente en depósito, barrica y botella: ' || (select group_concat(partida)), '') REQUISITO FROM partida_aforo WHERE partida_aforo.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "aforo.csv"
+      }
+    },
+    {
+      "name": "t20",
+      "processor": {
+        "inputFile": "${t19.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t21",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT case when trazabilidad_id is not null and entrada_uva_id is null then replace(requisito, trazabilidad_id, (select partida from trazabilidad t where t.trazabilidad_id = de.trazabilidad_id)) when entrada_uva_id is not null then COALESCE(REPLACE(REPLACE(requisito,trazabilidad_id,(SELECT partida FROM trazabilidad t WHERE t.trazabilidad_id = de.trazabilidad_id)),entrada_uva_id,(SELECT entrada_uva FROM entrada_uva eu WHERE eu.entrada_uva_id = de.entrada_uva_id)),requisito) when granel_deposito_id is not null then COALESCE(REPLACE(REPLACE(requisito,partida_aforo_id,(select partida from partida_aforo pa where pa.partida_aforo_id = de.partida_aforo_id)),granel_deposito_id,(select numero from deposito d, granel_deposito gd where gd.deposito_id = d.deposito_id and gd.granel_deposito_id = de.granel_deposito_id)),requisito) when granel_barrica_id is not null then COALESCE(REPLACE(REPLACE(requisito,partida_aforo_id,(select partida from partida_aforo pa where pa.partida_aforo_id = de.partida_aforo_id)),granel_barrica_id,(select granel_barrica from granel_barrica gb where gb.granel_barrica_id = de.granel_barrica_id)),requisito) when envasado_id is not null then COALESCE(REPLACE(REPLACE(requisito,partida_aforo_id,(select partida from partida_aforo pa where pa.partida_aforo_id = de.partida_aforo_id)),envasado_id,(select envasado from envasado gb where gb.envasado_id = de.envasado_id)),requisito) when etiquetado_id is not null then COALESCE(REPLACE(REPLACE(requisito,partida_aforo_id,(select partida from partida_aforo pa where pa.partida_aforo_id = de.partida_aforo_id)),etiquetado_id,(select etiquetado from etiquetado gb where gb.etiquetado_id = de.etiquetado_id)),requisito) else requisito end REQUISITO, hallazgo HALLAZGO, ifnull(observaciones, '') OBSERVACIONES FROM desviacion de WHERE de.expediente_id='${params.expediente_id}' and de.dop_id='${params.dop_id}' and cumple='NO' order by requisito"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "hallazgos.csv"
+      }
+    },
+
+    {
+      "name": "t22",
+      "processor": {
+        "inputFile": "${t21.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+
+    {
+      "name": "t23",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(texto_pregunta, '') REQUISITO FROM tipo_vino LEFT OUTER JOIN pregunta ON tipo_vino.pregunta_id = pregunta.pregunta_id where tipo_vino.expediente_id='${params.expediente_id}' and contiene='SI'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "tiposvino.csv"
+      }
+    },
+
+    {
+      "name": "t24",
+      "processor": {
+        "inputFile": "${t23.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+
+    {
+      "name": "t25",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT ifnull(firma_auditor,'iVBORw0KGgoAAAANSUhEUgAAAyAAAAJYCAYAAACadoJwAAAgAElEQVR4XsS9WZClaXIldO6') firma1, ifnull(firma_auditor2,'iVBORw0KGgoAAAANSUhEUgAAAyAAAAJYCAYAAACadoJwAAAgAElEQVR4XsS9WZClaXIldO6') firma2, ifnull(firma_auditado,'iVBORw0KGgoAAAANSUhEUgAAAyAAAAJYCAYAAACadoJwAAAgAElEQVR4XsS9WZClaXIldO6') firma3 FROM expediente WHERE expediente.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "firmas.csv"
+      }
+    },
+    {
+      "name": "t26",
+      "processor": {
+        "inputFile": "${t25.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t27",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT vino VINO, total_granel_deposito TOTAL_GRANEL_DEPOSITO, total_granel_barrica TOTAL_GRANEL_BARRICA, total_envasado TOTAL_ENVASADO, total_etiquetado TOTAL_ETIQUETADO, total_bodega TOTAL_BODEGA FROM expediente_vino where expediente_vino.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "expedientevino.csv"
+      }
+    },
+    {
+      "name": "t28",
+      "processor": {
+        "inputFile": "${t27.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t29",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT nivel_proteccion NIVEL_PROTECCION, total_granel_deposito TOTAL_GRANEL_DEPOSITO, total_granel_barrica TOTAL_GRANEL_BARRICA, total_envasado TOTAL_ENVASADO, total_etiquetado TOTAL_ETIQUETADO, total_bodega TOTAL_BODEGA FROM expediente_nivel_proteccion where expediente_nivel_proteccion.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "expedientenivelproteccion.csv"
+      }
+    },
+    {
+      "name": "t30",
+      "processor": {
+        "inputFile": "${t29.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t31",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/controloperadoresvino.sqlite",
+        "sqlQuery": "SELECT partida PARTIDA, anada ANADA, vino TIPO_DE_VINO, nivel_proteccion NIVEL_DE_PROTECCION, total_volumen_aforado VOLUMEN_AFORADO FROM partida_aforo, vino, nivel_proteccion WHERE vino.vino_id = partida_aforo.vino_id and nivel_proteccion.nivel_proteccion_id = partida_aforo.nivel_proteccion_id AND partida_aforo.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "partidaaforo.csv"
+      }
+    },
+    {
+      "name": "t32",
+      "processor": {
+        "inputFile": "${t31.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t33",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "url": "${gparams.endpointActa}?jobType=${gparams.jobType}&apikey=${gparams.apikey}&inputFile=${t2.responseHeaders['Location']}&inputFile=${t4.responseHeaders['Location']}&inputFile=${t6.responseHeaders['Location']}&inputFile=${t8.responseHeaders['Location']}&inputFile=${t10.responseHeaders['Location']}&inputFile=${t12.responseHeaders['Location']}&inputFile=${t14.responseHeaders['Location']}&inputFile=${t16.responseHeaders['Location']}&inputFile=${t18.responseHeaders['Location']}&inputFile=${t20.responseHeaders['Location']}&inputFile=${t22.responseHeaders['Location']}&inputFile=${t24.responseHeaders['Location']}&inputFile=${t26.responseHeaders['Location']}&inputFile=${t28.responseHeaders['Location']}&inputFile=${t30.responseHeaders['Location']}&inputFile=${t32.responseHeaders['Location']}"
+      }
+    },
+    {
+      "name": "t34",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t33.responseHeaders['Location']}?apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t35",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t34.outputJson['resources'][0]}?apikey=${gparams.apikey}",
+        "outputFile": "Acta_Control.docx",
+        "outputFileExtension": "docx"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1351 @@
+<main id="trazabilidad" name="Trazabilidad" repo="trazabilidadRepo" mainForm="false">
+    <list id="listTrazabilidad" name="Trazabilidad" description="Listado trazabilidad">
+       <datatable>
+           <column id="column_partida" headerText="Partida" filtering="true" ordering="true" value="${entity.partida}">
+               <filter property="partida" matching="contains" valueExpression="${this.column_partida}"/>
+               <order property="partida"/>
+           </column>
+           <column id="column_num_expediente" headerText="Expediente" filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+       </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editTrazabilidad">
+        <script src="scripts/control.js"/>
+        <form id="formTrazabilidad">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="TRAZABILIDAD"/>
+
+            <table headerText=" Id. Exp., Nº Exp., Id. DOP, DOP" weights="30, 20, 10, 40">
+                <row>
+                    <input id="expediente_id" value="${entity.expediente_id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                    <input id="num_expediente" value="${entity.expediente.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                    <input id="dop_id" value="${entity.expediente.dop_id}" placeHolder="${params.dop_id}" readonly="true"/>
+                    <input id="dop" value="${entity.expediente.dop.dop}" placeHolder="${params.dop}" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id. Operador, Razón social" weights="20, 80">
+                <row>
+                    <input id="operador_id" value="${entity.expediente.operador_id}" placeHolder="${params.operador_id}" readonly="true"/>
+                    <input id="razon_social" value="${entity.expediente.operador.razon_social}" placeHolder="${params.razon_social}" readonly="true"/>
+                </row>
+            </table>
+
+
+            <p value=""/>
+
+            <tab>
+                <tabitem label="TRAZABILIDAD">
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Partida"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table>
+                        <row weights="20, 30, 50">
+                            <input id="trazabilidad_id" label="Id.: " value="${entity.trazabilidad_id}" readonly="true"/>
+                            <input id="partida" label="Partida: " value="${entity.partida}" validator="required"/>
+                            <input label="Nº de contraetiqueta: " value="${entity.num_contraetiqueta}" validator="required"/>
+                        </row>
+                        <row>
+                            <input label="Tipo de vino calificado: " value="${entity.tipo_vino}"/>
+                            <input label="Volumen de la partida: " value="${entity.volumen}" inputType="3"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Fecha calificación"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table>
+                        <row>
+                            <date label="Fecha calificación:" value="${entity.fecha_fisico_quimico}"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Aptitud fisico-quimica y organoléptica"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table>
+                        <row>
+                            <autocomplete id="vino_aptitud_id" label="Tipo de vino: " forceSelection="true" repo="vinoAptitudRepo" value="${entity.vino_aptitud_id}">
+                                <options labelExpression="${entity.vino_aptitud}" labelFilteringProperty="vino_aptitud" valueProperty="vino_aptitud_id" />
+                                <repofilter>
+                                    <eq property="dop_id" value="${view.dop_id}" mandatory="true"/>
+                                    <contains property="vino_aptitud" value="${this.value}"/>
+                                </repofilter>
+                                <action type="js">
+                                    <param name="method" value="anadirDescripcionAptitudFisicoQuimica" />
+                                    <param name="vino_aptitud_id" value="${view.vino_aptitud_id}" />
+                                </action>
+                            </autocomplete>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="6" />
+                    <p bold="true" italic="true " value="Aptitud fisico-quimica"/>
+                    <divisor color="#00766C" strokeWidth="6" />
+
+                    <table weights="70, 30" render="${not empty(view.vino_aptitud_id)}">
+                        <row>
+                            <input id="grado_alcoholico_total_minimo" label="Grado alcohólico total mínimo en % Vol.: " value="${entity.grado_alcoholico_total_minimo}" hint="${entity.grado_alcoholico_total_minimo_descripcion}" inputType="3">
+                                <action type="js">
+                                    <param name="method" value="cumpleGradoAlcoholicoTotalMinimo" />
+                                    <param name="grado_alcoholico_total_minimo" value="${view.grado_alcoholico_total_minimo}" />
+                                    <param name="grado_alcoholico_total_minimo_valor" value="${entity.grado_alcoholico_total_minimo_valor}" />
+                                </action>
+                            </input>
+                            <radio id="grado_alcoholico_total_minimo_cumple" label="Cumple: " value="${entity.grado_alcoholico_total_minimo_cumple}" orientation="horizontal" readonly="true">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                        <row>
+                            <input id="grado_alcoholico_adquirido_minimo" label="Grado alcohólico adquirido mínima en % Vol.: " value="${entity.grado_alcoholico_adquirido_minimo}" hint="${entity.grado_alcoholico_adquirido_minimo_descripcion}" inputType="3">
+                                <action type="js">
+                                    <param name="method" value="cumpleGradoAlcoholicoAdquiridoMinimo" />
+                                    <param name="grado_alcoholico_adquirido_minimo" value="${view.grado_alcoholico_adquirido_minimo}" />
+                                    <param name="grado_alcoholico_adquirido_minimo_valor" value="${entity.grado_alcoholico_adquirido_minimo_valor}" />
+                                    <param name="vino_aptitud_id" value="${view.vino_aptitud_id}" />
+                                </action>
+                            </input>
+                            <radio id="grado_alcoholico_adquirido_minimo_cumple" label="Cumple: " value="${entity.grado_alcoholico_adquirido_minimo_cumple}" orientation="horizontal" readonly="true">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                        <row>
+                            <input id="azucares_totales_maximos" label="Azúcares totales máximos expresados en gramos por litro de glucosa+fructosa: " value="${entity.azucares_totales_maximos}" hint="${entity.azucares_totales_maximos_descripcion}" inputType="3">
+                                <action type="js">
+                                    <param name="method" value="cumpleAzucaresTotalesMaximos" />
+                                    <param name="azucares_totales_maximos" value="${view.azucares_totales_maximos}" />
+                                    <param name="azucares_totales_maximos_valor" value="${entity.azucares_totales_maximos_valor}" />
+                                    <param name="anhidrido_sulforoso_total_maximo" value="${view.anhidrido_sulforoso_total_maximo}" />
+                                    <param name="anhidrido_sulforoso_total_maximo_valor" value="${entity.anhidrido_sulforoso_total_maximo_valor}" />
+                                    <param name="anhidrido_sulforoso_total_maximo_valor_min" value="${entity.anhidrido_sulforoso_total_maximo_valor_min}" />
+                                    <param name="anhidrido_sulforoso_total_maximo_valor_max" value="${entity.anhidrido_sulforoso_total_maximo_valor_max}" />
+                                    <param name="vino_aptitud_id" value="${view.vino_aptitud_id}" />
+                                </action>
+                            </input>
+                            <radio id="azucares_totales_maximos_cumple" label="Cumple: " value="${entity.azucares_totales_maximos_cumple}" orientation="horizontal" readonly="true">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                        <row>
+                            <input id="acidez_total_minima" label="Acidez total mínima en gramos por litro de ácido tartárico: " value="${entity.acidez_total_minima}" hint="${entity.acidez_total_minima_descripcion}" inputType="3">
+                                <action type="js">
+                                    <param name="method" value="cumpleAcidezTotalMinima" />
+                                    <param name="acidez_total_minima" value="${view.acidez_total_minima}" />
+                                    <param name="acidez_total_minima_valor" value="${entity.acidez_total_minima_valor}" />
+                                </action>
+                            </input>
+                            <radio id="acidez_total_minima_cumple" label="Cumple: " value="${entity.acidez_total_minima_cumple}" orientation="horizontal" readonly="true">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                        <row>
+                            <input id="acidez_volatil_maxima" label="Acidez volátil máxima en gramos por litro de ácido acético: " value="${entity.acidez_volatil_maxima}" hint="${entity.acidez_volatil_maxima_descripcion}" inputType="3" readonly="${view.dop_id == 1 and (view.vino_aptitud_id == 3 or view.vino_aptitud_id == 5 or view.vino_aptitud_id == 7)}">
+                                <action type="js">
+                                    <param name="method" value="cumpleAcidezVolatilMaxima" />
+                                    <param name="acidez_volatil_maxima" value="${view.acidez_volatil_maxima}" />
+                                    <param name="acidez_volatil_maxima_valor" value="${entity.acidez_volatil_maxima_valor}" />
+                                    <param name="grado_alcoholico_adquirido_minimo" value="${view.grado_alcoholico_adquirido_minimo}" />
+                                    <param name="vino_aptitud_id" value="${view.vino_aptitud_id}" />
+                                </action>
+                            </input>
+                            <radio id="acidez_volatil_maxima_cumple" label="Cumple: " value="${entity.acidez_volatil_maxima_cumple}" orientation="horizontal" readonly="true">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                        <row>
+                            <input id="anhidrido_sulforoso_total_maximo" label="Anhídrido sulfuroso total máximo expresado en miligramos por litro: " value="${entity.anhidrido_sulforoso_total_maximo}" hint="${entity.anhidrido_sulforoso_total_maximo_descripcion}" inputType="3">
+                                <action type="js">
+                                    <param name="method" value="cumpleAnhidridoSulfurosoTotalMaximo" />
+                                    <param name="anhidrido_sulforoso_total_maximo" value="${view.anhidrido_sulforoso_total_maximo}" />
+                                    <param name="anhidrido_sulforoso_total_maximo_valor" value="${entity.anhidrido_sulforoso_total_maximo_valor}" />
+                                    <param name="azucares_totales_maximos" value="${view.azucares_totales_maximos}" />
+                                    <param name="anhidrido_sulforoso_total_maximo_valor_min" value="${entity.anhidrido_sulforoso_total_maximo_valor_min}" />
+                                    <param name="anhidrido_sulforoso_total_maximo_valor_max" value="${entity.anhidrido_sulforoso_total_maximo_valor_max}" />
+                                    <param name="vino_aptitud_id" value="${view.vino_aptitud_id}" />
+                                </action>
+                            </input>
+                            <radio id="anhidrido_sulforoso_total_maximo_cumple" label="Cumple: " value="${entity.anhidrido_sulforoso_total_maximo_cumple}" orientation="horizontal" readonly="true">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row weights="20, 20, 60">
+                            <p bold="true" value="Imagen: "/>
+                            <switcher id="switcherImagenFisicoQuimico" value="${not empty(entity.imagen_fisico_quimico)?1:0}"/>
+                            <p value=""/>
+                        </row>
+                        <row>
+                            <image converter="b64Image" embedded="true" value="${entity.imagen_fisico_quimico}" render="${view.switcherImagenFisicoQuimico eq 'true'}" hasDeleteButton="false" inputType="5"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="6" />
+                    <p bold="true" italic="true " value="Aptitud organoléptica"/>
+                    <divisor color="#00766C" strokeWidth="6" />
+
+                    <table weights="70, 30" render="${not empty(view.vino_aptitud_id)}">
+                        <row>
+                            <textarea label="Fase visual: " value="${entity.visual}" hint="${entity.visual_descripcion}"/>
+                            <radio label="Cumple: " value="${entity.visual_cumple}" orientation="horizontal">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                        <row>
+                            <input label="Fase olfativa: " value="${entity.olfativa}" hint="${entity.olfativa_descripcion}"/>
+                            <radio label="Cumple: " value="${entity.olfativa_cumple}" orientation="horizontal">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                        <row>
+                            <input label="Fase gustativa: " value="${entity.gustativa}" hint="${entity.gustativa_descripcion}"/>
+                            <radio label="Cumple: " value="${entity.gustativa_cumple}" orientation="horizontal">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row weights="20, 20, 60">
+                            <p bold="true" value="Imagen: "/>
+                            <switcher id="switcherImagenOrganoleptico" value="${not empty(entity.imagen_organileptico)?1:0}"/>
+                            <p value=""/>
+                        </row>
+                        <row>
+                            <image converter="b64Image" embedded="true" value="${entity.imagen_organileptico}" render="${view.switcherImagenOrganoleptico eq 'true'}" hasDeleteButton="false" inputType="5"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Calificación (Pliego de condiciones)"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table weights="33, 67">
+                        <row>
+                            <radio id="cumple_calificacion" label="Cumple: " value="${entity.cumple_calificacion}" orientation="horizontal">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                            <textarea id="observaciones_trazabilidad_calificacion" label="Observaciones" value="${entity.observaciones_trazabilidad_calificacion}"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Numeración de contraetiquetas asignadas"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+
+                    <button label="Añadir" readonly="${empty (entity.trazabilidad_id)}">
+                        <action type="save" route="numeracionContraetiquetado-editNumeracionContraetiquetado">
+                            <param name="expediente_id" value="${view.expediente_id}" />
+                            <param name="num_expediente" value="${view.num_expediente}" />
+                            <param name="operador_id" value="${view.operador_id}"/>
+                            <param name="razon_social" value="${view.razon_social}"/>
+                            <param name="dop_id" value="${view.dop_id}"/>
+                            <param name="dop" value="${view.dop}"/>
+                            <param name="trazabilidad_id" value="${view.trazabilidad_id}"/>
+                            <param name="partida" value="${view.partida}"/>
+                            <param name="asignada" value="Y"/>
+                        </action>
+                    </button>
+
+                    <datatable onBeforeRender="setContraetiquetasNumeracionesUtilizadas"
+                        route="numeracionContraetiquetado-editNumeracionContraetiquetado"
+                        numVisibleRows="3"
+                        repo="numeracionContraetiquetadoRepo"
+                        allowsPartialRestore="false">
+                        <column headerText="Etiquetado desde" filtering="false" ordering="true" value="${entity.etiqueta_desde}">
+                            <order property="etiqueta_desde"/>
+                        </column>
+                        <column headerText="Desde" filtering="false" ordering="true" value="${entity.desde}">
+                            <order property="desde"/>
+                        </column>
+                        <column headerText="Etiquetado hasta" filtering="false" ordering="true" value="${entity.etiqueta_hasta}">
+                            <order property="etiqueta_hasta"/>
+                        </column>
+                        <column headerText="Hasta" filtering="false" ordering="true" value="${entity.hasta}">
+                            <order property="hasta"/>
+                        </column>
+                        <column headerText="Unidades" filtering="false" ordering="true" value="${entity.unidades}">
+                            <order property="hasta"/>
+                        </column>
+                        <param name="expediente_id" value="${view.expediente_id}" />
+                        <param name="num_expediente" value="${view.num_expediente}" />
+                        <param name="operador_id" value="${view.operador_id}"/>
+                        <param name="razon_social" value="${view.razon_social}"/>
+                        <param name="dop_id" value="${view.dop_id}"/>
+                        <param name="dop" value="${view.dop}"/>
+                        <param name="trazabilidad_id" value="${view.trazabilidad_id}"/>
+                        <param name="partida" value="${view.partida}"/>
+                        <param name="asignada" value="Y"/>
+                       <repofilter>
+                            <and>
+                                <eq property="trazabilidad_id" value="${empty(entity.trazabilidad_id) ? '-1' : entity.trazabilidad_id}" />
+                                <eq property="asignada" value="Y" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                    <table border="false" weights="30, 70">
+                        <row>
+                            <p bold="true" allowsPartialRestore="false" value="Nº de contras asignadas a la partida: " readonly="true"/>
+                            <input id="contras_usadas" allowsPartialRestore="false" value="${entity.contras_usadas}" readonly="true"/>
+                        </row>
+                    </table>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Existencia en bodega de contras sin utilizar"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+                    <button label="Añadir" readonly="${empty (entity.trazabilidad_id)}">
+                        <action type="save" route="numeracionContraetiquetado-editNumeracionContraetiquetado">
+                            <param name="expediente_id" value="${view.expediente_id}" />
+                            <param name="num_expediente" value="${view.num_expediente}" />
+                            <param name="operador_id" value="${view.operador_id}"/>
+                            <param name="razon_social" value="${view.razon_social}"/>
+                            <param name="dop_id" value="${view.dop_id}"/>
+                            <param name="dop" value="${view.dop}"/>
+                            <param name="trazabilidad_id" value="${view.trazabilidad_id}"/>
+                            <param name="partida" value="${view.partida}"/>
+                            <param name="asignada" value="N"/>
+                        </action>
+                    </button>
+
+                    <datatable onBeforeRender="setContraetiquetasNumeracionesSinUtilizar"
+                        route="numeracionContraetiquetado-editNumeracionContraetiquetado"
+                        numVisibleRows="3"
+                        repo="numeracionContraetiquetadoRepo"
+                        allowsPartialRestore="false">
+                        <column headerText="Etiquetado desde" filtering="false" ordering="true" value="${entity.etiqueta_desde}">
+                            <order property="etiqueta_desde"/>
+                        </column>
+                        <column headerText="Desde" filtering="false" ordering="true" value="${entity.desde}">
+                            <order property="desde"/>
+                        </column>
+                        <column headerText="Etiquetado hasta" filtering="false" ordering="true" value="${entity.etiqueta_hasta}">
+                            <order property="etiqueta_hasta"/>
+                        </column>
+                        <column headerText="Hasta" filtering="false" ordering="true" value="${entity.hasta}">
+                            <order property="hasta"/>
+                        </column>
+                        <column headerText="Unidades" filtering="false" ordering="true" value="${entity.unidades}">
+                            <order property="hasta"/>
+                        </column>
+                        <param name="expediente_id" value="${view.expediente_id}" />
+                        <param name="num_expediente" value="${view.num_expediente}" />
+                        <param name="operador_id" value="${view.operador_id}"/>
+                        <param name="razon_social" value="${view.razon_social}"/>
+                        <param name="dop_id" value="${view.dop_id}"/>
+                        <param name="dop" value="${view.dop}"/>
+                        <param name="trazabilidad_id" value="${view.trazabilidad_id}"/>
+                        <param name="partida" value="${view.partida}"/>
+                        <param name="asignada" value="N"/>
+                        <repofilter>
+                            <and>
+                                <eq property="trazabilidad_id" value="${empty(entity.trazabilidad_id) ? '-1' : entity.trazabilidad_id}" />
+                                <eq property="asignada" value="N" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+
+                    <table border="false" weights="30, 70">
+                        <row>
+                            <p bold="true" value="Existencia en bodega de contras sin utilizar: " readonly="true"/>
+                            <input id="contras_sin_usar" allowsPartialRestore="false" value="${entity.contras_sin_usar}" readonly="true"/>
+                        </row>
+                    </table>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Vino etiquetado/contraetiquetado"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table>
+                        <row>
+                            <input id="cantidad_vino_etiquetado" label="Cantidad (litros): " value="${entity.cantidad_vino_etiquetado}" inputType="3">
+                                <action type="js">
+                                    <param name="method" value="updateBalanceContraetiquetasUsadas" />
+                                    <param name="contras_usadas" value="${view.contras_usadas}" />
+                                    <param name="contras_sin_usar" value="${view.contras_sin_usar}" />
+                                    <param name="cantidad_vino_etiquetado" value="${view.cantidad_vino_etiquetado}" />
+                                    <param name="capacidad_botella" value="${view.capacidad_botella}" />
+                                </action>
+                            </input>
+                            <input id="capacidad_botella" label="Capacidad de botella: " value="${entity.capacidad_botella}" inputType="3">
+                                <action type="js">
+                                    <param name="method" value="updateBalanceContraetiquetasUsadas" />
+                                    <param name="contras_usadas" value="${view.contras_usadas}" />
+                                    <param name="contras_sin_usar" value="${view.contras_sin_usar}" />
+                                    <param name="cantidad_vino_etiquetado" value="${view.cantidad_vino_etiquetado}" />
+                                    <param name="capacidad_botella" value="${view.capacidad_botella}" />
+                                </action>
+                            </input>
+                            <input allowsPartialRestore="false" id="numero_botellas" label="Número de botellas: " value="${entity.numero_botellas}" readonly="true"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Balances de uso de contraetiquetas"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <table weights="33, 67">
+                        <row>
+                            <input allowsPartialRestore="false" id="balance_contraetiquetas_usadas" label="Balance de contraetiquetas usadas: " readonly="true" value="${entity.balance_contraetiquetas_usadas}" hint="Contraetiquetas asignadas - contraetiquetas usadas(=número de botellas)" />
+                            <textarea label="Observaciones" value="${entity.observaciones_balance}"/>
+                        </row>
+                        <row>
+                            <input id="balance_uso_contras" label="Balance uso de contras: " allowsPartialRestore="false" readonly="true" value="${entity.balance_uso_contras}" hint="Contraetiquetas asignadas - contraetiquetas usadas - existencia en bodega de contras sin utilizar"/>
+                            <radio id="cumple_balance" hint="Balance de uso de contras es mayor que el 5% del balance de contraetiquetas usadas" allowsPartialRestore="false" label="Cumple porcentaje balance uso de contras: " orientation="horizontal" readonly="true" value="${entity.cumple_balance}" weights="16, 16">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                        </row>
+                    </table>
+
+                    <!--<divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Requisitos de etiquetado"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <table>
+                        <row>
+                            <radio label="Cumple: " value="${entity.cumple_requisitos_etiquetado}" orientation="horizontal"  weights="25, 25">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                    </table>-->
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Total vino embotellado partida"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <table>
+                        <row>
+                            <input label="Cantidad (L): " value="${entity.cantidad_vino_embotellado}" inputType="3"/>
+                            <date label="Fecha: " value="${entity.fecha_vino_embotellado}"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Vino existente  en Aforo de la partida calificada"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <table>
+                        <row>
+                            <input label="Granel  (litros): " value="${entity.cantidad_vino_aforo}" inputType="3"/>
+                            <input label="Embotellado (litros): " value="${entity.cantidad_vino_embotellado}" inputType="3"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Salidas (L) partida verificada"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <table>
+                        <row>
+                            <input label="Salidas (L): " value="${entity.salidas_partida_verificada}" inputType="3"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Descripción de movimientos entre depósitos intermedios"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <table>
+                        <row>
+                            <textarea label="Descripción: " value="${entity.descripcion_movimientos_depositos}"/>
+                        </row>
+                    </table>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Envejecimiento barricas, bodega y botellas"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table>
+                        <row>
+                            <autocomplete label="Tipo envejecimiento: " forceSelection="true" id="tipo_envejecimiento_id" repo="tipoEnvejecimientoRepo" value="${entity.tipo_envejecimiento_id}">
+                                <options labelExpression="${entity.tipo_envejecimiento}" labelFilteringProperty="tipo_envejecimiento" valueProperty="tipo_envejecimiento_id" />
+                                <repofilter>
+                                    <contains property="tipo_envejecimiento" value="${this.value}"/>
+                                </repofilter>
+                                <action type="js">
+                                    <param name="method" value="resetMesesBodegaBarrica" />
+                                 </action>
+                            </autocomplete>
+                        </row>
+                    </table>
+
+                    <table border ="false">
+                        <row>
+                            <datatable
+                                id="datatableEnvejecimientoBodega"
+                                route="${not empty(view.tipo_envejecimiento_id)?'trazabilidadBodega-editTrazabilidadBodega':null}"
+                                numVisibleRows="1"
+                                repo="trazabilidadRepo">
+                                <param name="expediente_id" value="${view.expediente_id}" />
+                                <param name="num_expediente" value="${view.num_expediente}" />
+                                <param name="operador_id" value="${view.operador_id}"/>
+                                <param name="razon_social" value="${view.razon_social}"/>
+                                <param name="dop_id" value="${view.dop_id}"/>
+                                <param name="dop" value="${view.dop}"/>
+                                <param name="trazabilidad_id" value="${view.trazabilidad_id}"/>
+                                <param name="partida" value="${view.partida}"/>
+                                <param name="tipo_envejecimiento_id" value="${view.tipo_envejecimiento_id}"/>
+                                <column headerText="F. inicio envejecimiento" filtering="false" ordering="true" value="${entity.fecha_inicio_envejecimiento}">
+                                    <order property="fecha_inicio_envejecimiento"/>
+                                </column>
+                                <column headerText="F. calificación" filtering="false" ordering="true" value="${entity.fecha_calificacion_bodega}">
+                                    <order property="fecha_calificacion_bodega"/>
+                                </column>
+                                <column headerText="Tiempo bodega" filtering="false" ordering="true" value="${entity.meses_bodega}">
+                                    <order property="meses_bodega"/>
+                                </column>
+                                <column headerText="Meses bodega" filtering="false" ordering="true" value="${entity.meses_bodega_envejecimento}">
+                                    <order property="meses_bodega_envejecimento"/>
+                                </column>
+                                <column headerText="Cumple" filtering="false" ordering="true" value="${entity.cumple_envejecimiento_bodega}">
+                                    <order property="cumple_envejecimiento_bodega"/>
+                                </column>
+                                 <repofilter>
+                                    <and>
+                                        <eq property="trazabilidad_id" value="${empty(entity.trazabilidad_id) ? '-1' : entity.trazabilidad_id}" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+                        </row>
+                    </table>
+
+                    <table border ="false">
+                        <row>
+                            <button label="Añadir barrica" render="${not empty(view.tipo_envejecimiento_id)}">
+                                <action type="save" route="trazabilidadBarrica-editTrazabilidadBarrica">
+                                    <param name="expediente_id" value="${view.expediente_id}" />
+                                    <param name="num_expediente" value="${view.num_expediente}" />
+                                    <param name="operador_id" value="${view.operador_id}"/>
+                                    <param name="razon_social" value="${view.razon_social}"/>
+                                    <param name="dop_id" value="${view.dop_id}"/>
+                                    <param name="dop" value="${view.dop}"/>
+                                    <param name="trazabilidad_id" value="${view.trazabilidad_id}"/>
+                                    <param name="tipo_envejecimiento_id" value="${view.tipo_envejecimiento_id}"/>
+                                    <param name="partida" value="${view.partida}"/>
+                                </action>
+                            </button>
+                          </row>
+                        <row>
+                            <datatable
+                                route="trazabilidadBarrica-editTrazabilidadBarrica"
+                                numVisibleRows="3"
+                                repo="trazabilidadBarricaRepo"
+                                id="datatableEnvejecimientoBarrica">
+                                <column headerText="Fecha entrada barrica" filtering="false" ordering="true" value="${entity.fecha_entrada_barrica}">
+                                    <order property="fecha_entrada_barrica"/>
+                                </column>
+                                <column headerText="Fecha salida barrica" filtering="false" ordering="true" value="${entity.fecha_salida_barrica}">
+                                    <order property="fecha_salida_barrica"/>
+                                </column>
+                                <column headerText="Meses" filtering="false" ordering="true" value="${entity.meses}">
+                                    <order property="meses"/>
+                                </column>
+                                <column headerText="Número de barricas" filtering="false" ordering="true" value="${entity.numero_barricas}">
+                                    <order property="numero_barricas"/>
+                                </column>
+                                <column headerText="Capacidad" filtering="false" ordering="true" value="${entity.capacidad}">
+                                    <order property="capacidad"/>
+                                </column>
+                                <param name="expediente_id" value="${view.expediente_id}" />
+                                <param name="num_expediente" value="${view.num_expediente}" />
+                                <param name="operador_id" value="${view.operador_id}"/>
+                                <param name="razon_social" value="${view.razon_social}"/>
+                                <param name="dop_id" value="${view.dop_id}"/>
+                                <param name="dop" value="${view.dop}"/>
+                                <param name="trazabilidad_id" value="${view.trazabilidad_id}"/>
+                                <param name="partida" value="${view.partida}"/>
+                                <param name="tipo_envejecimiento_id" value="${view.tipo_envejecimiento_id}"/>
+                                <repofilter>
+                                    <and>
+                                        <eq property="trazabilidad_id" value="${empty(entity.trazabilidad_id) ? '-1' : entity.trazabilidad_id}" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+                        </row>
+                    </table>
+
+                    <table border ="false">
+                        <row>
+                            <datatable
+                                id="datatableEnvejecimientoBarricaTotal"
+                                numVisibleRows="1"
+                                repo="trazabilidadRepo">
+                                <column headerText="Tiempo barrica" filtering="false" ordering="true" value="${entity.meses_barrica}">
+                                    <order property="meses_barrica"/>
+                                </column>
+                                <column headerText="Meses barrica" filtering="false" ordering="true" value="${entity.meses_barrica_envejecimento}">
+                                    <order property="meses_barrica_envejecimento"/>
+                                </column>
+                                <column headerText="Cumple barrica" filtering="false" ordering="true" value="${entity.cumple_envejecimiento_barrica}">
+                                    <order property="cumple_envejecimiento_barrica"/>
+                                </column>
+                                <repofilter>
+                                    <and>
+                                        <eq property="trazabilidad_id" value="${empty(entity.trazabilidad_id) ? '-1' : entity.trazabilidad_id}" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+                        </row>
+                    </table>
+
+
+                    <table>
+                       <row weights="70, 30, 30">
+                            <textarea label="Observaciones: " value="${entity.observaciones_trazabilidad_envejecimiento}"/>
+                           <radio allowsPartialRestore="false" id="cumple_envejecimiento" label="Cumple envejecimiento: " value="${entity.cumple_envejecimiento}" orientation="horizontal" readonly="${empty(view.tipo_envejecimiento_id) or view.tipo_envejecimiento_id le 6}">
+                               <options>
+                                   <option label="SI" value="SI" />
+                                   <option label="NO" value="NO" />
+                               </options>
+                           </radio>
+
+
+                           <!--radio allowsPartialRestore="false" id="cumple_envejecimiento" label="Cumple envejecimiento: " value="${entity.cumple_envejecimiento}" orientation="horizontal" render="${not empty(view.tipo_envejecimiento_id) and math:round(view.tipo_envejecimiento_id) gt 6}">
+                               <options>
+                                   <option label="SI" value="SI" />
+                                   <option label="NO" value="NO" />
+                               </options>
+                           </radio>
+                            <radio id="cumple_envejecimiento_total_bodega" label="Cumple envejecimiento: " allowsPartialRestore="false" value="${entity.cumple_envejecimiento}" orientation="horizontal" readonly="${empty(view.tipo_envejecimiento_id) or (not empty(view.tipo_envejecimiento_id) and math:round(view.tipo_envejecimiento_id) le 6)}" onBeforeRender="updateCumpleEnvejecimientoTotalBodega">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                             </radio-->
+
+
+                           </row>
+                    </table>
+
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Vino elaborado"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table>
+                        <row>
+                            <input label="Cantidad (L): " value="${entity.cantidad_vino_elaborado}" inputType="3"/>
+                            <date label="Fecha elaboración: " value="${entity.fecha_elaboracion}"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Mosto (L)"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <table>
+                        <row>
+                            <input label="Cantidad: " value="${entity.cantidad_mosto}" inputType="3"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Uva (kg)"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <table>
+                        <row>
+                            <input label="Cantidad: " value="${entity.cantidad_uva}" inputType="3"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="¿El sistema de autocontrol permite garantizar la trazabilidad de la partida?"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <table>
+                        <row>
+                            <radio id="cumple_trazabilidad_partida" label="Cumple: " value="${entity.cumple_trazabilidad_partida}" orientation="horizontal">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                            <textarea id="observaciones_trazabilidad_partida" label="Observaciones" value="${entity.observaciones_trazabilidad_partida}"/>
+                        </row>
+                    </table>
+
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Foto botella trazada"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <table border="false">
+                        <row>
+                            <table border="false" weights="20, 10, 35, 35">
+                                <row>
+                                    <p bold="true" value="Foto: "/>
+                                    <switcher id="switcherImagenBotella" value="${not empty(entity.imagen_botella) or not empty(entity.imagen_botella_2)?1:0}"/>
+                                    <image converter="b64Image" embedded="true" value="${entity.imagen_botella}" render="${view.switcherImagenBotella eq 'true'}" hasDeleteButton="false" inputType="5"/>
+                                    <image converter="b64Image" embedded="true" value="${entity.imagen_botella_2}" render="${view.switcherImagenBotella eq 'true'}" hasDeleteButton="false" inputType="5"/>
+                                </row>
+                            </table>
+                        </row>
+                    </table>
+            </tabitem>
+
+            <tabitem label="ENTRADA DE UVA">
+                <table border="false">
+                    <row>
+                        <button label="Entrada de uva" readonly="${empty (entity.trazabilidad_id)}">
+                            <action type="save" route="entradaUva-editEntradaUva">
+                                <param name="expediente_id" value="${view.expediente_id}" />
+                                <param name="num_expediente" value="${view.num_expediente}" />
+                                <param name="operador_id" value="${view.operador_id}"/>
+                                <param name="razon_social" value="${view.razon_social}"/>
+                                <param name="dop_id" value="${view.dop_id}"/>
+                                <param name="dop" value="${view.dop}"/>
+                                <param name="trazabilidad_id" value="${view.trazabilidad_id}"/>
+                                <param name="partida" value="${view.partida}"/>
+                            </action>
+                        </button>
+                    </row>
+                </table>
+
+                <datatable onBeforeRender="updateCumpleEntradaUva"
+                    numVisibleRows="4"
+                    repo="entradaUvaRepo"
+                    route="entradaUva-editEntradaUva">
+                    <column id="column_entrada_uva" headerText="Entrada de uva" filtering="true" ordering="true" value="${entity.entrada_uva}">
+                        <filter property="entrada_uva" matching="contains" valueExpression="${this.column_entrada_uva}"/>
+                        <order property="entrada_uva"/>
+                    </column>
+                    <column id="column_fecha_entrada" headerText="Fecha entrada" filtering="true" ordering="true" value="${entity.fecha_entrada}">
+                        <filter property="fecha_entrada" matching="contains" valueExpression="${this.column_fecha_entrada}"/>
+                        <order property="fecha_entrada"/>
+                    </column>
+                    <column id="column_poligono" headerText="Polígono" filtering="true" ordering="true" value="${entity.poligono}">
+                        <filter property="poligono" matching="contains" valueExpression="${this.column_poligono}"/>
+                        <order property="poligono"/>
+                    </column>
+                    <column id="column_parcela" headerText="Parcela" filtering="true" ordering="true" value="${entity.parcela}">
+                        <filter property="parcela" matching="contains" valueExpression="${this.column_parcela}"/>
+                        <order property="parcela"/>
+                    </column>
+                    <column id="column_recinto" headerText="Recinto" filtering="true" ordering="true" value="${entity.recinto}">
+                        <filter property="recinto" matching="contains" valueExpression="${this.column_recinto}"/>
+                        <order property="recinto"/>
+                    </column>
+                    <column id="column_variedad" headerText="Variedad" filtering="false" ordering="false" value="${entity.variedad.variedad}">
+                    </column>
+                    <column id="column_cupo" headerText="Cupo" filtering="true" ordering="true" value="${entity.cupo}">
+                        <filter property="cupo" matching="contains" valueExpression="${this.column_cupo}"/>
+                        <order property="cupo"/>
+                    </column>
+                    <column id="column_kg_totales_recepcionados" headerText="Kg. de uva entrada" filtering="true" ordering="true" value="${entity.kg_totales_recepcionados}">
+                        <filter property="kg_totales_recepcionados" matching="contains" valueExpression="${this.column_kg_totales_recepcionados}"/>
+                        <order property="kg_totales_recepcionados"/>
+                    </column>
+                    <column id="column_conforme_rendimiento" headerText="Conforme rendimiento" filtering="true" ordering="true" value="${entity.conforme_rendimiento}">
+                        <filter property="conforme_rendimiento" matching="contains" valueExpression="${this.column_conforme_rendimiento}"/>
+                        <order property="conforme_rendimiento"/>
+                    </column>
+                    <column id="column_conforme_grado" headerText="Conforme grado" filtering="true" ordering="true" value="${entity.conforme_grado}">
+                        <filter property="conforme_grado" matching="contains" valueExpression="${this.column_conforme_grado}"/>
+                        <order property="conforme_grado"/>
+                    </column>
+                    <column id="column_registro_viticola" headerText="Conforme registro vitivinícola" filtering="true" ordering="true" value="${entity.registro_viticola}">
+                        <filter property="registro_viticola" matching="contains" valueExpression="${this.column_registro_viticola}"/>
+                        <order property="registro_viticola"/>
+                    </column>
+                    <column id="column_estado_sanitario" headerText="Conforme estado sanitario" filtering="true" ordering="true" value="${entity.estado_sanitario}">
+                        <filter property="estado_sanitario" matching="contains" valueExpression="${this.column_estado_sanitario}"/>
+                        <order property="estado_sanitario"/>
+                    </column>
+                    <column id="column_tickets_pesada" headerText="Conforme tickets pesada" filtering="true" ordering="true" value="${entity.tickets_pesada}">
+                        <filter property="tickets_pesada" matching="contains" valueExpression="${this.column_tickets_pesada}"/>
+                        <order property="tickets_pesada"/>
+                    </column>
+                    <param name="expediente_id" value="${view.expediente_id}" />
+                    <param name="num_expediente" value="${view.num_expediente}" />
+                    <param name="operador_id" value="${view.operador_id}"/>
+                    <param name="razon_social" value="${view.razon_social}"/>
+                    <param name="dop_id" value="${view.dop_id}"/>
+                    <param name="dop" value="${view.dop}"/>
+                    <param name="trazabilidad_id" value="${view.trazabilidad_id}"/>
+                    <param name="partida" value="${view.partida}"/>
+                    <repofilter>
+                        <and>
+                            <eq property="trazabilidad_id" value="${empty(entity.trazabilidad_id) ? '-1' : entity.trazabilidad_id}" />
+                        </and>
+                    </repofilter>
+                </datatable>
+            </tabitem>
+            <tabitem label="CONTROL ETIQUETADO" onBeforeRender="anadirDescripcion">
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="ETIQUETA AUTORIZADA POR EL CONSEJO REGULADOR"/>
+                <divisor color="#00766C" strokeWidth="8" />
+
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_etiqueta_autorizada_consejo_regulador}" orientation="horizontal" hint="${entity.desc_etiqueta_autorizada_consejo_regulador}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiqueta_autorizada_consejo_regulador}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="10" />
+                <p bold="true" value="INDICACIONES OBLIGATORIAS(Reglamento 1308/2013)" fontSize="20"/>
+                <divisor color="#00766C" strokeWidth="10" />
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="DENOMINACIÓN DEL PRODUCTO"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_denominacion_producto}" orientation="horizontal" hint="${entity.desc_denominacion_producto}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_denominacion_producto}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="GRADO ALCOHÓLICO"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_grado_alcoholico}" orientation="horizontal" hint="${entity.desc_grado_alcoholico}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_grado_alcoholico}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="PROCEDENCIA"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_procedencia}" orientation="horizontal" hint="${entity.desc_procedencia}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_procedencia}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="EMBOTELLADO POR O EMBOTELLADOR"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_embotellado_por}" orientation="horizontal" hint="${entity.desc_embotellado_por}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_embotellado_por}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="EMBOTELLADO POR ENCARGO"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_embotellado_por_encargo}" orientation="horizontal" hint="${entity.desc_embotellado_por_encargo}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_embotellado_por_encargo}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="IMPORTADOR"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_importador}" orientation="horizontal" hint="${entity.desc_importador}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_importador}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="VOLUMEN NOMINAL"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_volumen_nominal}" orientation="horizontal" hint="${entity.desc_volumen_nominal}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_volumen_nominal}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="10" />
+                <p bold="true" value="OTRAS INDICACIONES OBLIGATORIAS" fontSize="20"/>
+                <divisor color="#00766C" strokeWidth="10" />
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="Nº DE REGISTRO DE EMBOTELLADOR"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_num_registro_embotellador}" orientation="horizontal" hint="${entity.desc_num_registro_embotellador}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_num_registro_embotellador}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="ALERGENOS-CONTIENE SULFITOS"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_alergenos}" orientation="horizontal" hint="${entity.desc_alergenos}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_alergenos}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="Nº DE LOTE"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_num_lote}" orientation="horizontal" hint="${entity.desc_num_lote}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_num_lote}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="PUNTO VERDE"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_punto_verde}" orientation="horizontal" hint="${entity.desc_punto_verde}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_punto_verde}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="10" />
+                <p bold="true" value="INDICACIONES FACULTATIVAS  (ART. 120 DE RGTO 1308/2013)" fontSize="20"/>
+                <divisor color="#00766C" strokeWidth="10" />
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="AÑO DE LA COSECHA, AÑADA, VENDIMIA"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_ano_cosecha}" orientation="horizontal" hint="${entity.desc_ano_cosecha}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_ano_cosecha}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="VARIEDADES DE VID"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_variedades_vid}" orientation="horizontal" hint="${entity.desc_variedades_vid}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_variedades_vid}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="MENCIONES TRADICIONALES"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_menciones_tradicionales}" orientation="horizontal" hint="${entity.desc_menciones_tradicionales}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_menciones_tradicionales}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="CONTENIDO EN AZÚCAR"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_contenido_azucar}" orientation="horizontal" hint="${entity.desc_contenido_azucar}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_contenido_azucar}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="SÍMBOLO COMUNITARIO DE DOP/IGP"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_simbolo_comunitario}" orientation="horizontal" hint="${entity.desc_simbolo_comunitario}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_simbolo_comunitario}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="MÉTODOS DE PRODUCCIÓN (FERMENTADO EN BARRICA o ROBLE)"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_metodos_produccion}" orientation="horizontal" hint="${entity.desc_metodos_produccion}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_metodos_produccion}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="MÉTODOS DE PRODUCCIÓN ECOLÓGICOS"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_metodos_ecologicos}" orientation="horizontal" hint="${entity.desc_metodos_ecologicos}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_metodos_ecologicos}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="UNIDAD GEOGRÁFICA MENOR O MAYOR VINO DE PUEBLO + TÉRMINO MUNICIPAL O ENTIDAD LOCAL MENOR"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_unidad_geografica}" orientation="horizontal" hint="${entity.desc_unidad_geografica}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_unidad_geografica}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="10" />
+                <p bold="true" value="OTRAS INDICACIONES FACULTATIVAS" fontSize="20"/>
+                <divisor color="#00766C" strokeWidth="10" />
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="EXPLOTACIÓN VITÍCOLA"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_explotacion_viticola}" orientation="horizontal" hint="${entity.desc_explotacion_viticola}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_explotacion_viticola}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="MENCIONES RELATIVAS AL COLOR"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_menciones_color}" orientation="horizontal" hint="${entity.desc_menciones_color}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_menciones_color}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="SÍMBOLO CE 'E'"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_simbolo_ce}" orientation="horizontal" hint="${entity.desc_simbolo_ce}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_simbolo_ce}"/>
+                    </row>
+                </table>
+
+                <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="MARCA"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_marca}" orientation="horizontal" hint="${entity.desc_marca}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_marca}"/>
+                    </row>
+                </table>
+
+               <p value=""/>
+                <divisor color="#00766C" strokeWidth="8" render="${entity.expediente.dop_id == '1'}"/>
+                <p bold="true" value="MENCIÓN “SELECCIÓN” O SIMILARES" render="${entity.expediente.dop_id == '1'}"/>
+                <divisor color="#00766C" strokeWidth="8" render="${entity.expediente.dop_id == '1'}"/>
+                <table weights="30, 70" render="${entity.expediente.dop_id == '1'}">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_mencion_seleccion}" orientation="horizontal" hint="${entity.desc_mencion_seleccion}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_mencion_seleccion}"/>
+                    </row>
+                </table>
+
+                <p value="" render="${entity.expediente.dop_id == '1'}"/>
+                <divisor color="#00766C" strokeWidth="8"  render="${entity.expediente.dop_id == '1'}"/>
+                <p bold="true" value="MENCIÓN “VIÑAS VIEJAS”, “VIÑEDOS VIEJOS”, “VIÑEDOS CENTENARIOS”, “VIÑEDO PREFILOXÉRICO” O SIMILARES"  render="${entity.expediente.dop_id == '1'}"/>
+                <divisor color="#00766C" strokeWidth="8"  render="${entity.expediente.dop_id == '1'}"/>
+                <table weights="30, 70"  render="${entity.expediente.dop_id == '1'}">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_mencion_vinas}" orientation="horizontal" hint="${entity.desc_mencion_vinas}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_mencion_vinas}"/>
+                    </row>
+                </table>
+
+                <p value=""  render="${entity.expediente.dop_id == '1'}"/>
+                <divisor color="#00766C" strokeWidth="8"  render="${entity.expediente.dop_id == '1'}"/>
+                <p bold="true" value="MENCIÓN “VIÑEDOS DE ALTURA” O SIMILARES"  render="${entity.expediente.dop_id == '1'}"/>
+                <divisor color="#00766C" strokeWidth="8"  render="${entity.expediente.dop_id == '1'}"/>
+                <table weights="30, 70"  render="${entity.expediente.dop_id == '1'}">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_mencion_vinedos_altura}" orientation="horizontal" hint="${entity.desc_mencion_vinedos_altura}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_mencion_vinedos_altura}"/>
+                    </row>
+                </table>
+
+                <p value=""  render="${entity.expediente.dop_id == '1'}"/>
+                <divisor color="#00766C" strokeWidth="8"  render="${entity.expediente.dop_id == '1'}"/>
+                <p bold="true" value="MENCIÓN “VIÑEDOS PROPIOS” O SIMILARES"  render="${entity.expediente.dop_id == '1'}"/>
+                <divisor color="#00766C" strokeWidth="8"  render="${entity.expediente.dop_id == '1'}"/>
+                <table weights="30, 70"  render="${entity.expediente.dop_id == '1'}">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_mencion_vinedos_propios}" orientation="horizontal" hint="${entity.desc_mencion_vinedos_propios}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_mencion_vinedos_propios}"/>
+                    </row>
+                </table>
+
+                <p value=""  render="${entity.expediente.dop_id == '1'}"/>
+                <divisor color="#00766C" strokeWidth="8"  render="${entity.expediente.dop_id == '1'}"/>
+                <p bold="true" value="MENCIONES NO ADMITIDAS SEGÚN REQUISITOS MÍNIMOS ESTABLECIDOS: “VINO DE AUTOR”, “VINO DE ALTA EXPRESIÓN” O SIMILARES." render="${entity.expediente.dop_id == '1'}"/>
+                <divisor color="#00766C" strokeWidth="8"  render="${entity.expediente.dop_id == '1'}"/>
+                <table weights="30, 70"  render="${entity.expediente.dop_id == '1'}">
+                    <row>
+                        <radio label="Cumple: " value="${entity.cumple_mencion_no_admitidas}" orientation="horizontal">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                            </options>
+                        </radio>
+                        <textarea label="Observaciones: " value="${entity.observaciones_etiquetado_mencion_no_admitidas}"/>
+                    </row>
+                </table>
+             </tabitem>
+            </tab>
+
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action id="compositeSaveAction">
+                <action type="save">
+                </action>
+                <!--action type="js">
+                    <param name="method" value="setCumpleEnvejecimiento" />
+                    <param name="tipo_envejecimiento_id" value="${view.tipo_envejecimiento_id}" />
+                    <param name="cumple_envejecimiento_botella" value="${view.cumple_envejecimiento_botella}" />
+                    <param name="cumple_envejecimiento_bodega" value="${view.cumple_envejecimiento_bodega}" />
+                    <param name="cumple_envejecimiento_barrica" value="${view.cumple_envejecimiento_barrica}" />
+                </action-->
+
+                <action type="js">
+                    <param name="method" value="updateDesviacionesTrazabilidad" />
+                    <param name="expediente_id_view" value="${view.expediente_id}" />
+                    <param name="dop_id_view" value="${view.dop_id}" />
+                </action>
+                <action type="js" route="back" registerInHistory="false" restoreView="false">
+                    <param name="method" value="setCumpleBalance" />
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="false">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.trazabilidad_id)}" readonlyMessage="No puede realizar esta acción: No existe trazabilidad" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

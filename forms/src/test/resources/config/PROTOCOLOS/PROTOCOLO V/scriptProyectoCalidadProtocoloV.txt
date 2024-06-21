@@ -1,0 +1,116 @@
+CREATE TABLE "grupo_producto" (
+	"grupo_producto_id" TEXT PRIMARY KEY,
+	"nombre_grupo_producto"	TEXT
+)
+
+insert into "grupo_producto"
+(
+	grupo_producto_id, 
+	nombre_grupo_producto
+)
+values
+	("1", "VINOS"),
+	("2", "BEBIDAS ESPIRITUOSAS"),
+	("3", "VINOS AROMATIZADOS")
+
+
+CREATE TABLE "auditoria" (
+	"auditoria_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"num_expediente" INTEGER,
+	"fecha"	TEXT,
+	"grupo_producto_id" TEXT,
+	"equipo_auditor" TEXT,
+	"nombre_empresa" TEXT,
+	"nif" TEXT,
+	"nombre_comercial" TEXT,
+	"domicilio" TEXT,
+	"prov_id" INTEGER,
+	"provmuni_id" TEXT,
+	"telefono" TEXT,
+	"email" TEXT,
+	"nombre_producto" TEXT,
+	"operador" TEXT,
+	"domicilio_producto" TEXT,
+	"marca_comercial" TEXT,
+	"lote" TEXT,
+	"codigo_barras" TEXT,
+	"codigo_barras_thumb" TEXT,
+	"firma" TEXT,
+	FOREIGN KEY(grupo_producto_id) REFERENCES grupo_producto(grupo_producto_id),
+	FOREIGN KEY(prov_id) REFERENCES provincia(id),
+	FOREIGN KEY(provmuni_id) REFERENCES municipio(provmuni))
+
+CREATE TABLE "pregunta_auditoria" (
+	"pregunta_auditoria_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"auditoria_id" INTEGER,
+	"pregunta_id" INTEGER,
+	"tab_id" TEXT,
+	"respuesta" TEXT,
+	"observaciones" TEXT,
+	"image_thumb" TEXT,
+	FOREIGN KEY(auditoria_id) REFERENCES auditoria(auditoria_id),
+	FOREIGN KEY(pregunta_id) REFERENCES pregunta(pregunta_id)
+)
+
+CREATE TRIGGER pregunta_auditoria AFTER INSERT ON auditoria
+BEGIN
+	INSERT INTO pregunta_auditoria (
+		auditoria_id,
+		pregunta_id,
+		tab_id
+	)
+	SELECT
+	  auditoria.auditoria_id,
+	  pregunta.pregunta_id,
+	  pregunta.tab_id
+	FROM auditoria
+	JOIN pregunta
+	WHERE 
+		auditoria.auditoria_id = (SELECT MAX(auditoria_id) FROM auditoria) and 
+		(SELECT MAX(auditoria_id) FROM auditoria) not in (select distinct auditoria_id from pregunta_auditoria);
+END;
+
+
+CREATE TABLE 'pregunta'(
+pregunta_id INTEGER PRIMARY KEY AUTOINCREMENT,
+tab_id TEXT,
+texto_pregunta TEXT,
+desc_pregunta TEXT)
+
+insert into pregunta (tab_id, texto_pregunta, desc_pregunta)
+values
+("controlEtiquetadoVinos", "1.1. La figura de calidad consta en eAmbrosia","Art. 104"),
+("controlEtiquetadoVinos", "1.2. Figura la expresión 'denominación de origen protegida' o 'indicación geográfica protegida', o en sustitución de la misma, el término tradicional correspondiente","Art. 119 (1) letra b) i"),
+("controlEtiquetadoVinos", "1.3. Figura el nombre de la denominación de origen protegida o de la indicación geográfica protegida","Art. 119 (1) letra b) ii"),
+("controlEtiquetadoVinos", "1.4. En el supuesto en que figure el símbolo de la figura de calidad, éste se ajusta a lo estipulado en la normativa","Art. 120 (1) letra e"),
+("controlEtiquetadoVinos", "1.5. Se cumple con la prohibición de utilizar un nombre protegido en un producto similar pero que no es el amparado por el pliego de condiciones (aprovechamiento de la reputación del nombre)","Art. 103 (2) letra a"),
+
+("controlNombreRegistradoVinos", "2.1. Se cumple con la prohibición de hacer un uso comercial directo o indirecto de un nombre protegido, en productos comparables que no se ajustan al pliego de condiciones o en la medida en que ese uso aproveche la reputación de una denominación de origen o una indicación geográfica","Art. 103 (2) letra a"),
+("controlNombreRegistradoVinos", "2.2. Se cumple con la prohibición de toda usurpación, imitación o evocación, aunque se indique el origen verdadero del producto o el servicio o si el nombre protegido se traduce, transcribe o translitera, o va acompañado de los términos 'estilo', 'tipo', 'método', 'producido como', 'imitación', 'sabor', 'parecido' u otros análogos","Art. 103 (2) letra b"),
+("controlNombreRegistradoVinos", "2.3. Se cumple con la prohibición de realizar cualquier otro tipo de indicación falsa o engañosa en cuanto a la procedencia, el origen, la naturaleza o las características esenciales del producto, en el envase o en el embalaje, en la publicidad o en los documentos relativos al producto vinícola de que se trate, así como la utilización de envases que por sus características puedan crear una impresión errónea acerca de su origen","Art. 103 (2) letra c"),
+("controlNombreRegistradoVinos", "2.4. Se cumple con la prohibición de realizar cualquier otra práctica que pueda inducir a error al consumidor acerca del verdadero origen del producto","Art. 103 (2) letra d"),
+
+("controlEtiquetadoBebidasEspirituosas", "3.1. La indicación geográfica consta en el en el Anexo III del R (CE) nº 110/2008 (eAmbrosia)","Anexo III"),
+("controlEtiquetadoBebidasEspirituosas", "3.2. Figura el nombre registrado del producto","Art. 9 (5)"),
+("controlEtiquetadoBebidasEspirituosas", "3.3. En el supuesto en que figure el símbolo de la figura de calidad, éste se ajusta a lo estipulado en la normativa y va acompañado de la indicación geográfica protegida","Art. 22 R (UE) 716/2013"),
+
+("controlNombreRegistradoEspirituosas", "4.1. Se cumple con la prohibición de hacer un uso comercial directo o indirecto en productos no cubiertos por el registro, en la medida en que estos sean comparables a la bebida espirituosa registrada bajo esa indicación geográfica o que ese uso aproveche el renombre de la indicación geográfica registrada","Art. 16 letra a"),
+("controlNombreRegistradoEspirituosas", "4.2. Se cumple con la prohibición de hacer un uso indebido, imitación o evocación, incluso cuando se indique el verdadero origen del producto o se utilice la indicación geográfica traducida o acompañada de una mención tal como 'género', 'tipo', 'estilo', 'elaborado', 'aroma' u otros términos similares","Art. 16 letra b"),
+("controlNombreRegistradoEspirituosas", "4.3. Se cumple con la prohibición de hacer una indicación falsa o engañosa de la procedencia, origen, naturaleza o cualidades esenciales en la designación, presentación o etiquetado del producto que pudiera dar una impresión falsa sobre su origen","Art. 16 letra c"),
+("controlNombreRegistradoEspirituosas", "4.4. Se cumple con la prohibición de hacer uso de cualquier otra práctica que pudiera inducir a error al consumidor sobre el auténtico origen del producto","Art. 16 letra d")
+
+
+INSERT INTO pregunta_auditoria (
+	autitoria_id,
+	pregunta_id
+)
+SELECT
+  auditoria.auditoria_id,
+  pregunta.pregunta_id
+FROM auditoria
+JOIN pregunta
+WHERE 
+	auditoria.auditoria_id = (SELECT MAX(auditoria_id) FROM auditoria);
+
+insert into auditoria (fecha) values ("2021-03-19 10:57:16")
+

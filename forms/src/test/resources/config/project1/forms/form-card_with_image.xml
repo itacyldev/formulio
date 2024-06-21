@@ -1,0 +1,24 @@
+<main name="Form Card Image" description="Card with image example." id="formCardImage" repo="superHRepo">
+    <edit>
+        <form>
+            <card label="Label" expandable="true" expanded="true" subtitle="${entity.real_name}" title="${entity.name}">
+                <image repo="superHImages" value="${entity.image}" readonly="true"/>
+            </card>
+            <card label="Label" expandable="true" expanded="true" subtitle="${entity.real_name}" title="${entity.name}" imagePosition="bottom">
+                <image repo="superHImages" value="${entity.image}" readonly="true"/>
+            </card>
+            <card label="Label" expandable="true" expanded="true" subtitle="${entity.real_name}" title="${entity.name}" imagePosition="right">
+                <image repo="superHImages" value="${entity.image}" readonly="true"/>
+            </card>
+            <card label="${entity.name}" expandable="true" expanded="true" imagePosition="left">
+                <p name="title" value="${entity.name}"/>
+                <p name="subtitle" value="subtitle"/>
+                <image repo="superHImages" value="${entity.image}" inputType="0"/>
+            </card>
+
+        </form>
+    </edit>
+    <list name="Form Card Image">
+        <datatable properties="name, real_name, age" />
+    </list>
+</main>

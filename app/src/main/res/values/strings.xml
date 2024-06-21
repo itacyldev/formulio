@@ -1,0 +1,56 @@
+<resources>
+    <string name="projects">Projects</string>
+    <string name="forms">Forms</string>
+    <string name="permissions">Permissions</string>
+    <string name="mustacceptallpermits">Must accept all permits.</string>
+    <string name="no_projects">No projects</string>
+    <string name="project_opening_init">Opening project %1$s ...</string>
+    <string name="project_opening">Opening project ...</string>
+    <string name="project_opening_finish">Project %1$s open.</string>
+    <string name="no_projects_found">No projects found. Import a project by pressing the + icon</string>
+    <string name="project_opening_error">There was an error trying to open project %1$s, check developer console.</string>
+    <string name="projects_of">"Projects of "</string>
+    <string name="forms_of">"Forms of "</string>
+    <string name="no_current_project">No current project</string>
+    <string name="export">Export</string>
+    <string name="log">Log</string>
+    <string name="detail">Detail</string>
+    <string name="share">Share</string>
+    <string name="synchro">Synchronization</string>
+    <string name="action_delete_success">Entity successfully deleted.</string>
+    <string name="action_delete_error">An error occurred while deleting the entity. Check dev. console for details.</string>
+    <string name="loading">Loading...</string>
+    <string name="not_found">Not found</string>
+    <string name="close">Close</string>
+    <string name="specificDirectoryAccessPermission">This app requires the
+        permission to access the contents of a specific directory</string>
+    <string name="allFilesAccessPermission">This app requires permission to
+        manage external storage. Only the files defined in the configuration of each project within the application will be used.</string>
+    <string name="title_activity_project_import">ProjectImportActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="file_to_load">File to load</string>
+    <string name="error_filemanager">No file manager found</string>
+    <string name="error_fileload_extension">The file type must be</string>
+    <string name="project_import_file_incorrect">The structure of the file is not correct.\nCheck that the following directories exist:\n</string>
+    <string name="projectimportfail">It was not possible to import the
+        project.\nTry to open the file with a file explorer or import it
+        directly</string>
+    <string name="project_import_files">And the files:\n</string>
+    <string name="project_import_existing_files">The following files already exist on the device:</string>
+    <string name="project_import_overwrite_files">If you continue, a copy will be saved in projects/bak and then they will be overwritten</string>
+    <string name="back">Back</string>
+    <string name="process_finish">The process has finished.</string>
+    <string name="job_result">Job result</string>
+    <string name="exporting">Exportando...</string>
+    <string name="project_import_continue">The project will be imported. Do you wish to continue?</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="information">Information</string>
+    <string name="job_error_publishing">An error occurred while trying to publish job resources</string>
+</resources>

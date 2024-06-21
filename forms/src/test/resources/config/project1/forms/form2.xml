@@ -1,0 +1,35 @@
+<main name="Form2" description="An example of short description" id="form2" repo="agentsRepo">
+    <list name="Form2">
+        <datatable properties="id,provmuni,provincia.name,municipio.name" route="form2-formLoad"/>
+        <actions>
+            <add route="form2-formLoad"/>
+        </actions>
+    </list>
+    <edit>
+        <script>
+            function onbefore(component){
+                console.log("This is a " + component.getId());
+            }
+
+            function onafter(widget){
+                console.log("This is a widget" + widget.getId());
+                for(p in widget){
+                    console.log(p);
+                }
+                widget.setBackgroundColor(-500136);
+                widget.getInputView().setTextColor(-500136);
+                widget.getInputView().setText("Hello world from rhino JS!");
+            }
+        </script>
+        <form onBeforeRender="onbefore"  >
+            <text label="zip code" onAfterRender="onafter" />
+        </form>
+    </edit>
+    <edit id="formLoad">
+        <script src="scripts/loadTableData.js">
+        </script>
+        <form>
+            <datatable repo="resumenIncis" onBeforeRender="mixRepoData"/>
+        </form>
+    </edit>
+</main>

@@ -1,0 +1,15 @@
+<main name="basicForm" description="Basic CRUD" id="form5" repo="contacts">
+    <list name="Basic Form">
+        <datatable route="form5-edit1" />
+    </list>
+    <edit>
+        <radio id="radio" label="it_profile" orientation="horizontal" validator="required"
+            value="${entity.it_profile}" converter="long">
+            <options>
+                <option label="1" value="1" />
+                <option label="2" value="2" />
+                <option label="3" value="3" />
+            </options>
+        </radio>
+    </edit>
+</main>

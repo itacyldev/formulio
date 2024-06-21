@@ -1,0 +1,200 @@
+<main name="auditoria" description="Auditorias" id="idAuditoria" repo="auditoriaRepo">
+    <list id="listAuditoria" name="FORMULARIO DE EJEMPLO" description="Ejemplo formulario sencillo">
+        <datatable>
+            <column id="column_auditoria_id" headerText="Auditoría" filtering="true" ordering="true" value="${entity.auditoria_id}">
+                <filter property="auditoria_id" matching="contains" valueExpression="${this.column_auditoria_id}"/>
+                <order property="auditoria_id"/>
+            </column>
+            <column id="column_fecha" headerText="Fecha" filtering="true" ordering="true" value="${entity.fecha}">
+                <filter property="auditoria_id" matching="contains" valueExpression="${this.column_fecha}"/>
+                <order property="fecha"/>
+            </column>
+            <column id="column_num_expediente" headerText="Nº Expediente" filtering="true" ordering="true" value="${entity.num_expediente}">
+                <filter property="num_expediente" matching="contains" valueExpression="${this.column_num_expediente}"/>
+                <order property="num_expediente"/>
+            </column>
+            <column id="column_equipo_auditor" headerText="Equipo auditor" filtering="true" ordering="true" value="${entity.equipo_auditor}">
+                <filter property="equipo_auditor" matching="contains" valueExpression="${this.column_equipo_auditor}"/>
+                <order property="equipo_auditor"/>
+            </column>
+            <action type="nav" route="idAuditoria-editAuditoria2"/>
+        </datatable>
+
+        <buttonbar type="fab">
+            <button id="createButton">
+                <action id="createAuditoria" type="create" route="idAuditoria-editAuditoria2" >
+                    <param name="repo" value="auditoriaRepo"/>
+                    <param name="fecha" value="${date.now}"/>
+                </action>
+            </button>
+        </buttonbar>
+
+    </list>
+
+    <edit id="editAuditoria2">
+        <script>
+            function onbefore(component){
+            console.log("component.value " + component.getValue(ctx));
+            var valueExpressionFactory = Packages.es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+            component.setValueExpression(valueExpressionFactory.getInstance().create(0));
+
+            }
+
+            function onafter(widget){
+            widget.getInputView().requestLayout();
+            //widget.getInputView().setChecked(false);
+            //widget.getInputView().setText("holaaaa");
+            //widget.getInputView().setBackgroundColor(-500136);
+
+
+
+            }
+        </script>
+        <form>
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="FORMULARIO DE EJEMPLO" fontSize="20"/>
+            <divisor color="#00766C" strokeWidth="10" />
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="DATOS GENERALES"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false" weights="20, 30, 50">
+                <row>
+                    <input label="Id. auditoria: " id="newAuditoria" readonly="true" placeHolder="${params.entityId}" value="${entity.auditoria_id}" />
+                    <input label="Nº Expediente: " id="numExpediente" value="${entity.num_expediente}" validator="required" inputType="3"/>
+                    <date label="Fecha:           " id="fecha" value="${entity.fecha}"  validator="required"/>
+                </row>
+                <row colspan="3">
+                    <select label="Equipo auditor: " value="${entity.equipo_auditor}">
+                        <options>
+                            <option value="Nombre1 Apellido1 Apellido1 " label="Nombre1 Apellido1 Apellido1"/>
+                            <option value="Nombre2 Apellido2 Apellido2 " label="Nombre2 Apellido2 Apellido2"/>
+                            <option value="Nombre3 Apellido3 Apellido3 " label="Nombre3 Apellido3 Apellido3"/>
+                            <option value="Nombre4 Apellido4 Apellido4 " label="Nombre4 Apellido4 Apellido4"/>
+                            <option value="Nombre5 Apellido5 Apellido5 " label="Nombre5 Apellido5 Apellido5"/>
+                        </options>
+                    </select>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="IDENTIFICACIÓN DEL ESTABLECIMIENTO DONDE SE REALIZA LA INSPECCIÓN"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row colspan="2">
+                    <input label="Nombre de la empresa o razón social: " value="${entity.nombre_establecimiento}" />
+                    <input label="NIF: " value="${entity.nif}" />
+                </row>
+
+                <row colspan="2">
+                    <input label="Nombre comercial: " value="${entity.nombre_comercial}" />
+                    <input label="Domicilio: " value="${entity.domicilio_establecimiento}" />
+                </row>
+
+                <row>
+                    <autocomplete forceSelection="true" id="provincia" label="Provincia: " repo="provRepo" value="${entity.prov_id}">
+                        <options labelExpression="${entity.name}" labelFilteringProperty="name" valueProperty="id" />
+                    </autocomplete>
+                    <autocomplete forceSelection="true" id="provmuni" label="Municipio: " repo="muniRepo" value="${entity.provmuni_id}">
+                        <options labelExpression="${entity.name}" labelFilteringProperty="name" valueProperty="provmuni" />
+                        <repofilter>
+                            <eq property="prov" value="${view.provincia}" mandatory="true"/>
+                            <contains property="name" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                </row>
+                <row>
+                    <input label="Telefono: " value="${entity.telefono}" inputType="3"/>
+                    <input label="Correo electrónico: " value="${entity.email}" validator="email" inputType="33"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="CUESTIONARIO"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <radio id="respuestaPregunta1" label="1. Pregunta 1: " value="${entity.respuesta_1}" orientation="horizontal"  hint="Descripción pregunta 1" validator="required">
+                <options>
+                    <option id="optionPregunta1SI" label="SI" value="SI" />
+                    <option id="optionPregutna1NO" label="NO" value="NO" />
+                    <option id="optionPregunta1NP" label="NP" value="NP" />
+                </options>
+            </radio>
+            <!--<table border="false" weights="30, 20, 50">
+                <row>
+                    <p bold="true" value="Observaciones y adjuntar imagen"/>
+                    <switcher id="switcherPregunta1" value="${not empty(entity.image_thumb_1) or not empty(entity.observaciones_1)?1:0}"/>
+                    <p value=""/>
+                </row>
+            </table>-->
+            <textarea label="Observaciones: " value="${entity.observaciones_1}" render="${view.respuestaPregunta1 eq 'NP'}" hasDeleteButton="false" />
+            <!--<image converter="b64Image" embedded="true" label="Imagen: " value="${entity.image_thumb_1}" render="${view.switcherPregunta1 eq 'true'}" hasDeleteButton="false" inputType="1 />-->
+
+            <radio id="respuestaPregunta2" label="2. Pregunta 2: " value="${entity.respuesta_2}" orientation="horizontal"  hint="Descripción pregunta 2" validator="required">
+                <options>
+                    <option id="optionPregunta2SI" label="SI" value="SI" />
+                    <option id="optionPregutna2NO" label="NO" value="NO" />
+                    <option id="optionPregunta2NP" label="NP" value="NP" />
+                </options>
+            </radio>
+            <!--<table border="false" weights="30, 20, 50">
+                <row>
+                    <p bold="true" value="Observaciones y adjuntar imagen"/>
+                    <switcher id="switcherPregunta2" value="${not empty(entity.image_thumb_2) or not empty(entity.observaciones_2)?1:0}"/>
+                    <p value=""/>
+                </row>
+            </table>-->
+            <textarea label="Observaciones: " value="${entity.observaciones_2}" render="${view.respuestaPregunta2 eq 'NP'}" hasDeleteButton="false" />
+            <!--<image converter="b64Image" embedded="true" label="Imagen: " value="${entity.image_thumb_2}" render="${view.switcherPregunta2 eq 'true'}" hasDeleteButton="false" inputType="1 />-->
+
+            <radio id="respuestaPregunta3" label="3. Pregunta 3" value="${entity.respuesta_3}" orientation="horizontal"  hint="Descripción pregunta 3" validator="required">
+                <options>
+                    <option id="optionPregunta3SI" label="SI" value="SI" />
+                    <option id="optionPregutna3NO" label="NO" value="NO" />
+                    <option id="optionPregunta3NP" label="NP" value="NP" />
+                </options>
+            </radio>
+            <textarea label="Observaciones: " value="${entity.observaciones_3}" render="${view.respuestaPregunta3 eq 'NP'}" hasDeleteButton="false" />
+            <table border="false" weights="30, 20, 50">
+                <row>
+                    <p bold="true" value="Adjuntar imagen"/>
+                    <switcher id="switcherAdjuntar" value="${not empty(entity.image_thumb)?1:0}"/>
+                    <p value=""/>
+                </row>
+            </table>
+            <image converter="b64Image" embedded="true" label="Imagen: " value="${entity.image_thumb}" render="${view.switcherAdjuntar eq 'true'}" hasDeleteButton="false" inputType="5"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="FIRMA"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false" weights="30, 20, 50">
+                <row>
+                    <p bold="true" value="Firma"/>
+                    <switcher id="switcherFirma" value="${not empty(entity.image_firma)?1:0}"/>
+                    <p value=""/>
+                </row>
+            </table>
+            <table border="false" weights="10, 90">
+                <row>
+                    <p value=""/>
+                    <image id="imageFirma" converter="b64Image" embedded="true" value="${entity.image_firma}" render="${view.switcherFirma eq 'true'}" hasDeleteButton="false" inputType="4"/>
+                </row>
+            </table>
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action route="idAuditoria-listAuditoria" type="save" registerInHistory="false" popHistory="1"/>
+            </button>
+            <button label="Cancel" route="back"/>
+        </buttonbar>
+    </edit>
+</main>

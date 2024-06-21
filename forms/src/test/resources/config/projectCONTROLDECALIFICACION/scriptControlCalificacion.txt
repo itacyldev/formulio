@@ -1,0 +1,102 @@
+CREATE TABLE "variedad" (
+	"variedad_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"variedad"	TEXT NOT NULL
+)
+
+INSERT INTO variedad (variedad)
+values
+("Rufete"),
+("Tempranillo"),
+("Garnacha"),
+("Palomino fino"),
+("Viura"),
+("Moscatel de grano menudo")
+
+CREATE TABLE "operador" (
+	"operador_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"bodega"	TEXT NOT NULL,
+	"cif" TEXT,
+	"representante"	TEXT,
+	"dni_representante" TEXT
+)
+
+insert into operador ("bodega", "cif", "representante", "dni_representante")
+values
+("Bodega 1", "cif 1", "Representante 1", "DNI 1"),
+("Bodega 2", "cif 2", "Representante 2", "DNI 2"),
+("Bodega 3", "cif 3", "Representante 3", "DNI 3")
+
+CREATE TABLE "solicitud" (
+	"solicitud_id" INTEGER PRIMARY KEY,
+	"numero_solicitud" TEXT,
+	"fecha_solicitud" TEXT,
+	"operador_id" INTEGER,
+	"observaciones_solicitud" TEXT,
+	"firma_servicios_tecnicos_dop" TEXT,
+	"firma_representante_bodega" TEXT,
+	"fecha_recepcion" TEXT,
+	FOREIGN KEY(operador_id) REFERENCES operador(operador_id)
+)
+
+CREATE TABLE "partida" (
+	"partida_id" INTEGER PRIMARY KEY,
+	"partida" TEXT,
+	"solicitud_id" INTEGER,
+	"lote_embotellado" TEXT,
+	"tipo_vino" TEXT,
+	"litros" REAL,
+	"numero_envases" INTEGER,
+	"capacidad_envase" REAL,
+	"fecha_embotellado" TEXT,
+	"anada" INTEGER,
+	FOREIGN KEY(solicitud_id) REFERENCES solicitud(solicitud_id)
+)
+
+CREATE TABLE "acta" (
+	"acta_id" INTEGER PRIMARY KEY,
+	"numero_acta" TEXT,
+	"fecha_acta" TEXT,
+	"partida_id" INTEGER,
+	"auditor" TEXT,
+	"analitica" TEXT,
+	"observaciones_partida" TEXT,
+	"fecha_entrada_uva" TEXT,
+	"observaciones_entrada_uva" TEXT,
+	"respuesta_1" TEXT,
+	"respuesta_2" TEXT,
+	"respuesta_3" TEXT,
+	"tratamientos_enologicos" TEXT,
+	"descripcion_movimientos_partidas" TEXT,
+	"respuesta_4" TEXT,
+	"kilogramos_totales" REAL,
+	"litros_totales" REAL,
+	"rendimiento_vino" TEXT,
+	"fecha_entrada_vino_barricas" TEXT,
+	"fecha_salida_vino_barricas" TEXT,
+	"mezcla_anadas" TEXT,
+	"respuesta_5" TEXT,
+	"muestras_partida" INTEGER,
+	"muestras_bodega" INTEGER,
+	"observaciones_acta" TEXT,
+	"firma_representante_bodega" TEXT,
+	"firma_servicios_tecnicos_asociacion" TEXT,
+	FOREIGN KEY(partida_id) REFERENCES PARTIDA(partida_id)
+)
+
+CREATE TABLE "entrada_uva" (
+	"entrada_uva_id" TEXT PRIMARY KEY,
+	"acta_id" INTEGER,
+	"fecha_entrada_uva" TEXT,
+	"variedad_id" INTEGER,
+	"cantidad_kg" REAL,
+	"deposito_destino" INTEGER,
+	FOREIGN KEY(variedad_id) REFERENCES variedad(variedad_id),
+	FOREIGN KEY(acta_id) REFERENCES acta(acta_id)
+)
+
+CREATE TABLE "muestra" (
+	"muestra_id" TEXT PRIMARY KEY,
+	"acta_id" INTEGER,
+	"numero_muestra" TEXT,
+	FOREIGN KEY(acta_id) REFERENCES acta(acta_id)
+)

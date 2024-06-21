@@ -1,0 +1,332 @@
+<main name="Todos los componentes" description="Simple form with image example." id="formPrueba"
+    repo="prue">
+    <edit>
+        <form>
+            <tab>
+                <tabitem label="Tab 0: Styles">
+
+                    <autocomplete label="Autocomplete: Estilos option:" forceSelection="true"
+                        value="italic">
+                        <options>
+                            <option label="fontSize:20;" value="fontSize" labelStyle="fontSize:20"/>
+                            <option label="backgroundColor:#EC2A2A;" value="backgroundColor" labelStyle="backgroundColor:#EC2A2A;"/>
+                            <option label="fontColor:#0C69FE" value="fontColor" labelStyle="fontColor:#0C69FE"/>
+                            <option label="fontFamily:times" value="fontFamily" labelStyle="fontFamily:times"/>
+                            <option label="fontStyle:italic" value="italic" labelStyle="fontStyle:italic"/>
+                            <option label="fontStyle:bold" value="bold" labelStyle="fontStyle:bold"/>
+                            <option label="fontStyle:boldItalic" value="boldItalic" labelStyle="fontStyle:boldItalic"/>
+                            <option label="fontStyle:underlined" value="underlined" labelStyle="fontStyle:underlined"/>
+                            <option label="fontStyle:uppercase" value="uppercase" labelStyle="fontStyle:uppercase"/>
+                        </options>
+                    </autocomplete>
+
+                    <select label="Select: Estilos option:" orientation="horizontal" value="fontColor">
+                        <options>
+                            <option label="backgroundColor:#EC2A2A;" value="backgroundColor" labelStyle="backgroundColor:#EC2A2A;"/>
+                            <option label="fontSize:20;" value="fontSize" labelStyle="fontSize:20"/>
+                            <option label="fontColor:#0C69FE" value="fontColor" labelStyle="fontColor:#0C69FE"/>
+                            <option label="fontFamily:times" value="fontFamily" labelStyle="fontFamily:times"/>
+                            <option label="fontStyle:italic" value="italic" labelStyle="fontStyle:italic"/>
+                            <option label="fontStyle:bold" value="bold" labelStyle="fontStyle:bold"/>
+                            <option label="fontStyle:boldItalic" value="boldItalic" labelStyle="fontStyle:boldItalic"/>
+                            <option label="fontStyle:underlined" value="underlined" labelStyle="fontStyle:underlined"/>
+                            <option label="fontStyle:uppercase" value="uppercase" labelStyle="fontStyle:uppercase"/>
+                        </options>
+                    </select>
+
+                    <input label="Input style " inputStyle="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase"/>
+
+                    <textarea label="Textarea style " inputStyle="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase"/>
+
+                    <table headerText="headerText1, headerText2 " labelStyle="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase">
+                        <row>
+                            <p value="Paragraph row1"/>
+                        </row>
+                        <row>
+                            <p value="Paragraph row2"/>
+                        </row>
+                    </table>
+
+                    <input label="backgroundColor:#EC2A2A;" labelStyle="backgroundColor:#EC2A2A"/>
+                    <input label="fontSize:20;" labelStyle="fontSize:20"/>
+                    <input label="fontColor:#0C69FE" labelStyle="fontColor:#0C69FE"/>
+                    <input label="fontFamily:times" labelStyle="fontFamily:times"/>
+                    <input label="fontStyle:bold" labelStyle="fontStyle:bold"/>
+                    <input label="fontStyle:italic" labelStyle="fontStyle:italic"/>
+                    <input label="fontStyle:boldItalic" labelStyle="fontStyle:boldItalic"/>
+                    <input label="fontStyle:underlined" labelStyle="fontStyle:underlined"/>
+                    <input label="fontStyle:uppercase" labelStyle="fontStyle:uppercase"/>
+                    <input label="fontStyle:boldItalic,underlined,uppercase" labelStyle="fontStyle:boldItalic,underlined,uppercase"/>
+                    <input label="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase" labelStyle="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase"/>
+
+                    <radio label="Radio: Estilos option:" orientation="horizontal" value="fontColor">
+                        <options>
+                            <option label="backgroundColor:#EC2A2A;" value="backgroundColor" labelStyle="backgroundColor:#EC2A2A;"/>
+                            <option label="fontSize:20;" value="fontSize" labelStyle="fontSize:20"/>
+                            <option label="fontColor:#0C69FE" value="fontColor" labelStyle="fontColor:#0C69FE"/>
+                            <option label="fontFamily:times" value="fontFamily" labelStyle="fontFamily:times"/>
+                        </options>
+                    </radio>
+
+                    <radio label="Radio: más estilos option:" orientation="horizontal" value="italic">
+                        <options>
+                            <option label="fontStyle:italic" value="italic" labelStyle="fontStyle:italic"/>
+                            <option label="fontStyle:bold" value="bold" labelStyle="fontStyle:bold"/>
+                            <option label="fontStyle:boldItalic" value="boldItalic" labelStyle="fontStyle:boldItalic"/>
+                            <option label="fontStyle:underlined" value="underlined" labelStyle="fontStyle:underlined"/>
+                            <option label="fontStyle:uppercase" value="uppercase" labelStyle="fontStyle:uppercase"/>
+                        </options>
+                    </radio>
+
+
+
+                    <card label="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase" labelStyle="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase" subtitle="subtitle"
+                        template="card_template_1" title="title" expandable="true" expanded="true"/>
+
+                </tabitem>
+                <tabitem label="Tab 1">
+                    <p bold="true" value="Head Formulario Prueba" fontSize="20"/>
+
+                    <p value="Paragraph Formulario Prueba" bold="true" fontSize="20"/>
+
+                    <link route="form1-list" value="Ir a Form Card Image" />
+
+                    <input label="1. Input: " value="${entity.input}" validator="required" hint="Hint 1. input."/>
+
+                    <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" hint="Hint 2. Radio">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                        </options>
+                    </radio>
+
+                    <textarea label="3. Textarea: " validator="required" value="${entity.textarea}" hint="Hint 3. Textarea"/>
+
+                    <switcher label="4. Switcher: " value="${entity.switcher}" hint="Hint 4. Switcher"/>
+
+                    <date converter="string" label="5.1 Date con patrón yyyy/MM/dd: " validator="required"
+                        value="${entity.fecha}" pattern="yyyy/MM/dd" hint="Hint 5.1 Date con patrón yyyy/MM/dd" />
+
+                    <date converter="string" label="5.2 Date sin patrón: " validator="required"
+                        value="${entity.fecha}" hint="Hint 5.2 Date sin patrón"/>
+
+                    <datetime converter="string" label="5.3 Datetme con patrón: " validator="required"
+                        value="${entity.fecha}" pattern="yyyy/MM/dd HH/mm/ss" hint="Hint 5.2 Date sin patrón"/>
+
+                    <datetime converter="string" label="5.3 Datetime sin patrón: " validator="required"
+                        value="${entity.fecha}" hint="Hint 5.3 Datetime sin patrón"/>
+
+
+                    <select label="6. Select: " validator="required" value="${entity.combo}" hint="Hint 6. Select">
+                        <options>
+                            <option label="Combo1" value="Combo1" />
+                            <option label="Combo2" value="Combo2" />
+                            <option label="Combo3" value="Combo3" />
+                        </options>
+                    </select>
+
+                    <autocomplete forceSelection="true" id="autocompletado_id"
+                        label="7. Autocomplete: " repo="autocompletado"
+                        validator="required" value="${entity.autocompletado_id}" hint="Hint 7. Autocomplete">
+                        <options labelExpression="${entity.valor}" labelFilteringProperty="valor"
+                            valueProperty="autocompletado_id" />
+                    </autocomplete>
+
+                    <divisor color="#00766C" strokeWidth="4" />
+
+                    <image label="8. Imagen: " repo="superHImages" value="${entity.image}" hint="Hint 8. Imagen"/>
+
+                    <image label="9. Imagen: " value="${'superheroes/batgirl.jpg'}" hint="Hint 9. Imagen"/>
+
+                    <image converter="b64Image" embedded="true" label="10. Imagen: " value="${entity.image_thumb}" hint="Hint 10. Imagen"/>
+
+                    <image converter="b64Image" embedded="true" label="11. Imagen: " value="${entity.image_thumb}" hint="Hint 11. Imagen" inputType="1"/>
+                    <image converter="b64Image" embedded="true" label="12. Imagen: " value="${entity.image_thumb}" hint="Hint 12. Imagen" inputType="2"/>
+                    <image converter="b64Image" embedded="true" label="13. Imagen: " value="${entity.image_thumb}" hint="Hint 13. Imagen" inputType="3"/>
+                    <image converter="b64Image" embedded="true" label="14. Imagen: " value="${entity.image_thumb}" hint="Hint 14. Imagen" inputType="4"/>
+                    <image converter="b64Image" embedded="true" label="15. Imagen: " value="${entity.image_thumb}" hint="Hint 15. Imagen" inputType="5"/>
+                    <image converter="b64Image" embedded="true" label="16. Imagen: " value="${entity.image_thumb}" hint="Hint 16. Imagen" inputType="6"/>
+                    <image converter="b64Image" embedded="true" label="17. Imagen: " value="${entity.image_thumb}" hint="Hint 17. Imagen" inputType="7"/>
+
+                </tabitem>
+                <tabitem label="Tab 2: Table">
+
+                    <table headerText=" 1. Con bordes, Clave, Valor " weights="20, 30, 50">
+                        <row colspans="3">
+                            <p value="Descripción de la tabla en un paragraph" />
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="1. " />
+                            <textarea readonly="true" value="Input " />
+                            <textarea readonly="true" value="${entity.input}" />
+                        </row>
+                    </table>
+
+                    <table border="false" headerText=" 2. Sin bordes">
+                        <row colspans="3">
+                            <p value="Descripción de la tabla en un paragraph" />
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="1.  " />
+                            <textarea readonly="true" value="Input " />
+                            <textarea readonly="true" value="${entity.input}" />
+                        </row>
+                    </table>
+
+                    <table headerText=" 3. Pesos">
+                        <row colspans="3">
+                            <p
+                                value="1: 20-30-50, 2: 20-30, 3: 20-30-50-70, 4: 40-40-80, 5: 30-80 6: asdfla" />
+                        </row>
+                        <row weights="20, 30, 50">
+                            <textarea readonly="true" value="1.  " />
+                            <textarea readonly="true" value="Input " />
+                            <input hasDeleteButton="false" value="${entity.input}" />
+                        </row>
+                        <row weights="20, 30">
+                            <textarea readonly="true" value="2.  " />
+                            <textarea readonly="true" value="Textarea: " />
+                            <textarea hasDeleteButton="false" value="${entity.textarea}" />
+                        </row>
+                        <row weights="20, 30, 50, 70">
+                            <textarea readonly="true" value="3.  " />
+                            <textarea readonly="true" value="Date: " />
+                            <date converter="string" hasDeleteButton="false"
+                                value="${entity.fecha}" />
+                        </row>
+                        <row weights="40, 40, 80">
+                            <textarea readonly="true" value="4.  " />
+                            <textarea readonly="true" value="Select: " />
+                            <select hasDeleteButton="false" value="${entity.combo}">
+                                <options>
+                                    <option label="Combo1" value="Combo1" />
+                                    <option label="Combo2" value="Combo2" />
+                                    <option label="Combo3" value="Combo3" />
+                                </options>
+                            </select>
+                        </row>
+                        <row weights="30, 80">
+                            <textarea readonly="true" value="5.  " />
+                            <textarea readonly="true" value="Switcher: " />
+                            <switcher value="${entity.switcher}" />
+                        </row>
+                        <row weights="asdfla">
+                            <textarea readonly="true" value="6.  " />
+                            <textarea readonly="true" value="Autocomplete: " />
+                            <textarea readonly="true" value="${entity.autocompletado_id}" />
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="7.  " />
+                            <textarea readonly="true" value="Image: " />
+                            <image hasDeleteButton="false" repo="superHImages"
+                                value="${entity.image}" />
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="8.  " />
+                            <textarea readonly="true" value="Radio: " />
+                            <radio orientation="horizontal" value="Radio1" hasDeleteButton="false">
+                                <options>
+                                    <option id="optRadio1" label="Radio1" value="Radio1" />
+                                    <option id="optRadio2" label="Radio2" value="Radio2" />
+                                    <option id="optRadio3" label="Radio3" value="Radio3" />
+                                </options>
+                            </radio>
+                        </row>
+                    </table>
+                </tabitem>
+                <tabitem label="Tab 3: Radio">
+
+                    <radio label="1. Radio sin weigths:" orientation="horizontal" value="${entity.radio}" validator="required">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                        </options>
+                    </radio>
+
+                    <radio label="2. Radio con weights weights=20, 30, 50:" orientation="horizontal" value="${entity.radio}" validator="required" weights="20, 30, 50">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                        </options>
+                    </radio>
+
+                    <radio label="3. Radio con weights weights=50, 30, 20:" orientation="horizontal" value="${entity.radio}" validator="required" weights="50, 30, 20">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                        </options>
+                    </radio>
+
+                    <radio label="4. Radio con weights weights=20, 20:" orientation="horizontal" value="${entity.radio}" validator="required" weights="20, 20">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                            <option label="Radio4" value="Radio4" />
+                        </options>
+                    </radio>
+
+                    <radio label="5. Radio vertical:" orientation="vertical" value="${entity.radio}" validator="required" weights="20, 20">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                            <option label="Radio4" value="Radio4" />
+                        </options>
+                    </radio>
+
+                </tabitem>
+
+                <tabitem label="Tab 4: Card">
+                    <input label="1. Input: " value="${entity.input}" validator="required"  />
+
+                    <card label="Card-${entity.id} expanded = true" subtitle="${entity.textarea}"
+                        template="card_template_1" title="${entity.input}" expandable="true" expanded="true"/>
+
+                    <card label="Card-${entity.id} expanded= false" subtitle="${entity.textarea}"
+                        template="card_template_1" title="${entity.input}" expandable="true" expanded="false"/>
+
+                    <card label="Card-${entity.id}" subtitle="${entity.textarea}"
+                        template="card_template_1" title="${entity.input}" />
+                </tabitem>
+                <tabitem label="Tab 5: Datalist">
+                    <input label="1. Input: " value="${entity.input}" validator="required"  />
+
+                    <datalist>
+                        <card expandable="true" expanded="false" label="Card-${entity.image}">
+                            <p name="title" value="${entity.input}" />
+                            <p name="subtitle" value="${entity.textarea}" />"
+                            <image repo="superHImages" value="${entity.image}" />
+                        </card>
+                    </datalist>
+                </tabitem>
+                <tabitem label="Tab 6: Datatable">
+                    <input id="inputFilter" label="Input filter: " value="${entity.input}" />
+                    <textarea id="textareaFilter" label="Textarea filter: "
+                        value="${entity.textarea}" />
+                    <switcher id="switcherFilter" label="Switcher filter " value="${entity.switcher}" />
+                    <datatable
+                        numVisibleRows="10"
+                        properties="input, radio, textarea, switcher, fecha, combo, autocompletado_id">
+                        <repofilter>
+                            <and>
+                                <or>
+                                    <contains property="input" value="${view.inputFilter}" />
+                                    <contains property="textarea" value="${view.textareaFilter}"/>
+                                </or>
+                                <eq property="switcher" value="${view.switcherFilter}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+            </tab>
+        </form>
+    </edit>
+    <list name="Todos los componentes">
+        <datatable properties="input, radio, textarea, switcher, fecha, combo, autocompletado_id" />
+    </list>
+</main>

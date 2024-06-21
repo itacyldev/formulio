@@ -1,0 +1,20 @@
+<main id="formRadio" name="Radio" repo="pruebaRepo">
+    <edit>
+        <form>
+            <radio label="Radio horizontal: " value="${entity.tipo_figura_calidad}" orientation="horizontal" weights="20, 30, 50">
+                <options>
+                    <option id="uno" label="Uno" value="Uno" />
+                    <option id="dos" label="Dos" value="Dos" />
+                    <option id="tres" label="Tres" value="Tres" />
+                </options>
+            </radio>
+            <radio label="Radio vertical: " value="${entity.tipo_figura_calidad}" orientation="vertical">
+                <options>
+                    <option id="cuatro" label="Cuatro" value="Cuatro" />
+                    <option id="cinco" label="Cinco" value="Cinco" />
+                    <option id="seis" label="Seis" value="Seis" />
+                </options>
+            </radio>
+       </form>
+    </edit>
+</main>

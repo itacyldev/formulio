@@ -1,0 +1,615 @@
+<main id="loteControlDocumental" name="Lote control documental" repo="loteControlDocumentalRepo" mainForm="false">
+    <list id="listLoteControlDocumental" name="Lote control documental" description="Listado control documental">
+        <datatable>
+            <column id="column_num_lote" headerText="Nº Lote" filtering="true" ordering="true" value="${entity.num_lote}">
+                <filter property="num_lote" matching="contains" valueExpression="${this.column_num_lote}"/>
+                <order property="num_lote"/>
+            </column>
+            <column id="column_num_expediente" headerText="Nº Exp." filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+            <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.expediente.operador.razon_social}"/>
+            <column id="column_fecha_fabricacion" headerText="Fecha fabricación" filtering="true" ordering="true" value="${entity.fecha_fabricacion}">
+                <filter property="fecha_fabricacion" matching="contains" valueExpression="${this.column_fecha_fabricacion}"/>
+                <order property="fecha_fabricacion"/>
+            </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editLoteControlDocumental">
+        <script src="scripts/controlLote.js"/>
+        <form id="formLoteControlDocumental">
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="CONTROL LOTE"/>
+            <p value=""/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="EXPEDIENTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. Exp., Nº Expediente, Operador" weights="25, 35, 40" >
+                        <row>
+                            <input value="${entity.expediente_id}" placeHolder="${not empty(params.expediente_id)?params.expediente_id:null}" readonly="true"/>
+                            <textarea value="${entity.expediente.num_expediente}" placeHolder="${not empty(params.num_expediente)?params.num_expediente:null}" readonly="true" />
+                            <textarea value="${entity.expediente.operador.razon_social}" placeHolder="${not empty(params.operador)?params.operador:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="INSTALACION: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. , Nombre instalación" weights="25, 75">
+                        <row>
+                            <input id="instalacion_id" value="${entity.expediente.instalacion.instalacion_id}" placeHolder="${not empty(params.instalacion_id)?params.instalacion_id:null}" readonly="true"/>
+                            <textarea value="${entity.expediente.instalacion.nombre_instalacion}" placeHolder="${not empty(params.nombre_instalacion)?params.nombre_instalacion:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="LOTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table headerText=" Id. Lote, Nº lote *, F. fabricación *" weights="25, 50, 25">
+                <row>
+                    <input id="lote_control_documental_id" value="${entity.lote_control_documental_id}" readonly="true"/>
+                    <input id="num_lote" value="${entity.num_lote}" hasDeleteButton="false" validator="required"/>
+                    <date value="${entity.fecha_fabricacion}" hasDeleteButton="false" hasTodayButton="false" validator="required"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <tab>
+                <tabitem label="Control producto">
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Comprobación de ingredientes"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+
+                    <table headerText=" MATERIAS PRIMAS, PESO, %, CUMPLE, NOTAS ACLARATORIAS" weights="20, 15, 15, 17, 33">
+                        <row>
+                            <input label="Cebolla Horcal" hint="Condición: Mayor del 35%. Normas de referencia: Descripción: Pliego de condiciones." readonly="true"/>
+                            <input id="cebolla_peso" value="${entity.cebolla_peso}" hasDeleteButton="false" inputType="3"/>
+                            <input id="porcentaje_cebolla_peso" value="${view.cebolla_peso gt 0? math:round(view.cebolla_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2):null}" readonly="true" inputType="3"/>
+                            <radio id="cumple_cebolla_peso" value="${view.cebolla_peso gt 0? (math:round(view.cebolla_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) ge 35 ? 'S': 'N'):'N'}" orientation="horizontal" readonly="true">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.cebolla_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Arroz" hint="Condición: Del 15% al 30%. Normas de referencia: Arroz seco, de grano entero, de las variedades tipo japonica Bahia o Bomba. Categoría extra." readonly="true"/>
+                            <input id="arroz_peso" value="${entity.arroz_peso}" hasDeleteButton="false" inputType="3"/>
+                            <input id="porcentale_arroz_peso" value="${view.arroz_peso gt 0? math:round(view.arroz_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2):null}" readonly="true" inputType="3"/>
+                            <radio id="cumple_arroz_peso" value="${view.arroz_peso gt 0? (math:round(view.arroz_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) ge 15 and math:round(view.arroz_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) le 30? 'S': 'N'):'N'}" orientation="horizontal" readonly="true">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.arroz_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Sangre" hint="Condición: Mayor del 12%. Normas de referencia: De oveja, vaca o cerdo." readonly="true"/>
+                            <input id="sangre_peso" value="${entity.sangre_peso}" hasDeleteButton="false" inputType="3"/>
+                            <input id="porcentaje_sangre_peso" value="${view.sangre_peso gt 0? math:round(view.sangre_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2):null}" readonly="true" inputType="3"/>
+                            <radio id="cumple_sangre_peso" value="${view.sangre_peso gt 0 and math:round(view.sangre_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) ge 12?'S':'N'}" orientation="horizontal" readonly="true">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.sangre_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Manteca de Cerdo o sebo" hint="Condición: Del 10% al 22%. Normas de referencia: Congelado o refrigerado por debajo de 4 ºC." readonly="true"/>
+                            <input id="manteca_peso" value="${entity.manteca_peso}" hasDeleteButton="false" inputType="3"/>
+                            <input id="porcentaje_manteca_peso" value="${view.manteca_peso gt 0? math:round(view.manteca_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2):null}" readonly="true" inputType="3"/>
+                            <radio id="cumple_manteca_peso" value="${view.manteca_peso gt 0? (math:round(view.manteca_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) ge 10 and math:round(view.manteca_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) le 22? 'S': 'N'):'N'}" orientation="horizontal" readonly="true">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.manteca_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Sal" readonly="true"/>
+                            <input id="sal_peso" value="${entity.sal_peso}" hasDeleteButton="false" inputType="3"/>
+                            <p value=""/>
+                            <radio value="${entity.sal_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.sal_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Especias" readonly="true"/>
+                            <input id="especias_peso" value="${entity.especias_peso}" hasDeleteButton="false" inputType="3"/>
+                            <p value=""/>
+                            <radio value="${entity.especias_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.especias_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="TOTAL" readonly="true"/>
+                            <input id="total_peso" value="${(view.cebolla_peso + view.arroz_peso + view.sangre_peso + view.manteca_peso + view.sal_peso + view.especias_peso) gt 0? math:round((view.cebolla_peso + view.arroz_peso + view.sangre_peso + view.manteca_peso + view.sal_peso + view.especias_peso)*math:pow(10,2))/math:pow(10,2):null}" hasDeleteButton="false" inputType="3" readonly="true"/>
+                            <p value=""/>
+                            <p value=""/>
+                            <p value=""/>
+                        </row>
+                    </table>
+
+                    <p value=""/>
+
+                    <table headerText=" REQUISITO, EVIDENCIAS, CUMPLE, NOTAS ACLARATORIAS" weights="20, 30, 17, 33">
+                        <row>
+                            <input label="Especias utilizadas" readonly="true"/>
+                            <textarea value="${entity.especias_utilizadas_evidencias}" hasDeleteButton="false" />
+                            <radio value="${entity.especias_utilizadas_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.especias_utilizadas_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Si hay precocción del arroz fecha de precocción (debe ser antes de 48 horas)" readonly="true"/>
+                            <date value="${entity.fecha_precoccion_evidecias}" hasDeleteButton="false" hasTodayButton="false"/>
+                            <radio value="${entity.fecha_precoccion_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.fecha_precoccion_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Si la cebolla no se pica en las instalaciones. Comprobaciones horcal" readonly="true"/>
+                            <textarea value="${entity.comprobaciones_horcal_evidencias}" hasDeleteButton="false" />
+                            <radio value="${entity.comprobaciones_horcal_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.comprobaciones_horcal_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Registro de Temperatura de la cámara de conservación de la Manteca de Cerdo o sebo (Menor 4ºC)" readonly="true"/>
+                            <textarea value="${entity.temperatura_camara_manteca_evidencias}" hasDeleteButton="false" />
+                            <radio value="${entity.temperatura_camara_manteca_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.temperatura_camara_manteca_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Tripas utilizadas" readonly="true"/>
+                            <textarea value="${entity.tripas_utilizadas_evidencias}" hasDeleteButton="false" />
+                            <radio value="${entity.tripas_utilizadas_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.tripas_utilizadas_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Temperatura cocción morcilla. Mayor de 90º C." readonly="true"/>
+                            <textarea value="${entity.temperatura_coccion_morcilla_evidencias}" hasDeleteButton="false" />
+                            <radio value="${entity.temperatura_coccion_morcilla_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.temperatura_coccion_morcilla_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Tiempo de oreo" readonly="true"/>
+                            <textarea value="${entity.tiempo_oreo_evidencias}" hasDeleteButton="false" />
+                            <radio value="${entity.tiempo_oreo_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.tiempo_oreo_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Cantidad elaborada despues del oreo (kg)" readonly="true"/>
+                            <textarea value="${entity.cantidad_elaborda_despues_oreo_evidencias}" hasDeleteButton="false" inputType="3"/>
+                            <radio value="${entity.cantidad_elaborda_despues_oreo_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.cantidad_elaborda_despues_oreo_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspan="4">
+                            <p bold="true" uppercase="true" value="Transformado"/>
+                        </row>
+                        <row>
+                            <input label="Fecha transformado" readonly="true"/>
+                            <date value="${entity.fecha_transformado_evidencias}" hasDeleteButton="false" hasTodayButton="false"/>
+                            <radio value="${entity.fecha_transformado_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.fecha_transformado_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Nº piezas transformadas/Kg obtenidos" readonly="true"/>
+                            <textarea value="${entity.numero_piezas_evidencias}" hasDeleteButton="false" inputType="3"/>
+                            <radio value="${entity.numero_piezas_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.numero_piezas_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Nº envases obtenidos" readonly="true"/>
+                            <textarea value="${entity.numero_envases_evidencias}" hasDeleteButton="false" inputType="3"/>
+                            <radio value="${entity.numero_envases_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.numero_envases_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspan="4">
+                            <p bold="true" uppercase="true" value="Etiquetado (contraetiquetas/mat. Preimpreso)"/>
+                        </row>
+                        <row>
+                            <input label="Marcas etiquetada enteras" readonly="true"/>
+                            <textarea value="${entity.marcas_etiquetadas_evidencias}" hasDeleteButton="false" />
+                            <radio value="${entity.marcas_etiquetadas_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.marcas_etiquetadas_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Marcas utilizadas transformado" readonly="true"/>
+                            <textarea value="${entity.marcas_utilizadas_evidencias}" hasDeleteButton="false" />
+                            <radio value="${entity.marcas_utilizadas_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.marcas_utilizadas_notas}" hasDeleteButton="false"/>
+                        </row>
+                    </table>
+
+                    <p value=""/>
+
+                    <table headerText=" EXPEDICIÓN, EVIDENCIAS, NOTAS ACLARATORIAS" weights="20, 45, 35">
+                        <row>
+                            <input label="Denominación de venta" readonly="true"/>
+                            <textarea value="${entity.denominacion_venta_evidencias}" hasDeleteButton="false" />
+                            <textarea value="${entity.denominacion_venta_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Fecha 1ª Expedición" readonly="true"/>
+                            <date value="${entity.fecha_primera_expedicion_evidencias}" hasDeleteButton="false" hasTodayButton="false" />
+                            <textarea value="${entity.fecha_primera_expedicion_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Fecha ultima expedición" readonly="true"/>
+                            <date value="${entity.fecha_ultima_expedicion_evidencias}" hasDeleteButton="false" hasTodayButton="false" />
+                            <textarea value="${entity.fecha_ultima_expedicion_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Total producto expedido (kg)" readonly="true"/>
+                            <textarea value="${entity.total_producto_expedido_evidencias}" hasDeleteButton="false" inputType="3"/>
+                            <textarea value="${entity.total_producto_expedido_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Existencias (kg)" readonly="true"/>
+                            <textarea value="${entity.existencias_evidencias}" hasDeleteButton="false" inputType="3"/>
+                            <textarea value="${entity.existencias_notas}" hasDeleteButton="false"/>
+                        </row>
+                    </table>
+                </tabitem>
+
+                <tabitem label="Balance de masas">
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Elaboración"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+
+                        <button label="Añadir" readonly="${empty (entity.lote_control_documental_id)}" readonlyMessage="No puede añadir una nueva elaboración. Antes debe guardar el lote">
+                            <action type="save" route="tipoMorcillaElaboracion-editTipoMorcillaElaboracion">
+                                <param name="expediente_id" value="${entity.expediente.id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador_id" value="${entity.expediente.operador_id}" />
+                                <param name="razon_social" value="${entity.expediente.operador.razon_social}" />
+                                <param name="instalacion_id" value="${entity.expediente.instalacion_id}" />
+                                <param name="nombre_instalacion" value="${entity.expediente.instalacion.nombre_instalacion}" />
+                                <param name="lote_control_documental_id" value="${entity.lote_control_documental_id}" />
+                                <param name="num_lote_control_documental" value="${view.num_lote}" />
+                            </action>
+                        </button>
+
+                        <datatable
+                            onBeforeRender="setTotalesElaboracion"
+                            route="tipoMorcillaElaboracion-editTipoMorcillaElaboracion"
+                            numVisibleRows="3"
+                            repo="tipoMorcillaElaboracionRepo"
+                            allowsPartialRestore="false">
+                            <column headerText="Tipo morcilla" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.tipo_morcilla}"/>
+                            <column headerText="Instalación" filtering="false" ordering="false" value="${entity.loteControlDocumental.expediente.instalacion.nombre_instalacion}"/>
+                            <column headerText="kg elaborados" filtering="false" ordering="false" value="${entity.kg_elaborados gt 0? math:round(math:pow(10,2)*entity.kg_elaborados)/math:pow(10,2):null}"/>
+                            <column headerText="Mermas (%)" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.merma_porcentaje gt 0? math:round(math:pow(10,2)*entity.tipoMorcillaInstalacion.merma_porcentaje)/math:pow(10,2):null}"/>
+                            <column headerText="Peso (kg)" filtering="false" ordering="false" value="${entity.kg_elaborados gt 0 and entity.tipoMorcillaInstalacion.merma_porcentaje gt 0?math:round(entity.kg_elaborados*entity.tipoMorcillaInstalacion.merma_porcentaje*math:pow(10,2)/100)/math:pow(10,2):null}"/>
+                            <column headerText="Kg después del oreo" filtering="false" ordering="false" value="${entity.kg_elaborados gt 0 and entity.tipoMorcillaInstalacion.merma_porcentaje gt 0?math:round(entity.kg_elaborados*(100-entity.tipoMorcillaInstalacion.merma_porcentaje)*math:pow(10,2)/100)/math:pow(10,2):null}"/>
+                            <column headerText="Unidades teóricas/kg" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.unidad_kg gt 0? math:round(math:pow(10,2)*entity.tipoMorcillaInstalacion.unidad_kg)/math:pow(10,2):null}"/>
+                            <column headerText="Unidades teóricas elaboradas" filtering="false" ordering="false" value="${entity.kg_elaborados gt 0 and entity.tipoMorcillaInstalacion.merma_porcentaje gt 0?math:round(entity.kg_elaborados*(100-entity.tipoMorcillaInstalacion.merma_porcentaje)*entity.tipoMorcillaInstalacion.unidad_kg*math:pow(10,2)/100)/math:pow(10,2):null}"/>
+                            <param name="expediente_id" value="${entity.loteControlDocumental.expediente_id}" />
+                            <param name="num_expediente" value="${entity.loteControlDocumental.expediente.num_expediente}" />
+                            <param name="operador_id" value="${entity.loteControlDocumental.expediente.operador_id}" />
+                            <param name="razon_social" value="${entity.loteControlDocumental.expediente.operador.razon_social}" />
+                            <param name="instalacion_id" value="${entity.loteControlDocumental.expediente.instalacion_id}" />
+                            <param name="nombre_instalacion" value="${entity.loteControlDocumental.expediente.instalacion.nombre_instalacion}" />
+                            <param name="lote_control_documental_id" value="${entity.lote_control_documental_id}" />
+                            <param name="num_lote_control_documental" value="${entity.num_lote}" />
+                            <repofilter>
+                                <and>
+                                    <eq property="lote_control_documental_id" value="${empty(entity.lote_control_documental_id) ? '-1' : entity.lote_control_documental_id}" />
+                                </and>
+                            </repofilter>
+                        </datatable>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Expedición"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+
+                        <button label="Añadir" readonly="${empty (entity.lote_control_documental_id)}" readonlyMessage="No puede añadir una nueva expedición. Antes debe guardar el lote">
+                            <action type="save" route="tipoMorcillaExpedicion-editTipoMorcillaExpedicion">
+                                <param name="expediente_id" value="${entity.expediente.id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador_id" value="${entity.expediente.operador_id}" />
+                                <param name="razon_social" value="${entity.expediente.operador.razon_social}" />
+                                <param name="instalacion_id" value="${entity.expediente.instalacion_id}" />
+                                <param name="nombre_instalacion" value="${entity.expediente.instalacion.nombre_instalacion}" />
+                                <param name="lote_control_documental_id" value="${entity.lote_control_documental_id}" />
+                                <param name="num_lote_control_documental" value="${view.num_lote}" />
+                            </action>
+                        </button>
+
+                        <datatable
+                            onBeforeRender="setTotalesExpedicion"
+                            route="tipoMorcillaExpedicion-editTipoMorcillaExpedicion"
+                            numVisibleRows="3"
+                            repo="tipoMorcillaExpedicionRepo"
+                            allowsPartialRestore="false">
+                            <column headerText="Tipo morcilla" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.tipo_morcilla}"/>
+                            <column headerText="Instalación" filtering="false" ordering="false" value="${entity.loteControlDocumental.expediente.instalacion.nombre_instalacion}"/>
+                            <column headerText="Kg expedidos" filtering="false" ordering="false" value="${entity.kg_expedidos gt 0? math:round(math:pow(10,2)*entity.kg_expedidos)/math:pow(10,2):null}"/>
+                            <column headerText="Unidades teóricas/kg" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.peso_unitario_kg gt 0? math:round(math:pow(10,2)/entity.tipoMorcillaInstalacion.peso_unitario_kg)/math:pow(10,2):null}"/>
+                            <column headerText="Unidades teóricas expedidas" filtering="false" ordering="false" value="${entity.kg_expedidos gt 0? math:round(math:pow(10,2)*(entity.kg_expedidos*entity.tipoMorcillaInstalacion.unidad_kg))/math:pow(10,2):null}"/>
+                            <param name="expediente_id" value="${entity.loteControlDocumental.expediente_id}" />
+                            <param name="num_expediente" value="${entity.loteControlDocumental.expediente.num_expediente}" />
+                            <param name="operador_id" value="${entity.loteControlDocumental.expediente.operador_id}" />
+                            <param name="razon_social" value="${entity.loteControlDocumental.expediente.operador.razon_social}" />
+                            <param name="instalacion_id" value="${entity.loteControlDocumental.expediente.instalacion_id}" />
+                            <param name="nombre_instalacion" value="${entity.loteControlDocumental.expediente.instalacion.nombre_instalacion}" />
+                            <param name="lote_control_documental_id" value="${entity.lote_control_documental_id}" />
+                            <param name="num_lote_control_documental" value="${entity.num_lote}" />
+                            <repofilter>
+                                <and>
+                                    <eq property="lote_control_documental_id" value="${empty(entity.lote_control_documental_id) ? '-1' : entity.lote_control_documental_id}" />
+                                </and>
+                            </repofilter>
+                        </datatable>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Contraetiquetas utilizadas"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+
+                    <button label="Añadir" readonly="${empty (entity.lote_control_documental_id)}" readonlyMessage="No puede añadir una nueva numeración. Antes debe guardar el lote">
+                        <action type="save" route="numeracionContraetiquetadoLote-editNumeracionContraetiquetadoLote">
+                            <param name="expediente_id" value="${entity.expediente.id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                            <param name="lote_control_documental_id" value="${entity.lote_control_documental_id}" />
+                            <param name="num_lote_control_documental" value="${view.num_lote}" />
+                        </action>
+                    </button>
+
+                    <datatable onBeforeRender="setContraetiquetasNumeracionesUtilizadas"
+                        route="numeracionContraetiquetadoLote-editNumeracionContraetiquetadoLote"
+                        numVisibleRows="3"
+                        properties="serie, desde, hasta, unidades"
+                        repo="numeracionContraEtiquetadoLoteRepo"
+                        allowsPartialRestore="false">
+                        <param name="expediente_id" value="${entity.loteControlDocumental.expediente.id}" />
+                        <param name="num_expediente" value="${entity.loteControlDocumental.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.loteControlDocumental.expediente.operador.razon_social}" />
+                        <param name="lote_control_documental_id" value="${entity.lote_control_documental_id}" />
+                        <param name="num_lote_control_documental" value="${entity.num_lote}" />
+                        <repofilter>
+                            <and>
+                                <eq property="lote_control_documental_id" value="${empty(entity.lote_control_documental_id) ? '-1' : entity.lote_control_documental_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Diferencias por tipos"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+                    <datatable
+                        numVisibleRows="3"
+                        repo="tipoMorcillaBalanceMasasRepo"
+                        allowsPartialRestore="false">
+                        <column headerText="Tipo morcilla" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.tipo_morcilla}"/>
+                        <column headerText="Kg después del oreo" filtering="false" ordering="false"  value="${entity.peso_despues_oreo}"/>
+                        <column headerText="Kg expedidos" filtering="false" ordering="false"  value="${entity.kg_expedidos}"/>
+                        <column headerText="Diferencia kg" filtering="false" ordering="false"  value="${entity.peso_despues_oreo - entity.kg_expedidos}"/>
+                        <column headerText="Ud. Elaboradas" filtering="false" ordering="false"  value="${entity.unidades_teoricas_elaboradas}"/>
+                        <column headerText="Ud. Expedidas" filtering="false" ordering="false"  value="${entity.unidades_teoricas_expedidas}"/>
+                        <column headerText="Diferencia uds." filtering="false" ordering="false"  value="${entity.unidades_teoricas_elaboradas - entity.unidades_teoricas_expedidas}"/>
+                        <repofilter>
+                            <and>
+                                <eq property="lote_control_documental_id" value="${empty(entity.lote_control_documental_id) ? '-1' : entity.lote_control_documental_id}" />
+                                <or>
+                                    <gt property="peso_despues_oreo" value="0"/>
+                                    <gt property="kg_expedidos" value="0"/>
+                                    <gt property="unidades_teoricas_elaboradas" value="0"/>
+                                    <gt property="unidades_teoricas_expedidas" value="0"/>
+                                </or>
+                            </and>
+                        </repofilter>
+                    </datatable>
+
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Diferencias totales"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+
+                    <table headerText=" KG ELABORADOS, KG DESPUÉS DEL OREO, UNIDADES TEÓRICAS ELABORADAS">
+                        <row>
+                            <input id="total_kg_elaborados" value="${entity.total_kg_elaborados}"  allowsPartialRestore="false" readonly="true"/>
+                            <input id="total_peso_despues_oreo" value="${entity.total_peso_despues_oreo}"  allowsPartialRestore="false" readonly="true"/>
+                            <input id="total_unidades_teoricas_elaboradas" value="${entity.total_unidades_teoricas_elaboradas}"  allowsPartialRestore="false" readonly="true"/>
+                        </row>
+                    </table>
+
+                    <table headerText=" KG EXPEDIDOS, UNIDADES TEÓRICAS EXPEDIDAS, CONTRAS UTILIZADAS">
+                        <row>
+                            <input id="total_kg_expedidos" value="${entity.total_kg_expedidos}"  allowsPartialRestore="false" readonly="true"/>
+                            <input id="total_unidades_teoricas_expedidas" value="${entity.total_unidades_teoricas_expedidas}"  allowsPartialRestore="false" readonly="true"/>
+                            <input id="contraetiquetas_numeraciones_utilizadas" value="${entity.contraetiquetas_numeraciones_utilizadas}"  allowsPartialRestore="false" readonly="true"/>
+                        </row>
+                    </table>
+
+                    <table headerText=" DIFERENCIA PESO, DIFERENCIA UNIDADES">
+                        <row>
+                            <input value="${view.total_peso_despues_oreo - view.total_kg_expedidos}"  allowsPartialRestore="false" readonly="true"/>
+                            <input value="${view.total_unidades_teoricas_elaboradas - view.total_unidades_teoricas_expedidas}"  allowsPartialRestore="false" readonly="true"/>
+                        </row>
+                    </table>
+
+
+
+
+                </tabitem>
+            </tab>
+
+
+            <!--<p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="Balance de masas"/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p value=""/>
+
+            <autocomplete label="Tipo de morcilla" id="tipo_morcilla_instalacion_id" forceSelection="true" repo="tipoMorcillaInstalacionRepo">
+                <options labelExpression="${entity.tipo_morcilla}" labelFilteringProperty="tipo_morcilla" valueProperty="tipo_morcilla_instalacion_id" />
+                <repofilter>
+                    <eq property="instalacion_id" value="${view.instalacion_id}" mandatory="true"/>
+                    <contains property="tipo_morcilla" value="${this.value}"/>
+                </repofilter>
+            </autocomplete>
+
+            <table headerText="">
+                <row>
+                    <input label="Peso de la masa (kg)" readonly="true"/>
+                    <input id="peso_masa" value="${(view.cebolla_peso + view.arroz_peso + view.sangre_peso + view.manteca_peso + view.sal_peso + view.especias_peso) gt 0? math:round((view.cebolla_peso + view.arroz_peso + view.sangre_peso + view.manteca_peso + view.sal_peso + view.especias_peso)*math:pow(10,2))/math:pow(10,2):null}" inputType="3" readonly="true"/>
+                </row>
+                <row>
+                    <input label="Peso despues del oreo (kg)" readonly="true"/>
+                    <input id="peso_despues_oreo" value="${entity.peso_despues_oreo}" hasDeleteButton="false" inputType="3"/>
+                    <input label="Mermas (%)" hint="% (Peso después del oreo - peso de la masa)" readonly="true"/>
+                    <input value="${(not empty(view.peso_masa) and view.peso_despues_oreo gt 0)? math:round((view.peso_masa-view.peso_despues_oreo)*100*math:pow(10,2)/view.peso_masa)/math:pow(10,2):null}" readonly="true" inputType="3"/>
+                </row>
+                <row>
+                    <input label="Unidades teóricas elaboradas" hint="(peso de la masa - mermas) x ud. teoricas/ kg de producto final " readonly="true"/>
+                    <input value="${(view.peso_despues_oreo gt 0 and not empty(view.unidades_teoricas_kg))?math:round(view.peso_despues_oreo*view.unidades_teoricas_kg*math:pow(10,2))/math:pow(10,2):null}" readonly="true"/>
+                    <input label="Ud teóricas / kg " readonly="true"/>
+                    <input id="unidades_teoricas_kg" value="${view.tipo_morcilla_id}"  onBeforeRender="updateUnidadesTeoricasKG" readonly="true"/>
+                </row>
+                <row>
+                    <input label="Cantidad expedida (kg)" readonly="true"/>
+                    <input id="cantidad_expedida" value="${entity.cantidad_expedida}" hasDeleteButton="false" inputType="3"/>
+                </row>
+                <row>
+                    <input label="Unidades teóricas expedidas" hint="(cantidad expedida x ud. Teoricas/ kg de producto final)" readonly="true"/>
+                    <input value="${(view.cantidad_expedida gt 0 and not empty(view.unidades_teoricas_kg))?math:round(view.cantidad_expedida*view.unidades_teoricas_kg*math:pow(10,2))/math:pow(10,2):null}" readonly="true"/>
+                </row>
+                <row>
+                    <input label="Contraetiquetas/Numeraciones utilizadas" hint="Nº de contras utilizadas" readonly="true" />
+                    <input id="contraetiquetas_numeraciones_utilizadas" value="${entity.contraetiquetas_numeraciones_utilizadas}" readonly="true" />
+                </row>
+                <row>
+                    <input label="DIFERENCIA PESO (KG)" hint="Diferencia peso despues del oreo - cantidad expedida (kg)" readonly="true"/>
+                    <input value="${(view.peso_despues_oreo gt 0 and view.cantidad_expedida gt 0)?math:round((view.peso_despues_oreo-view.cantidad_expedida)*math:pow(10,2))/math:pow(10,2):null}" readonly="true"/>
+                </row>
+                <row>
+                    <input label="DIFERENCIA UNIDADES" hint="Difrencia ud. teoricas elaboradas -  ud. Teoricas expedidas" readonly="true"/>
+                    <input value="${(view.peso_despues_oreo gt 0 and not empty(view.unidades_teoricas_kg) and view.cantidad_expedida gt 0)?math:round((view.peso_despues_oreo*view.unidades_teoricas_kg - view.cantidad_expedida*view.unidades_teoricas_kg)*math:pow(10,2))/math:pow(10,2):null}" readonly="true"/>
+                </row>
+            </table>-->
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.lote_control_documental_id)}" readonlyMessage="No puede realizar esta acción: No existe lote">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

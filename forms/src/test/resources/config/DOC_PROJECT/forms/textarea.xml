@@ -1,0 +1,12 @@
+<main id="formTextarea" name="Textarea" repo="pruebaRepo">
+    <edit>
+        <form>
+            <textarea label="Textarea: " value="${entity.d_prueba}" validator="required" hint="Hint description" lines="4"/>
+            <textarea label="Readonly: " value="${entity.d_prueba}" readonly="true"/>
+            <textarea label="PlaceHolder: " placeHolder="${params.d_prueba}" value="${entity.d_prueba}"/>
+            <textarea label="InputType: " inputType="3" value="${entity.d_prueba}"/>
+            <textarea label="HasDeleteButton: " hasDeleteButton="false"  value="${entity.d_prueba}"/>
+            <textarea label="Converter: " converter="integer" value="${entity.d_prueba}"/>
+        </form>
+    </edit>
+</main>

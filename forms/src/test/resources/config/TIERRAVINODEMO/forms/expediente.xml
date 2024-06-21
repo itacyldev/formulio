@@ -1,0 +1,253 @@
+<main name="expediente" description="Expedientes" id="idExpediente" repo="expedienteRepo">
+    <list id="listExpediente" name="LISTADO DE VERIFICACIÓN" description="LISTADO DE VERIFICACIÓN CONTROL ANUAL A OPERADORES">
+        <datatable>
+            <column id="column_expediente_id" headerText="Expediente" filtering="true" ordering="true" value="${entity.expediente_id}">
+                <filter property="expediente_id" matching="contains" valueExpression="${this.column_expediente_id}"/>
+                <order property="expediente_id"/>
+            </column>
+            <column id="column_num_expediente" headerText="Nº Expediente" filtering="true" ordering="true" value="${entity.num_expediente}">
+                <filter property="num_expediente" matching="contains" valueExpression="${this.column_num_expediente}"/>
+                <order property="num_expediente"/>
+            </column>
+            <action type="nav" route="idExpediente-editExpediente2"/>
+        </datatable>
+
+        <buttonbar type="fab">
+            <button id="createButton">
+                <action id="createExpediente" type="create" route="idExpediente-editExpediente2" >
+                    <param name="repo" value="expedienteRepo"/>
+                    <param name="fecha" value="${date.now}"/>
+                </action>
+            </button>
+        </buttonbar>
+
+    </list>
+
+    <edit id="editExpediente2">
+        <script src="scripts/control.js"/>
+        <form>
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="CONTROL CRV"/>
+
+            <table border="false">
+                <row>
+                    <button label="Cuestionario">
+                        <action type="save" route="idCuestionarioExpediente-editCuestionarioExpediente">
+                            <param name="expediente_id" value="${entity.expediente_id}"/>
+                            <param name="num_expediente" value="${view.numExpediente}"/>
+                            <param name="operador_id" value="${view.operador_id}"/>
+                            <param name="dop_id" value="${view.dop_id}"/>
+                        </action>
+                    </button>
+
+                    <!--<button label="Sincronizar">
+                        <action registerInHistory="false" type="job">
+                            <param name="jobId" value="formic_sync_job" />
+                        </action>
+                    </button>
+
+                    <button label="Acta">
+                        <action registerInHistory="false" type="job">
+                            <param name="jobId" value="job_generar_acta_toma_muestras" />
+                        </action>
+                    </button>-->
+
+                </row>
+            </table>
+                    <table>
+                        <row colspan="2">
+                            <autocomplete id="dop_id" label="Control realizado a efecto de comporbar el cumplimiento del Pliego de Condiciones de la D.O.P.:: " value="${entity.dop_id}" forceSelection="true" repo="dopRepo" validator="required">
+                                <options labelExpression="${entity.dop}" labelFilteringProperty="dop" valueProperty="dop_id" />
+                            </autocomplete>
+                        </row>
+                    </table>
+                    <table>
+                        <row>
+                            <input label="Id. expediente: " id="newExpediente" readonly="true" placeHolder="${params.entityId}" value="${entity.expediente_id}" />
+                            <input id="numExpediente" label="CONTROL: " value="${entity.num_expediente}" validator="required"/>
+                            <input allowsPartialRestore="false" label="Formato: " id="formato" value="${view.dop_id}" onBeforeRender="updateFormato" readonly="true"/>
+                        </row>
+                    </table>
+                    <table weights="33, 66">
+                        <row>
+                            <date id="fechaInspeccion" label="Fecha inspección: " value="${entity.fecha_inspeccion}" validator="required"/>
+                            <select label="Tipo auditoria: " value="${entity.tipo_auditoria}">
+                                <options>
+                                    <option value="Certificación" label="Certificación"/>
+                                    <option value="Mantenimiento" label="Mantenimiento"/>
+                                    <option value="Renovación" label="Renovación"/>
+                                    <option value="Extraordinaria" label="Extraordinaria"/>
+                                </options>
+                            </select>
+                        </row>
+                    </table>
+                    <table weights="67, 33">
+                        <row border="false">
+                            <autocomplete label="Operador: " forceSelection="true" id="operador_id" repo="operadorRepo" value="${entity.operador_id}" validator="required">
+                                <options labelExpression="${entity.razon_social}" labelFilteringProperty="razon_social" valueProperty="operador_id" />
+                                <repofilter>
+                                    <eq property="dop_id" value="${view.dop_id}" mandatory="true"/>
+                                    <contains property="razon_social" value="${this.value}"/>
+                                </repofilter>
+                            </autocomplete>
+                            <button label="Detalle operador">
+                                <action type="save" route="operador-editOperadores">
+                                    <param name="entityId" value="${view.operador_id}" />
+                                </action>
+                            </button>
+                        </row>
+                        <row>
+                            <input id="direccionInstalacion" allowsPartialRestore="false" label="Dirección de la instalación auditada: " value="${view.operador_id}" onBeforeRender="updateDireccionInstalacion" readonly="true"/>
+                            <input id="nifOperador" allowsPartialRestore="false" label="NIF Operador: " value="${view.operador_id}" onBeforeRender="updateNifOperador" readonly="true"/>
+                        </row>
+                        <row>
+                            <input id="representante" allowsPartialRestore="false" label="Representante operador en la auditoria/Cargo: " value="${view.operador_id}" onBeforeRender="updateRepresentante" readonly="true"/>
+                            <input id="nifRepresentante" allowsPartialRestore="false" label="NIF Representante:" value="${view.operador_id}" onBeforeRender="updateNifRepresentante" readonly="true"/>
+                        </row>
+                    </table>
+                    <table weights="67, 33">
+                        <row>
+                            <select id="auditor" label="Auditor: " value="${entity.auditor}" >
+                                <options>
+                                    <option value="Auditor 1" label="Auditor 1"/>
+                                    <option value="Auditor 2" label="Auditor 2"/>
+                                    <option value="Auditor 3" label="Auditor 3"/>
+                                </options>
+                            </select>
+                            <input label="NIF auditor: " value="${not empty(view.auditor)?'00000001B':''}" render="${view.auditor eq 'Auditor 1'}" readonly="true"/>
+                            <input label="NIF auditor:" value="${not empty(view.auditor)?'00000002B':''}" render="${view.auditor eq 'Auditor 2'}" readonly="true"/>
+                            <input label="NIF auditor: " value="${not empty(view.auditor)?'00000003B':''}" render="${view.auditor eq 'Auditor 3'}" readonly="true"/>
+                        </row>
+                        <row>
+                            <select id="auditor2" label="Otro auditor: " value="${entity.auditor2}">
+                                <options>
+                                    <option value="Auditor 1" label="Auditor 1"/>
+                                    <option value="Auditor 2" label="Auditor 2"/>
+                                    <option value="Auditor 3" label="Auditor 3"/>
+                                </options>
+                            </select>
+                            <input label="NIF otro auditor:" value="${not empty(view.auditor2)?'00000001B':''}" render="${view.auditor2 eq 'Auditor 1'}" readonly="true"/>
+                            <input label="NIF otro auditor:" value="${not empty(view.auditor2)?'00000002B':''}" render="${view.auditor2 eq 'Auditor 2'}" readonly="true"/>
+                            <input label="NIF otro auditor:" value="${not empty(view.auditor2)?'00000003B':''}" render="${view.auditor2 eq 'Auditor 3'}" readonly="true"/>
+                        </row>
+                    </table>
+                    <table>
+                        <row>
+                            <input id="numero_partidas_autocalificadas" label="Nº de partidas autocalificadas año en curso: " value="${entity.numero_partidas_autocalificadas}" inputType="3"/>
+                            <input label="Nº de partidas tomadas:" value="${math:floor(math:sqrt(view.numero_partidas_autocalificadas))}"  readonly="true"/>
+                        </row>
+                    </table>
+
+                    <table>
+                        <row>
+                            <table border="false">
+                                <row>
+                                    <p bold="true" value="Principales desviaciones detactadas tras el control: "/>
+                                    <button label="AÑADIR">
+                                        <action id="createDesviacion" type="create" route="desviacion-editDesviacion" >
+                                            <param name="repo" value="desviacionRepo"/>
+                                            <param name="expediente_id" value="${entity.expediente_id}" />
+                                            <param name="num_expediente" value="${view.num_expediente}" />
+                                            <param name="operador_id" value="${view.operador_id}"/>
+                                            <param name="razon_social" value="${view.razon_social}"/>
+                                            <param name="dop_id" value="${view.dop_id}"/>
+                                            <param name="dop" value="${view.dop}"/>
+                                        </action>
+                                    </button>
+                                </row>
+                                <row>
+                                    <datatable
+                                        numVisibleRows="3"
+                                        repo="desviacionRepo"
+                                        route="desviacion-editDesviacion">
+
+                                        <column id="column_desviacion" headerText="Descripción" filtering="true" ordering="true" value="${entity.desviacion}">
+                                            <filter property="desviacion" matching="contains" valueExpression="${this.column_desviacion}"/>
+                                            <order property="desviacion"/>
+                                        </column>
+                                        <column id="column_documentacion" headerText="Acción" filtering="true" ordering="true" value="${entity.documentacion_accion_consejo}">
+                                            <filter property="documentacion_accion_consejo" matching="contains" valueExpression="${this.column_documentacion}"/>
+                                            <order property="documentacion_accion_consejo"/>
+                                        </column>
+                                        <repofilter>
+                                            <and>
+                                                <eq property="expediente_id" value="${empty(entity.expediente_id) ? '-1' : entity.expediente_id}" />
+                                            </and>
+                                        </repofilter>
+                                    </datatable>
+                                </row>
+                            </table>
+                        </row>
+                    </table>
+
+                    <table>
+                        <row>
+                            <p bold="true" value="Les recordamos que dado el carácter muestral de la Auditoría pueden existir otros incumplimientos no detectados por el equipo de control. En cualquier caso, agradecemos tanto su disposición como el trato recibido durante el transcurso de la Auditoría." />
+                        </row>
+
+                        <row weights="67, 33">
+                            <date label="A los efectos oportunos, subscriben el presente documento, por lo que firman: " value="${entity.fecha_firma}" hasButtonToday="true"/>
+                            <radio label="Conforme: " value="${entity.conforme}" orientation="horizontal">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                        </row>
+                        <row weights="33, 34, 33">
+                            <table border="false">
+                                <row>
+                                    <p bold="true" value="Auditor"/>
+                                </row>
+                                <row>
+                                    <image converter="b64Image" embedded="true" value="${entity.firma_auditor}" hasDeleteButton="false" inputType="4"/>
+                                </row>
+                                <row>
+                                    <input value="Fdo. ${view.auditor}" readonly="true"/>
+                                </row>
+                            </table>
+                            <table border="false">
+                                <row>
+                                    <p bold="true" value="Auditor 2"/>
+                                </row>
+                                <row>
+                                    <image converter="b64Image" embedded="true" value="${entity.firma_auditor2}" hasDeleteButton="false" inputType="4"/>
+                                </row>
+                                <row>
+                                    <input value="Fdo. ${view.auditor2}" readonly="true"/>
+                                </row>
+                            </table>
+                            <table border="false">
+                                <row>
+                                    <p bold="true" value="Auditados"/>
+                                </row>
+                                <row>
+                                    <image converter="b64Image" embedded="true" value="${entity.firma_auditado}" hasDeleteButton="false" inputType="4"/>
+                                </row>
+                                <row>
+                                    <input label="Fdo." value="${entity.auditado}"/>
+                                </row>
+                            </table>
+                        </row>
+                    </table>
+
+
+
+            <!--<p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="DATOS GENERALES"/>
+            <divisor color="#00766C" strokeWidth="8" />-->
+
+
+
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action route="idExpediente-listExpediente" type="save" registerInHistory="false" popHistory="1"/>
+            </button>
+            <button label="Cancel" route="back"/>
+        </buttonbar>
+    </edit>
+</main>

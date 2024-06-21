@@ -1,0 +1,336 @@
+<main id="operador" name="Operadores" repo="operadorRepo">
+    <list id="listOperador" name="Operadores" description="Listado operadores">
+       <datatable>
+            <column id="column_razon_social" headerText="Razón social" filtering="true" ordering="true" value="${entity.razon_social}">
+                <filter property="razon_social" matching="contains" valueExpression="${this.column_razon_social}"/>
+                <order property="razon_social"/>
+            </column>
+            <column id="column_dop" headerText="DOP" filtering="false" ordering="false" value="${entity.dop.dop}"/>
+            <column id="column_tipo_operador" headerText="Tipo" filtering="true" ordering="true" value="${entity.tipo_operador}">
+                <filter property="tipo_operador" matching="contains" valueExpression="${this.column_tipo_operador}"/>
+                <order property="tipo_operador"/>
+            </column>
+           <column id="column_nombre_operador" headerText="Nombre" filtering="true" ordering="true" value="${entity.nombre_operador}">
+               <filter property="nombre_operador" matching="contains" valueExpression="${this.column_nombre_operador}"/>
+               <order property="nombre_operador"/>
+           </column>
+           <column id="column_apellidos_operador" headerText="Apellidos" filtering="true" ordering="true" value="${entity.apellidos_operador}">
+               <filter property="apellidos_operador" matching="contains" valueExpression="${this.column_apellidos_operador}"/>
+               <order property="apellidos_operador"/>
+           </column>
+           <column id="column_nif_operador" headerText="NIF" filtering="true" ordering="true" value="${entity.nif_operador}">
+               <filter property="nif_operador" matching="contains" valueExpression="${this.column_nif_operador}"/>
+               <order property="nif_operador"/>
+           </column>
+       </datatable>
+    </list>
+    <edit id="editOperadores">
+        <form id="formOperador">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="OPERADOR"/>
+            <p value=""/>
+
+            <tab allowsPartialRestore="true">
+                <tabitem label="DATOS GENERALES">
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="10" />
+                    <p bold="true" value="1. Datos básicos del operador:" fontSize="18"/>
+                    <divisor color="#00766C" strokeWidth="10" />
+
+                        <select label="Tipo de operador: " value="${entity.tipo_operador}">
+                            <options>
+                                <option value="Etiquetador" label="Etiquetador"/>
+                                <option value="Intermedio" label="Intermedio"/>
+                                <option value="Primario" label="Primario"/>
+                            </options>
+                        </select>
+
+                        <input label="Id. Fiscal: " value="${entity.nif_operador}"  />
+
+                        <input label="Razón social: " value="${entity.razon_social}"  />
+
+                        <input label="Nombre: " value="${entity.nombre_operador}"  />
+
+                        <input label="Apellidos: " value="${entity.apellidos_operador}"  />
+
+                        <input label="Número de registro general de operadores del sector vitivinícola (REOVI): " value="${entity.num_reovi}"  />
+
+                        <input label="Número de registro de envasadores y embotelladores de vinos y bebidas alcohólicas: " value="${entity.num_reg_envasadores_embotelladores}"  />
+
+                        <input label="Número de registro de empresas y actividades alimentarias: " value="${entity.num_reg_empresas_actividades}"  />
+
+                        <input label="Número de código de actividad y del establecimiento (CAE): " value="${entity.num_cae}"  />
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="10" />
+                    <p bold="true" value="2. Representante legal del operador:" fontSize="18"/>
+                    <divisor color="#00766C" strokeWidth="10" />
+                        <input label="Nombre: " value="${entity.nombre_representante}"  />
+
+                        <input label="Apellidos: " value="${entity.apellidos_representante}"  />
+
+                        <input label="Id. Fiscal: " value="${entity.nif_representante}"  />
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="10" />
+                    <p bold="true" value="3. Dirección principal:" fontSize="18"/>
+                    <divisor color="#00766C" strokeWidth="10" />
+
+                        <select label="Tipo de vía: " value="${entity.tipo_via_operador}">
+                            <options>
+                                <option value="Alameda" label="Alameda"/>
+                                <option value="Apdo. de Correos" label="Apdo. de Correos"/>
+                                <option value="Autopista" label="Autopista"/>
+                                <option value="Autovía" label="Autovía"/>
+                                <option value="Avenida" label="Avenida"/>
+                                <option value="Bulevar" label="Bulevar"/>
+                                <option value="Calle" label="Calle"/>
+                                <option value="Camino" label="Camino"/>
+                                <option value="Carretera" label="Carretera"/>
+                                <option value="Glorieta" label="Glorieta"/>
+                                <option value="Pasaje" label="Pasaje"/>
+                                <option value="Paseo" label="Paseo"/>
+                                <option value="Plaza" label="Plaza"/>
+                                <option value="Pol. Industrial" label="Pol. Industrial"/>
+                                <option value="Ronda" label="Ronda"/>
+                                <option value="Sector" label="Sector"/>
+                                <option value="Travesía" label="Travesía"/>
+                                <option value="Urbanización" label="Urbanización"/>
+                            </options>
+                        </select>
+
+                        <input label="Vía: " value="${entity.via_operador}"  />
+
+                        <table border ="false">
+                            <row>
+                                <autocomplete forceSelection="true" id="provincia_operador" label="Provincia: " repo="provRepo" value="${entity.provincia_operador_id}">
+                                    <options labelExpression="${entity.d_exten_prov}" labelFilteringProperty="d_exten_prov" valueProperty="c_provincia" />
+                                </autocomplete>
+                                <autocomplete forceSelection="true" id="provmuni_operador" label="Municipio: " repo="muniRepo" value="${entity.municipio_operador_id}">
+                                    <options labelExpression="${entity.d_exten_muni}" labelFilteringProperty="d_exten_muni" valueProperty="c_municipio_id" />
+                                    <repofilter>
+                                        <eq property="c_provincia" value="${view.provincia_operador}" mandatory="true"/>
+                                        <contains property="d_exten_muni" value="${this.value}"/>
+                                    </repofilter>
+                                </autocomplete>
+
+                                <autocomplete forceSelection="true" id="provmuniloca_operador" label="Localidad: " repo="locaRepo" value="${entity.localidad_operador_id}">
+                                    <options labelExpression="${entity.d_exten_loca}" labelFilteringProperty="d_exten_loca" valueProperty="c_localidad_id" />
+                                    <repofilter>
+                                        <eq property="c_provincia" value="${view.provincia_operador}" mandatory="true"/>
+                                        <eq property="c_municipio_id" value="${view.provmuni_operador}" mandatory="true"/>
+                                        <contains property="d_exten_loca" value="${this.value}"/>
+                                    </repofilter>
+                                </autocomplete>
+                            </row>
+                        </table>
+
+                        <input label="Código postal: " value="${entity.codigo_postal_operador}"  />
+
+                        <input label="País: " value="${entity.pais}"  />
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="10" />
+                    <p bold="true" value="4. Dirección de la instalación:" fontSize="18"/>
+                    <divisor color="#00766C" strokeWidth="10" />
+
+                        <input label="Dirección: " value="${entity.direccion_instalacion}"  />
+
+                        <table border ="false">
+                            <row>
+                                <autocomplete forceSelection="true" id="provincia_instalacion" label="Provincia: " repo="provRepo" value="${entity.provincia_instalacion_id}">
+                                    <options labelExpression="${entity.d_exten_prov}" labelFilteringProperty="d_exten_prov" valueProperty="c_provincia" />
+                                </autocomplete>
+                                <autocomplete forceSelection="true" id="provmuni_instalacion" label="Municipio: " repo="muniRepo" value="${entity.municipio_instalacion_id}">
+                                    <options labelExpression="${entity.d_exten_muni}" labelFilteringProperty="d_exten_muni" valueProperty="c_municipio_id" />
+                                    <repofilter>
+                                        <eq property="c_provincia" value="${view.provincia_instalacion}" mandatory="true"/>
+                                        <contains property="d_exten_muni" value="${this.value}"/>
+                                    </repofilter>
+                                </autocomplete>
+
+                                <autocomplete forceSelection="true" id="provmuniloca_instalacion" label="Localidad: " repo="locaRepo" value="${entity.localidad_instalacion_id}">
+                                    <options labelExpression="${entity.d_exten_loca}" labelFilteringProperty="d_exten_loca" valueProperty="c_localidad_id" />
+                                    <repofilter>
+                                        <eq property="c_provincia" value="${view.provincia_instalacion}" mandatory="true"/>
+                                        <eq property="c_municipio_id" value="${view.provmuni_instalacion}" mandatory="true"/>
+                                        <contains property="d_exten_loca" value="${this.value}"/>
+                                    </repofilter>
+                                </autocomplete>
+                            </row>
+
+                        </table>
+
+                    <input label="Código postal: " value="${entity.codigo_postal_instalacion}"  />
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="10" />
+                    <p bold="true" value="5. Contacto:" fontSize="18"/>
+                    <divisor color="#00766C" strokeWidth="10" />
+
+                        <input label="Personal de contacto: " value="${entity.persona_contacto}"  />
+
+                        <input label="Teléfono 1: " value="${entity.telefono1}"  inputType="3"/>
+
+                        <input label="Teléfono 2: "  value="${entity.telefono2}"  inputType="3"/>
+
+                        <input label="Email: " value="${entity.email}" validator="email" inputType="33"/>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="10" />
+                    <p bold="true" value="6. Figura:" fontSize="18"/>
+                    <divisor color="#00766C" strokeWidth="10" />
+
+                        <autocomplete label="DOP; " id="dop_id" forceSelection="true" repo="dopRepo" value="${entity.dop_id}">
+                            <options labelExpression="${entity.dop}" labelFilteringProperty="dop" valueProperty="dop_id" />
+                            <repofilter>
+                                <contains property="dop" value="${this.value}"/>
+                            </repofilter>
+                        </autocomplete>
+
+                        <date label="Fecha de alta: " value="${entity.fecha_alta}"  />
+
+                        <date label="Fecha de baja: " value="${entity.fecha_baja}"  />
+                </tabitem>
+                <tabitem label="MAQUINARIA">
+                    <button label="AÑADIR MAQUINARIA" readonly="${empty (entity.operador_id)}" readonlyMessage="No puede añadir maquinaria. Antes debe guardar el operador">
+                        <action type="save" route="maquinaria-editMaquinaria">
+                            <param name="operador_id" value="${entity.operador_id}" />
+                            <param name="razon_social" value="${view.razon_social}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        repo="maquinariaRepo"
+                        route="maquinaria-editMaquinaria">
+                        <column id="column_tipo" headerText="Tipo" filtering="true" ordering="true" value="${entity.tipo}">
+                            <filter property="tipo" matching="contains" valueExpression="${this.column_tipo}"/>
+                            <order property="tipo"/>
+                        </column>
+                        <column id="column_rto" headerText="Rto" filtering="true" ordering="true" value="${entity.rto}">
+                            <filter property="rto" matching="contains" valueExpression="${this.column_rto}"/>
+                            <order property="rto"/>
+                        </column>
+                        <column id="column_capacidad" headerText="Capacidad" filtering="true" ordering="true" value="${entity.capacidad}">
+                            <filter property="capacidad" matching="contains" valueExpression="${this.column_capacidad}"/>
+                            <order property="capacidad"/>
+                        </column>
+                        <column id="column_marca" headerText="Marca" filtering="true" ordering="true" value="${entity.marca}">
+                            <filter property="marca" matching="contains" valueExpression="${this.column_marca}"/>
+                            <order property="marca"/>
+                        </column>
+                        <column id="column_modelo" headerText="Modelo" filtering="true" ordering="true" value="${entity.modelo}">
+                            <filter property="modelo" matching="contains" valueExpression="${this.column_modelo}"/>
+                            <order property="modelo"/>
+                        </column>
+                        <column id="column_observaciones" headerText="Observaciones" filtering="true" ordering="true" value="${entity.observaciones}">
+                            <filter property="observaciones" matching="contains" valueExpression="${this.column_observaciones}"/>
+                            <order property="observaciones"/>
+                        </column>
+                        <param name="operador_id" value="${entity.operador_id}" />
+                        <param name="razon_social" value="${entity.operador.razon_social}" />
+                        <repofilter>
+                            <eq property="operador_id" value="${empty(entity.operador_id) ? '-1' : entity.operador_id}" />
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+                <tabitem label="DEPÓSITOS">
+                    <button label="AÑADIR DEPÓSITO" readonly="${empty (entity.operador_id)}" readonlyMessage="No puede añadir depósito. Antes debe guardar el operador">
+                        <action type="save" route="deposito-editDeposito">
+                            <param name="operador_id" value="${entity.operador_id}" />
+                            <param name="razon_social" value="${view.razon_social}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        repo="depositoRepo"
+                        route="deposito-editDeposito">
+                        <column id="column_numero" headerText="Número" filtering="true" ordering="true" value="${entity.numero}">
+                            <filter property="numero" matching="contains" valueExpression="${this.column_numero}"/>
+                            <order property="numero"/>
+                        </column>
+                        <column id="column_material" headerText="Material" filtering="true" ordering="true" value="${entity.material}">
+                            <filter property="material" matching="contains" valueExpression="${this.column_material}"/>
+                            <order property="material"/>
+                        </column>
+                        <column id="column_capacidad_deposito" headerText="Capacidad" filtering="true" ordering="true" value="${entity.capacidad}">
+                            <filter property="capacidad" matching="contains" valueExpression="${this.column_capacidad_deposito}"/>
+                            <order property="capacidad"/>
+                        </column>
+                        <param name="operador_id" value="${entity.operador_id}" />
+                        <param name="razon_social" value="${entity.operador.razon_social}" />
+                        <repofilter>
+                            <eq property="operador_id" value="${empty(entity.operador_id) ? '-1' : entity.operador_id}" />
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+                <tabitem label="BARRICAS">
+                    <button label="AÑADIR BARRICA" readonly="${empty (entity.operador_id)}" readonlyMessage="No puede añadir barrica. Antes debe guardar el operador">
+                        <action type="save" route="barrica-editBarrica">
+                            <param name="operador_id" value="${entity.operador_id}" />
+                            <param name="razon_social" value="${view.razon_social}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        repo="barricaRepo"
+                        route="barrica-editBarrica">
+                        <column id="column_unidades" headerText="Unidades" filtering="true" ordering="true" value="${entity.unidades}">
+                            <filter property="unidades" matching="contains" valueExpression="${this.column_unidades}"/>
+                            <order property="unidades"/>
+                        </column>
+                        <column id="column_tipo_roble" headerText="Tipo roble" filtering="true" ordering="true" value="${entity.tipo_roble}">
+                            <filter property="tipo_roble" matching="contains" valueExpression="${this.column_tipo_roble}"/>
+                            <order property="tipo_roble"/>
+                        </column>
+                        <column id="column_numeracion" headerText="Numeración" filtering="true" ordering="true" value="${entity.numeracion}">
+                            <filter property="numeracion" matching="contains" valueExpression="${this.column_numeracion}"/>
+                            <order property="numeracion"/>
+                        </column>
+                        <column id="column_cap_unit" headerText="Cap. Unit." filtering="true" ordering="true" value="${entity.cap_unit}">
+                            <filter property="cap_unit" matching="contains" valueExpression="${this.column_cap_unit}"/>
+                            <order property="cap_unit"/>
+                        </column>
+                        <column id="column_cap_total" headerText="Cap. Total" filtering="true" ordering="true" value="${entity.cap_total}">
+                            <filter property="cap_total" matching="contains" valueExpression="${this.column_cap_total}"/>
+                            <order property="cap_total"/>
+                        </column>
+                        <column id="column_edad" headerText="Edad" filtering="true" ordering="true" value="${entity.edad}">
+                            <filter property="edad" matching="contains" valueExpression="${this.column_edad}"/>
+                            <order property="edad"/>
+                        </column>
+                        <param name="operador_id" value="${entity.operador_id}" />
+                        <param name="razon_social" value="${entity.operador.razon_social}" />
+                        <repofilter>
+                            <and>
+                                <eq property="operador_id" value="${empty(entity.operador_id) ? '-1' : entity.operador_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+            </tab>
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.operador_id)}" readonlyMessage="No puede realizar esta acción: No existe el operador" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

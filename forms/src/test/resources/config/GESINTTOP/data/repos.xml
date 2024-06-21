@@ -1,0 +1,112 @@
+<repos>
+    <repo dbFile="gesinttop.sqlite" id="provinciaRepo" dbTable="provincia" />
+    <repo dbFile="gesinttop.sqlite" id="municipioRepo" dbTable="municipio">
+        <mapping fk="c_provincia_id" property="provincia" repo="provinciaRepo"/>
+    </repo>
+
+    <repo dbFile="gesinttop.sqlite" id="habitatRepo" dbTable="habitat" />
+    <repo dbFile="gesinttop.sqlite" id="grupoProdRepo" dbTable="grupoprod">
+        <mapping fk="c_habitat_id" property="habitat" repo="habitatRepo"/>
+    </repo>
+    <repo dbFile="gesinttop.sqlite" id="productoRepo" dbTable="producto">
+        <mapping fk="c_habitat_id" property="habitat" repo="habitatRepo"/>
+        <mapping fk="c_grupoprod_id" property="grupoProd" repo="grupoProdRepo"/>
+    </repo>
+
+    <repo dbFile="gesinttop.sqlite" id="sistemaExplotacionRepo" dbTable="sistema_explotacion" />
+    <repo dbFile="gesinttop.sqlite" id="tipoLaboreoRepo" dbTable="tipo_laboreo" />
+    <repo dbFile="gesinttop.sqlite" id="tipoActuacionParcelaRepo" dbTable="tipo_actuacion_parcela" />
+
+    <repo dbFile="gesinttop.sqlite" id="estadoCubiertaParcelaRepo" dbTable="estado_cubierta_parcela" />
+    <repo dbFile="gesinttop.sqlite" id="densidadCubiertaParcelaRepo" dbTable="densidad_cubierta_parcela" />
+    <repo dbFile="gesinttop.sqlite" id="alturaCubiertaParcelaRepo" dbTable="altura_cubierta_parcela" />
+
+    <repo dbFile="gesinttop.sqlite" id="porcentajeRodalesTopilloParcelaRepo" dbTable="porcentaje_rodales_topillo_parcela" />
+    <repo dbFile="gesinttop.sqlite" id="apreciacionVisualRodalesTopilloParcelaRepo" dbTable="apreciacion_visual_rodales_topillo_parcela" />
+    <repo dbFile="gesinttop.sqlite" id="presenciaLenosasParcelaRepo" dbTable="presencia_lenosas_parcela" />
+
+    <repo dbFile="gesinttop.sqlite" id="tipoLindeRepo" dbTable="tipo_linde" />
+    <repo dbFile="gesinttop.sqlite" id="tipoActuacionLindeRepo" dbTable="tipo_actuacion_linde" />
+
+    <repo dbFile="gesinttop.sqlite" id="porcentajeRodalesTopilloLindeRepo" dbTable="porcentaje_rodales_topillo_linde" />
+    <repo dbFile="gesinttop.sqlite" id="apreciacionVisualRodalesTopilloLindeRepo" dbTable="apreciacion_visual_rodales_topillo_linde" />
+    <repo dbFile="gesinttop.sqlite" id="presenciaLenosasLindeRepo" dbTable="presencia_lenosas_linde" />
+
+    <repo dbFile="gesinttop.sqlite" id="estadoCubiertaLindeRepo" dbTable="estado_cubierta_linde" />
+    <repo dbFile="gesinttop.sqlite" id="densidadCubiertaLindeRepo" dbTable="densidad_cubierta_linde" />
+    <repo dbFile="gesinttop.sqlite" id="alturaCubiertaLindeRepo" dbTable="altura_cubierta_linde" />
+
+
+    <repo dbFile="gesinttop.sqlite" id="recintoRepo" dbTable="recinto">
+        <meta>
+            <keyGenerator type="numericUUID"/>
+            <property name="f_create" converter="date" evalOn="insert" expression="${date.now}" />
+            <property name="f_update" converter="date" pattern="seconds" evalOn="update" expression="${date.now}" />
+        </meta>
+        <mapping fk="c_provincia_id" property="provincia" repo="provinciaRepo"/>
+        <mapping fk="c_provmuni_id" property="municipio" repo="municipioRepo"/>
+    </repo>
+    <repo dbFile="gesinttop.sqlite" id="visitaRepo" dbTable="visita">
+        <meta>
+            <keyGenerator type="numericUUID"/>
+            <property name="position" converter="string" expression="${location.asLatLong}" evalOn="insert"/>
+            <property name="f_create" converter="date" evalOn="insert" expression="${date.now}" />
+            <property name="f_update" converter="date" pattern="seconds" evalOn="update" expression="${date.now}" />
+        </meta>
+        <mapping fk="c_recinto_id" property="recinto" repo="recintoRepo"/>
+        <mapping fk="c_habitat_id" property="habitat" repo="habitatRepo"/>
+        <mapping fk="c_sistema_explotacion_id" property="sistemaExplotacion" repo="sistemaExplotacionRepo"/>
+        <mapping fk="c_tipo_laboreo_id" property="tipoLaboreo" repo="tipoLaboreoRepo"/>
+        <mapping fk="c_tipo_actuacion_parcela_id" property="tipoActuacionParcela" repo="tipoActuacionParcelaRepo"/>
+        <mapping fk="c_estado_cubierta_parcela_id" property="estadoCubiertaParcela" repo="estadoCubiertaParcelaRepo"/>
+        <mapping fk="c_densidad_cubierta_parcela_id" property="densidadCubiertaParcela" repo="densidadCubiertaParcelaRepo"/>
+        <mapping fk="c_altura_cubierta_parcela_id" property="alturaCubiertaParcela" repo="alturaCubiertaParcelaRepo"/>
+        <mapping fk="c_porcentaje_rodales_topillo_parcela_id" property="porcentajeRodalesTopilloParcela" repo="porcentajeRodalesTopilloParcelaRepo"/>
+        <mapping fk="c_apreciacion_visual_rodales_topillo_parcela_id" property="apreciacionVisualRodalesTopilloParcela" repo="apreciacionVisualRodalesTopilloParcelaRepo"/>
+        <mapping fk="c_presencia_lenosas_parcela_id" property="presenciaLenosasParcela" repo="presenciaLenosasParcelaRepo"/>
+        <mapping fk="c_tipo_linde_id" property="tipoLinde" repo="tipoLindeRepo"/>
+        <mapping fk="c_tipo_actuacion_linde_id" property="tipoActuacionLinde" repo="tipoActuacionLindeRepo"/>
+        <mapping fk="c_porcentaje_rodales_topillo_linde_id" property="porcentajeRodalesTopilloLinde" repo="porcentajeRodalesTopilloLindeRepo"/>
+        <mapping fk="c_apreciacion_visual_rodales_topillo_linde_id" property="apreciacionVisualRodalesTopilloLinde" repo="apreciacionVisualRodalesTopilloLindeRepo"/>
+        <mapping fk="c_presencia_lenosas_linde_id" property="presenciaLenosasLinde" repo="presenciaLenosasLindeRepo"/>
+        <mapping fk="c_estado_cubierta_linde_id" property="estadoCubiertaLinde" repo="estadoCubiertaLindeRepo"/>
+        <mapping fk="c_densidad_cubierta_linde_id" property="densidadCubiertaLinde" repo="densidadCubiertaLindeRepo"/>
+        <mapping fk="c_altura_cubierta_linde_id" property="alturaCubiertaLinde" repo="alturaCubiertaLindeRepo"/>
+    </repo>
+    <repo dbFile="gesinttop.sqlite" id="tipoTransectoRepo" dbTable="tipo_transecto">
+
+    </repo>
+    <repo dbFile="gesinttop.sqlite" id="transectoRepo" dbTable="transecto">
+        <meta>
+            <keyGenerator type="numericUUID"/>
+            <property name="f_create" converter="date" evalOn="insert" expression="${date.now}" />
+            <property name="f_update" converter="date" pattern="seconds" evalOn="update" expression="${date.now}" />
+        </meta>
+        <mapping fk="visita_id" property="visita" repo="visitaRepo"/>
+        <mapping fk="tipo_transecto_id" property="tipoTransecto" repo="tipoTransectoRepo"/>
+    </repo>
+
+    <repo dbFile="gesinttop.sqlite" id="hurasTotalesTransectoRepo" dbTable="huras_totales_transecto" />
+    <repo dbFile="gesinttop.sqlite" id="hurasActivasTransectoRepo" dbTable="huras_activas_transecto" />
+    <repo dbFile="gesinttop.sqlite" id="densidadCubiertaTransectoRepo" dbTable="densidad_cubierta_transecto" />
+    <repo dbFile="gesinttop.sqlite" id="porcentajeDanoTransectoRepo" dbTable="porcentaje_dano_transecto" />
+    <repo dbFile="gesinttop.sqlite" id="presenciaTrampasTransectoRepo" dbTable="presencia_trampas_transecto" />
+    <repo dbFile="gesinttop.sqlite" id="caminillosTransectoRepo" dbTable="caminillos_transecto" />
+    <repo dbFile="gesinttop.sqlite" id="alturaCubiertaTransectoRepo" dbTable="altura_cubierta_transecto" />
+
+    <repo dbFile="gesinttop.sqlite" id="unidadMuestralRepo" dbTable="unidad_muestral">
+        <meta>
+            <keyGenerator type="numericUUID"/>
+            <property name="f_create" converter="date" evalOn="insert" expression="${date.now}" />
+            <property name="f_update" converter="date" pattern="seconds" evalOn="update" expression="${date.now}" />
+        </meta>
+        <mapping fk="transecto_id" property="transecto" repo="transectoRepo"/>
+        <mapping fk="c_huras_totales_transecto_id" property="hurasTotalesTransecto" repo="hurasTotalesTransectoRepo"/>
+        <mapping fk="c_huras_activas_transecto_id" property="hurasActivasTransecto" repo="hurasActivasTransectoRepo"/>
+        <mapping fk="c_densidad_cubierta_transecto_id" property="densidadCubiertaTransecto" repo="densidadCubiertaTransectoRepo"/>
+        <mapping fk="c_porcentaje_dano_transecto_id" property="porcentajeDanoTransecto" repo="porcentajeDanoTransectoRepo"/>
+        <mapping fk="c_presencia_trampas_transecto_id" property="presenciaTrampasTransecto" repo="presenciaTrampasTransectoRepo"/>
+        <mapping fk="c_caminillos_transecto_id" property="caminillosTransecto" repo="caminillosTransectoRepo"/>
+        <mapping fk="c_altura_cubierta_transecto_id" property="alturaCubiertaTransecto" repo="alturaCubiertaTransectoRepo"/>
+    </repo>
+</repos>

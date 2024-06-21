@@ -1,0 +1,41 @@
+<repos>
+    <repo dbFile="inspeccionesvinedo.sqlite" id="variedadRepo" dbTable="variedad"/>
+    <repo dbFile="inspeccionesvinedo.sqlite" id="tipoPlagaRepo" dbTable="tipo_plaga"/>
+    <repo dbFile="inspeccionesvinedo.sqlite" id="severidadRepo" dbTable="severidad" >
+        <mapping fk="tipo_plaga_id" property="tipoPlaga" repo="tipoPlagaRepo"/>
+    </repo>
+    <repo dbFile="inspeccionesvinedo.sqlite" id="provinciaRepo" dbTable="provincia" />
+    <repo dbFile="inspeccionesvinedo.sqlite" id="municipioRepo" dbTable="municipio">
+        <mapping fk="c_provincia_id" property="provincia" repo="provinciaRepo"/>
+    </repo>
+
+    <repo dbFile="inspeccionesvinedo.sqlite" id="plagaRepo" dbTable="plaga">
+        <meta properties="all">
+            <property name="location" columnName="location" converter="string" calculated="jexl" expression="${location.asWKT}" evalOn="insert"/>
+            <property name="f_actuacion" converter="date" pattern="seconds" evalOn="update" expression="${date.now}" />
+            <keyGenerator type="numericUUID"/>
+        </meta>
+        <mapping fk="variedad_id" property="variedad" repo="variedadRepo"/>
+        <mapping fk="tipo_plaga_id" property="tipoPlaga" repo="tipoPlagaRepo"/>
+        <mapping fk="severidad_id" property="severidad" repo="severidadRepo"/>
+    </repo>
+
+    <repo dbFile="inspeccionesvinedo.sqlite" id="plagaImagesRepo" dbTable="plaga_foto">
+        <meta>
+            <keyGenerator type="numericUUID"/>
+            <property name="f_actuacion" converter="date" pattern="seconds" evalOn="update" expression="${date.now}" />
+        </meta>
+        <mapping fk="plaga_id" property="plaga" repo="plagaRepo"/>
+    </repo>
+
+    <filerepo defaultExtension="jpg"
+        folder="pictures/estado_fen"
+        id="estadoFenImages" />
+
+    <repo dbFile="inspeccionesvinedo.sqlite" id="changeRegistryRepo" dbTable="change_registry">
+        <meta>
+            <property name="create_time" converter="date" pattern="seconds" evalOn="insert" expression="${date.now}" />
+            <property name="f_actuacion" converter="date" pattern="seconds" evalOn="update" expression="${date.now}" />
+        </meta>
+    </repo>
+</repos>

@@ -1,0 +1,212 @@
+<main id="lote" name="Lotes" repo="loteRepo" mainForm="false">
+    <list id="listLote" name="Materias primas" description="Listado materias primas">
+        <datatable>
+           <column id="column_nombre_materia_prima" headerText="Materia prima" filtering="false" ordering="false" value="${entity.materiaPrima.nombre_materia_prima}"/>
+           <column id="column_num_expediente" headerText="Nº Exp." filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+           <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.expediente.operador.razon_social}"/>
+           <column id="column_num_lote" headerText="Nº Lote" filtering="true" ordering="true" value="${entity.num_lote}">
+               <filter property="num_lote" matching="contains" valueExpression="${this.column_num_lote}"/>
+               <order property="num_lote"/>
+           </column>
+           <column id="column_proveedor" headerText="Proveedor" filtering="true" ordering="true" value="${entity.proveedor}">
+                <filter property="proveedor" matching="contains" valueExpression="${this.column_proveedor}"/>
+                <order property="proveedor"/>
+           </column>
+           <column id="column_notas_aclaratorias" headerText="Notas aclaratorias" filtering="true" ordering="true" value="${entity.notas_aclaratorias}">
+                <filter property="notas_aclaratorias" matching="contains" valueExpression="${this.column_notas_aclaratorias}"/>
+                <order property="notas_aclaratorias"/>
+           </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editLote" >
+        <form id="formLote">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="MATERIA PRIMA"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="EXPEDIENTE: " />
+            <divisor color="#00766C" strokeWidth="8" />º
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. Exp., Nº Expediente, Operador" weights="25, 35, 40" >
+                        <row>
+                            <input value="${entity.expediente_id}" placeHolder="${not empty(params.expediente_id)?params.expediente_id:null}" readonly="true"/>
+                            <textarea value="${entity.expediente.num_expediente}" placeHolder="${not empty(params.num_expediente)?params.num_expediente:null}" readonly="true" />
+                            <textarea value="${entity.expediente.operador.razon_social}" placeHolder="${not empty(params.operador)?params.operador:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="MATERIA PRIMA"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. MP, Nombre Materia Prima" weights="25, 75">
+                        <row>
+                            <input value="${entity.materia_prima_id}" placeHolder="${params.materia_prima_id}" readonly="true"/>
+                            <textarea value="${entity.materiaPrima.nombre_materia_prima}" placeHolder="${params.nombre_materia_prima}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <table border="false" render="${not empty(params.materia_prima_id)? (params.materia_prima_id eq '1'? true : false) : (entity.materia_prima_id eq '1'? true : false)}">
+                <row>
+                    <table headerText=" Peso, Anchura (mm), Color cubierta, Color pulpa">
+                        <row>
+                            <textarea value="≥ 100 gr" readonly="true"/>
+                            <textarea value="≥ 80 mm" readonly="true"/>
+                            <textarea value="Marrón" readonly="true"/>
+                            <textarea value="De blanco al amarillo verdoso" readonly="true"/>
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <table border="false" render="${not empty(params.materia_prima_id)? (params.materia_prima_id eq '3'? true : false) : (entity.materia_prima_id eq '3'? true : false)}">
+                <row>
+                    <table headerText=" Grano">
+                        <row>
+                            <textarea value="Grano corto tipo japónica bahía o bomba. Categoría 'Extra'" readonly="true"/>
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <table border="false" render="${not empty(params.materia_prima_id)? (params.materia_prima_id eq '4'? true : false) : (entity.materia_prima_id eq '4'? true : false)}">
+                <row>
+                    <table headerText=" Manteca">
+                        <row>
+                            <textarea value="Congelada o refrigerada ≤ 4ºC" readonly="true"/>
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="LOTE"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <input label=" Proveedor: " value="${entity.proveedor}" validator="required"/>
+
+            <input label=" Nº Lote: " value="${entity.num_lote}" validator="required" />
+
+            <textarea label=" Notas aclaratorias" value="${entity.notas_aclaratorias}"/>
+
+            <table border="false" weights="20, 10, 70">
+                <row>
+                    <p bold="true" value="Foto: "/>
+                    <switcher id="switcherImagenLote" value="${not empty(entity.imagen_lote)?1:0}"/>
+                    <p value=""/>
+                </row>
+            </table>
+            <table border="false" weights="10, 90" render="${view.switcherImagenLote eq 'true'}">
+                <row>
+                    <p value=""/>
+                    <image converter="b64Image" embedded="true" value="${entity.imagen_lote}" render="${view.switcherImagenLote eq 'true'}" hasDeleteButton="false" inputType="5"/>
+                </row>
+            </table>
+
+            <table border="false"
+                render="${not empty(params.materia_prima_id)? (params.materia_prima_id eq '1'? true : false) : (entity.materia_prima_id eq '1'? true : false)}">
+                <row>
+                    <button label="Añadir requisito" readonly="${empty (entity.id)}" readonlyMessage="No puede añadir un requisito. Antes debe guardar el lote">
+                        <action type="save" route="tipoCebolla-editTipoCebolla">
+                            <param name="lote_id" value="${entity.lote_id}" />
+                            <param name="num_lote" value="${entity.num_lote}" />
+                            <param name="expediente_id" value="${entity.expediente_id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                        </action>
+                    </button>
+                </row>
+                <row>
+                    <datatable
+                        allowsPartialRestore="false"
+                        numVisibleRows="2"
+                        repo="tipoCebollaRepo"
+                        route="tipoCebolla-editTipoCebolla">
+                        <column headerText="Nº Cebolla" filtering="true" ordering="true" value="${entity.nombre_requisito}">
+                            <filter property="nombre_requisito" matching="contains" valueExpression="${this.column_nombre_requisito}"/>
+                            <order property="nombre_requisito"/>
+                        </column>
+                        <column headerText="Peso" filtering="true" ordering="true" value="${entity.peso}">
+                            <filter property="peso" matching="contains" valueExpression="${this.column_peso}"/>
+                            <order property="peso"/>
+                        </column>
+                        <column headerText="Longitud" filtering="true" ordering="true" value="${entity.longitud}">
+                            <filter property="longitud" matching="contains" valueExpression="${this.column_longitud}"/>
+                            <order property="longitud"/>
+                        </column>
+                        <column headerText="Anchura" filtering="true" ordering="true" value="${entity.anchura}">
+                            <filter property="anchura" matching="contains" valueExpression="${this.column_anchura}"/>
+                            <order property="anchura"/>
+                        </column>
+                        <column headerText="Color cubierta" filtering="true" ordering="true" value="${entity.color_cubierta}">
+                            <filter property="color_cubierta" matching="contains" valueExpression="${this.column_color_cubierta}"/>
+                            <order property="color_cubierta"/>
+                        </column>
+                        <column headerText="Color pulpa" filtering="true" ordering="true" value="${entity.color_pulpa}">
+                            <filter property="color_pulpa" matching="contains" valueExpression="${this.column_color_pulpa}"/>
+                            <order property="color_pulpa"/>
+                        </column>
+                        <param name="lote_id" value="${entity.lote_id}" />
+                        <param name="num_lote" value="${entity.lote.num_lote}" />
+                        <param name="backRoute" value="lote-editLote" />
+                        <param name="backParentRoute" value="${empty(params.backRoute)? 'lote-listLote' : 'controlInSitu-editInSitu'}" />
+                        <param name="expediente_id" value="${entity.expediente_id}" />
+                        <param name="num_expediente" value="${entity.lote.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.lote.expediente.operador.razon_social}" />
+                        <repofilter>
+                            <and>
+                                <eq property="lote_id" value="${empty(entity.lote_id) ? '-1' : entity.lote_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </row>
+            </table>
+            <radio label="Cumple requisitos: " value="${entity.cumple_requisitos}" orientation="horizontal" weights="15, 85" render="${not empty(params.materia_prima_id)? (params.materia_prima_id eq '1'? true : false) : (entity.materia_prima_id eq '1'? true : false)}">
+                <options>
+                    <option label="Sí" value="S" />
+                    <option label="No" value="N" />
+                </options>
+            </radio>
+            <radio label="Usado en Proceso de fabricación 'In situ': " value="${entity.proceso_fabricacion}" orientation="horizontal" weights="15, 85" render="${not empty(params.materia_prima_id)? (params.materia_prima_id eq '1'? true : false) : (entity.materia_prima_id eq '1'? true : false)}">
+                <options>
+                    <option label="Sí" value="S" />
+                    <option label="No" value="N" />
+                </options>
+            </radio>
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.lote_id)}" readonlyMessage="No puede realizar esta acción: No existe el lote">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+
+    </edit>
+</main>

@@ -1,0 +1,128 @@
+<main id="partida" name="Partida" repo="partidaRepo" mainForm="false">
+    <list id="listPartida" name="Partida" description="Listado partidas a calificar">
+        <datatable>
+            <column id="column_partida" headerText="Partida" filtering="true" ordering="true" value="${entity.partida}">
+                <filter property="partida" matching="contains" valueExpression="${this.column_partida}"/>
+                <order property="partida"/>
+            </column>
+            <column id="column_numero_solicitud" headerText="Nº Solicitud" filtering="false" ordering="false" value="${entity.solicitud.numero_solicitud}"/>
+            <column id="column_lote_embotellado" headerText="Lote embotellado" filtering="true" ordering="true" value="${entity.lote_embotellado}">
+                <filter property="lote_embotellado" matching="contains" valueExpression="${this.column_lote_embotellado}"/>
+                <order property="lote_embotellado"/>
+            </column>
+            <column id="column_tipo_vino" headerText="Tipo de vino" filtering="true" ordering="true" value="${entity.tipo_vino}">
+                <filter property="tipo_vino" matching="contains" valueExpression="${this.column_tipo_vino}"/>
+                <order property="tipo_vino"/>
+            </column>
+            <column id="column_litros" headerText="Litros a certificar" filtering="true" ordering="true" value="${entity.litros}">
+                <filter property="litros" matching="contains" valueExpression="${this.column_litros}"/>
+                <order property="litros"/>
+            </column>
+            <column id="column_numero_envases" headerText="Número de envases" filtering="true" ordering="true" value="${entity.numero_envases}">
+                <filter property="numero_envases" matching="contains" valueExpression="${this.column_numero_envases}"/>
+                <order property="numero_envases"/>
+            </column>
+            <column id="column_capacidad_envase" headerText="Capacidad de envases" filtering="true" ordering="true" value="${entity.capacidad_envase}">
+                <filter property="capacidad_envase" matching="contains" valueExpression="${this.column_capacidad_envase}"/>
+                <order property="capacidad_envase"/>
+            </column>
+            <column id="column_anada" headerText="Añada" filtering="true" ordering="true" value="${entity.anada}">
+                <filter property="anada" matching="contains" valueExpression="${this.column_anada}"/>
+                <order property="anada"/>
+            </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editPartida">
+        <form id="formPartida">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="PARTIDA A CALIFICAR"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="SOLICITUD DE CALIFICACIÓN:"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. Solicitud, Nº Solicitud">
+                        <row>
+                            <input value="${entity.solicitud_id}" placeHolder="${not empty(params.solicitud_id)?params.solicitud_id:null}" readonly="true"/>
+                            <input value="${entity.solicitud.numero_solicitud}" placeHolder="${not empty(params.numero_solicitud)?params.numero_solicitud:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="OPERADOR: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Bodega, CIF, Representante, DNI" weights="30, 10, 30, 10" >
+                        <row>
+                            <input value="${entity.solicitud.operador.bodega}" placeHolder="${not empty(params.bodega)?params.bodega:null}" readonly="true"/>
+                            <input value="${entity.solicitud.operador.cif}" placeHolder="${not empty(params.cif)?params.cif:null}" readonly="true"/>
+                            <input value="${entity.solicitud.operador.representante}" placeHolder="${not empty(params.representante)?params.representante:null}" readonly="true" />
+                            <input value="${entity.solicitud.operador.dni_representante}" placeHolder="${not empty(params.dni_representante)?params.dni_representante:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="PARTIDA A CALIIFICAR: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <input label="Partida: " value="${entity.partida}" validator="required" />
+
+            <date label="Fecha embotellado: " value="${entity.fecha_embotellado}"/>
+
+            <input label="Lote embotellado: " value="${entity.lote_embotellado}" />
+
+            <input label="Tipo de vino: " value="${entity.tipo_vino}" />
+
+            <input label="Litros a certificar: " value="${entity.litros}" inputType="3"/>
+
+            <input label="Número de envases: " value="${entity.numero_envases}" inputType="3"/>
+
+            <input label="Capacidad de envases: " value="${entity.capacidad_envase}" inputType="3" />
+
+            <input label="Añada: " value="${entity.anada}" inputType="3" />
+
+            <button label="Generar acta" render="${not empty(entity.partida_id)}">
+                <action type="save" route="idActaControl-editActaControl">
+                    <param name="partida_id" value="${entity.partida_id}" />
+                </action>
+            </button>
+
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.solicitud_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.solicitud_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.partida_id)}" readonlyMessage="No puede realizar esta acción: No existe partida a calificar">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.solicitud_id}" />
+                </action>
+            </button>
+
+        </buttonbar>
+
+    </edit>
+</main>

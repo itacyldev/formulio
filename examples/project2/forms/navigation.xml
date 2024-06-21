@@ -1,0 +1,24 @@
+<main name="navForm" description="Basic CRUD" id="navForm" repo="contacts">
+    <list >
+        <datatable route="navForm-nav1"/>
+    </list>
+    <edit id="nav1">
+        <p value="Formulario1 - ${params.myParam}" />
+        <actions>
+            <nav label="Nav2" route="navForm-nav2" >
+                <param name="myParam" value="value1"/>
+            </nav>
+            <nav label="Back" route="back" />
+        </actions>
+    </edit>
+    <edit id="nav2">
+        <p value="Formulario2 - ${params.myParam}" />
+        <actions>
+            <nav label="Nav1" route="navForm-nav1" >
+                <param name="myParam" value="value2"/>
+            </nav>
+            <nav label="Back" route="back" />
+        </actions>
+    </edit>
+</main>
+

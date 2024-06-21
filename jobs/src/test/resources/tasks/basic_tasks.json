@@ -1,0 +1,23 @@
+[
+  {
+    "name": "t1",
+    "processor": {
+      "type": "contextPopulateProcessor",
+      "value": "A very weird value!!"
+    }
+  },
+  {
+    "name": "t2",
+    "processor": {
+      "type": "contextPopulateProcessor",
+      "value": 123.45
+    }
+  },
+  {
+    "name": "t3",
+    "processor": {
+      "type": "contextPopulateProcessor",
+      "value": true
+    }
+  }
+]

@@ -1,0 +1,717 @@
+<main name="Verificacion Pliego Condiciones" description="Verificacion Pliego Condiciones" id="idVerificacionPliegoCondiciones" repo="expedienteRepo" mainForm="false">
+    <list id="listVerificacionPliegoCondiciones" name="Verificacion Pliego Condiciones" description="Verificacion Pliego Condiciones">
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editVerificacionPliegoCondiciones">
+
+        <script src="scripts/control.js"/>
+        <p value=""/>
+        <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="VERIFICACION PLIEGO CONDICIONES"/>
+        <p value=""/>
+
+        <table headerText=" Id. Exp., Nº Exp., Id. DOP, DOP" weights="30, 20, 10, 40">
+            <row>
+                <input id="expediente_id" value="${entity.expediente_id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                <input id="num_expediente" value="${entity.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                <input id="dop_id" value="${entity.dop_id}" placeHolder="${params.dop_id}" readonly="true"/>
+                <input id="dop" value="${entity.dop.dop}" onBeforeRender="updateDop" readonly="true"/>
+            </row>
+        </table>
+        <table headerText=" Id. Operador, Razón social" weights="20, 80">
+            <row>
+                <input id="operador_id" value="${entity.operador.operador_id}" placeHolder="${params.operador_id}" readonly="true"/>
+                <input id="razon_social" value="${entity.operador.razon_social}" onBeforeRender="updateRazonSocial" readonly="true"/>
+            </row>
+        </table>
+
+        <p value=""/>
+
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 1. VERIFICACIÓN DE LA SISTEMÁTICA IMPLANTADA POR LA BODEGA PARA COMPROBAR EL ORIGEN DE LA UVA" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc1" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc1_arlanza':'ppc1_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}" readonly="${entity.pregunta.texto_pregunta.contains('REVI')}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 2. VERIFICACIÓN DEL LA SISTEMÁTICA IMPLANTADA POR LA BODEGA PARA CONTROLAR QUE EL VITICULTOR CUMPLE CON LAS PRÁCTICAS DE CULTIVO" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc2" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc2_arlanza':'ppc2_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 3. VERIFICACIÓN DE LA SISTEMÁTICA IMPLANTADA POR LA BODEGA PARA CONTROLAR LA UVA QUE ENTRA EN LA BODEGA" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc3" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc3_arlanza':'ppc3_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio allowsPartialRestore="false" label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}" readonly="true">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 4.1. VERIFICACIÓN DE QUE SE CUMPLEN LOS RENDIMIENTOS DE EXTRACCIÓN" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc4_1" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc4_1_arlanza':'ppc4_1_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+
+                <!--button label="Cálculo rendimiento">
+                    <action type="save" route="idCalculoRendimiento-editCalculoRendimiento">
+                        <param name="entityId" value="${entity.verificacion_pliego_condiciones_id}" />
+                        <param name="expediente_id" value="${entity.expediente_id}"/>
+                        <param name="verificacion_pliego_condiciones_id" value="${entity.verificacion_pliego_condiciones_id}"/>
+                        <param name="num_expediente" value="${entity.expediente.num_expediente}"/>
+                        <param name="punto_normativo" value="${entity.punto_normativo}"/
+
+                    </action>
+                </button-->
+                <table weights="30, 70">
+                    <row weights="30, 35, 35">
+                        <input id="campanha" label="Campaña: " value="${entity.campanha}" />
+                        <input id="litros_producidos" label="Litros producidos: " value="${entity.litros_producidos}" converter="double" inputType="3"/>
+                        <input id="kg_uva" label="KG uva: " value="${entity.kg_uva}" converter="double" inputType="3"/>
+                    </row>
+                    <row>
+                        <!--radio allowsPartialRestore="false" id="cumpleRendimientosExtraccion" label="Cumplimiento: " value="${math:round(entity.kg_uva) gt 0 and math:round(entity.litros_producidos)*100/math:round(entity.kg_uva) ge 72?'NO':'SI'}" orientation="horizontal" readonly="true" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio-->
+                        <radio id="cumpleRendimientosExtraccion" label="Cumplimiento: " value="${math:round(view.kg_uva) gt 0?(math:round(view.litros_producidos)*100/math:round(view.kg_uva) ge 72?'NO':'SI'):'NA'}" orientation="horizontal" readonly="true" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+                <!--table weights="30, 70">
+                    <row weights="30, 35, 35">
+                        <input label="Campaña: " value="${entity.campanha}" />
+                        <input id="litros_producidos" label="Litros producidos: " value="${entity.litros_producidos}" inputType="3"/>
+                        <input id="kg_uva" label="KG uva: " value="${entity.kg_uva}" inputType="3"/>
+                    </row>
+                    <row>
+                        <radio allowsPartialRestore="false" id="cumpleRendimientosExtraccion" label="Cumplimiento: " value="${view.litros_producidos+''+view.kg_uva}" orientation="horizontal" readonly="true" hint="${entity.pregunta.descripcion_pregunta}" onBeforeRender="updateCumpleRendimientosExtraccion">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist-->
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 4.2. REVISIÓN DE LAS INSTALACIONES DE LA BODEGA AL OBJETO DE VERIFICAR" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc4_2" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc4_2_arlanza':'ppc4_2_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 5. VERIFICACIÓN DE LA SISTEMÁTICA IMPLANTADA POR LA BODEGA PARA COMPROBAR QUE SE CUMPLEN LOS RENDIMIENTOS MÁXIMOS POR VARIEDADES" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc5" repo="verificacionPliegoCondicionesRepo" >
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc5_arlanza':'ppc5_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio id="verificionPliegoCondicionesPPC5" allowsPartialRestore="false" label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}" readonly="true">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 6. VERIFICACIÓN DE LA SISTEMÁTICA IMPLANTADA POR LA BODEGA PARA EL CONTROL DE VARIEDADES AUTORIZADAS" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc6_1" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc6_1_arlanza':'ppc6_1_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc6_2" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc6_2_arlanza':'ppc6_2_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 7. VERIFICACIÓN DE QUE LA BODEGA CUMPLE CON LOS PERIODOS DE ENVEJECIMIENTO EN LOS VINOS IDENTIFICADOS CON TÉRMINOS TRADICIONALES" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc7" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc7_arlanza':'ppc7_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 8.COMPROBACIÓN DE LOS TIPOS DE ENVASE Y CIERRE UTILIZADOS" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc8" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc8_arlanza':'ppc8_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 9.COMPROBAR LAS MENCIONES OBLIGATORIAS Y FACULTATIVAS EN LAS ETIQUETAS" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc9" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc9_arlanza':'ppc9_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " allowsPartialRestore="false" value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}" render="${entity.pregunta.texto_pregunta.contains('CRDO')}" readonly="true">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}" render="${!entity.pregunta.texto_pregunta.contains('CRDO')}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 10.1. REGLAMENTO" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc10_1" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc10_1_arlanza':'ppc10_1_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="PCC 10.2. REGLAMENTO" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc10_2" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc10_2_arlanza':'ppc10_2_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="NORMA ISO 17065. VERIFICACION DEL SISTEMA DE AUTOCONTROL DE LA BODEGA" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc11_1" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="${view.dop_id eq 1?'ppc11_1_arlanza':'ppc11_1_zamora'}"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="NORMA ISO 17065. REVISIÓN DEL SISTEMA DE QUEJAS Y RECLAMACIONES" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc11_2" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="ppc11_2"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal" hint="${entity.pregunta.descripcion_pregunta}">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="NORMA ISO 17065. CALIBRACIÓN/VERIFICACIÓN BÁSCULA" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc11_3" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="ppc11_3"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <p value=""/>
+        <divisor color="#00766C" strokeWidth="10" />
+        <p bold="true" value="NORMA ISO 17065. CALIBRACIÓN/VERIFICACIÓN REFRACTÓMETRO" fontSize="20"/>
+        <divisor color="#00766C" strokeWidth="10" />
+
+        <datalist id="datalistVerificacionPliegoCondiciones_ppc11_4" repo="verificacionPliegoCondicionesRepo">
+            <repofilter>
+                <and>
+                    <eq property="expediente_id" value="${params.expediente_id}"/>
+                    <eq property="punto_normativo" value="ppc11_4"/>
+                </and>
+            </repofilter>
+            <datalistitem>
+                <divisor color="#00766C" strokeWidth="8" />
+                <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                <divisor color="#00766C" strokeWidth="8" />
+                <table weights="30, 70">
+                    <row>
+                        <radio label="Cumplimiento: " value="${entity.cumple}" orientation="horizontal">
+                            <options>
+                                <option label="SI" value="SI" />
+                                <option label="NO" value="NO" />
+                                <option label="NA" value="NA" />
+                            </options>
+                        </radio>
+                        <textarea label="Evidencias: " value="${entity.evidencias}" />
+                    </row>
+                </table>
+                <table>
+                    <row>
+                        <textarea label="Observaciones: " value="${entity.observaciones}" />
+                    </row>
+                </table>
+                <p value=""/>
+            </datalistitem>
+        </datalist>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action route="back" type="save" registerInHistory="false" controller="datalistVerificacionPliegoCondiciones_ppc1, datalistVerificacionPliegoCondiciones_ppc2, datalistVerificacionPliegoCondiciones_ppc3, datalistVerificacionPliegoCondiciones_ppc4_1, datalistVerificacionPliegoCondiciones_ppc4_2, datalistVerificacionPliegoCondiciones_ppc5, datalistVerificacionPliegoCondiciones_ppc6_1, datalistVerificacionPliegoCondiciones_ppc6_2, datalistVerificacionPliegoCondiciones_ppc7, datalistVerificacionPliegoCondiciones_ppc8, datalistVerificacionPliegoCondiciones_ppc9, datalistVerificacionPliegoCondiciones_ppc10_1, datalistVerificacionPliegoCondiciones_ppc10_2, datalistVerificacionPliegoCondiciones_ppc11_1, datalistVerificacionPliegoCondiciones_ppc11_2, datalistVerificacionPliegoCondiciones_ppc11_3, datalistVerificacionPliegoCondiciones_ppc11_4">
+                     <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+            <button label="Cancel" route="back"/>
+        </buttonbar>
+    </edit>
+</main>

@@ -1,0 +1,26 @@
+<repos>
+    <repo dbFile="plagas.sqlite" id="huraRepo" dbTable="hura" />
+    <repo dbFile="plagas.sqlite" id="activaRepo" dbTable="activa" />
+    <repo dbFile="plagas.sqlite" id="cobVegRepo" dbTable="cob_veg" />
+    <repo dbFile="plagas.sqlite" id="danoRepo" dbTable="dano" />
+    <repo dbFile="plagas.sqlite" id="lindeRepo" dbTable="linde" />
+    <repo dbFile="plagas.sqlite" id="recintoRepo" dbTable="recinto" />
+    <repo dbFile="plagas.sqlite" id="visitaRepo" dbTable="visita">
+        <mapping fk="recinto_id" property="recinto" repo="recintoRepo"/>
+        <mapping fk="linde_id" property="linde" repo="lindeRepo"/>
+    </repo>
+    <repo dbFile="plagas.sqlite" id="tipoTransectorRepo" dbTable="tipo_transector">
+
+    </repo>
+    <repo dbFile="plagas.sqlite" id="transectorRepo" dbTable="transector">
+        <mapping fk="visita_id" property="visita" repo="visitaRepo"/>
+        <mapping fk="tipo_transector_id" property="tipoTransector" repo="tipoTransectorRepo"/>
+    </repo>
+    <repo dbFile="plagas.sqlite" id="unidadMuestralRepo" dbTable="unidad_muestral">
+        <mapping fk="transector_id" property="transector" repo="transectorRepo"/>
+        <mapping fk="hura_id" property="hura" repo="huraRepo"/>
+        <mapping fk="activa_id" property="activa" repo="activaRepo"/>
+        <mapping fk="cob_veg_id" property="cobVeg" repo="cobVegRepo"/>
+        <mapping fk="dano_id" property="dano" repo="danoRepo"/>
+    </repo>
+</repos>

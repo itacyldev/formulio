@@ -1,0 +1,29 @@
+{
+  "description": "Unidad muestral",
+  "requiredContexts": [
+    "user",
+    "job"
+  ],
+  "globalParams": {
+    "endpoint": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/files/",
+    "apikey": "USER-MUNGARRO-UQSERV",
+    "jobType": "FormicExportarUnidadesMuestrales",
+    "endpointActa": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/jobs/"
+  },
+  "executionMode": "FG_ASYNC",
+  "tasks": [
+    {
+      "name": "t1",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/gesinttop.sqlite",
+        "sqlQuery": "SELECT unidad_muestral_id as 'ID. UNIDAD MUESTRAL', num_unidad_muestral as 'N. UNIDAD MUESTRAL', unidad_muestral.transecto_id as 'ID. TRANSECTO', transecto.num_transecto as 'N. TRANSECTO', visita.visita as 'VISITA', huras_totales_transecto.d_huras_totales_transecto as 'HURAS TOTALES', huras_activas_transecto.d_huras_activas_transecto as 'HURAS ACTIVAS', densidad_cubierta_transecto.d_densidad_cubierta_transecto as 'DENS. CUBIERTA', porcentaje_dano_transecto.d_porcentaje_dano_transecto as '% DAÑO', presencia_trampas_transecto.d_presencia_trampas_transecto as 'TRAMPAS', caminillos_transecto.d_caminillos_transecto as 'CAMINILLOS', altura_cubierta_transecto.d_altura_cubierta_transecto as 'ALTURA CUBIERTA', ifnull(observaciones_unidad_muestral,'') as 'OBSERVACIONES' FROM unidad_muestral, transecto, visita, huras_totales_transecto, huras_activas_transecto, densidad_cubierta_transecto, porcentaje_dano_transecto, presencia_trampas_transecto, caminillos_transecto, altura_cubierta_transecto WHERE transecto.transecto_id = unidad_muestral.transecto_id and visita.visita_id = transecto.visita_id and huras_totales_transecto.c_huras_totales_transecto_id = unidad_muestral.c_huras_totales_transecto_id and huras_activas_transecto.c_huras_activas_transecto_id = unidad_muestral.c_huras_activas_transecto_id and densidad_cubierta_transecto.c_densidad_cubierta_transecto_id = unidad_muestral.c_densidad_cubierta_transecto_id and porcentaje_dano_transecto.c_porcentaje_dano_transecto_id = unidad_muestral.c_porcentaje_dano_transecto_id and presencia_trampas_transecto.c_presencia_trampas_transecto_id = unidad_muestral.c_presencia_trampas_transecto_id and caminillos_transecto.c_caminillos_transecto_id = unidad_muestral.c_caminillos_transecto_id and altura_cubierta_transecto.c_altura_cubierta_transecto_id = unidad_muestral.c_altura_cubierta_transecto_id and transecto.visita_id='${params.visita_id}'"
+      },
+      "writer": {
+        "type": "excelWriter",
+        "sheetName": "UNIDADES MUESTRALES",
+        "outputFile": "Unidades_muestrales_${params.visita}.xlsx"
+      }
+    }
+  ]
+}

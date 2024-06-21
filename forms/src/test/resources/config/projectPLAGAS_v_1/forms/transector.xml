@@ -1,0 +1,162 @@
+<main id="idTransector" name="Transector" repo="transectorRepo" mainForm="false">
+    <list id="listTransector"/>
+    <edit id="editTransector">
+        <form id="formTransector">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="TRANSECTO"/>
+            <p value=""/>
+
+            <table>
+                <row colspan="2">
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Visita"/>
+                </row>
+                <row weights="25, 75">
+                    <input id="visita_id" label="Id. visita: " readonly="true" value="${entity.visita_id}" />
+                    <input label="Visita: " value="${entity.visita.visita}" readonly="true"/>
+                </row>
+                <row>
+                    <date label="Fecha evaluación: " value="${entity.visita.fecha_evaluacion}" readonly="true"/>
+                    <input label="Evaluador: " value="${entity.visita.evaluador}" readonly="true"/>
+                </row>
+            </table>
+
+            <table>
+                <row colspan="4">
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Recinto"/>
+                </row>
+                <row colspan="4">
+                    <input label="Recinto: " value="${entity.visita.recinto.recinto}" readonly="true"/>
+                </row>
+                <row>
+                    <input label="Habitat: " value="${entity.visita.recinto.habitat}" readonly="true"/>
+                    <input label="Grupo: " value="${entity.visita.recinto.grupo}" readonly="true"/>
+                    <input label="Utilización: " value="${entity.visita.recinto.utilizacion}" readonly="true"/>
+                    <input label="Sist. explotación: " value="${entity.visita.recinto.sis_explotacion}" readonly="true"/>
+                </row>
+                <row>
+                    <input label="Actuación parcela: " value="${entity.visita.recinto.actuacion_parcela}" readonly="true"/>
+                    <input label="Tipo laboreo: " value="${entity.visita.recinto.tipo_laboreo}" readonly="true"/>
+                    <input label="Altura: " value="${entity.visita.recinto.altura}" readonly="true"/>
+                    <input label="Densidad: " value="${entity.visita.recinto.densidad}" readonly="true"/>
+                </row>
+            </table>
+
+            <table>
+                <row colspan="4">
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Linde"/>
+                </row>
+                <row weights="25, 75">
+                    <input label="Linde: " value="${entity.visita.linde.tipo}" readonly="true"/>
+                    <input label="Actuación linde: " value="${entity.visita.linde.actuacion}" readonly="true"/>
+                </row>
+            </table>
+            <table>
+                <row colspan="4">
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Transecto"/>
+                </row>
+                <row weights="25, 75">
+                    <input id="transector_id" label="Id. transecto: " placeHolder="${params.entityId}"  value="${entity.transector_id}" readonly="true"/>
+                    <input label="Tipo transecto: " value="${entity.tipoTransector.tipo_transector}" readonly="true"/>
+                </row>
+                <row>
+                    <autocomplete label="Hura: " id="huraTotal" forceSelection="true" repo="huraRepo">
+                        <options labelExpression="${entity.rango_hura}" labelFilteringProperty="rango_hura" valueProperty="hura_id" />
+                        <repofilter>
+                            <contains property="rango_hura" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                    <autocomplete label="Activa: " id="activaTotal" forceSelection="true" repo="activaRepo" >
+                        <options labelExpression="${entity.rango_activa}" labelFilteringProperty="rango_activa" valueProperty="activa_id" />
+                        <repofilter>
+                            <contains property="rango_activa" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                    <autocomplete label="Cob. Veg: " id="cobVegTotal" forceSelection="true" repo="cobVegRepo">
+                        <options labelExpression="${entity.rango_cob_veg}" labelFilteringProperty="rango_cob_veg" valueProperty="cob_veg_id" />
+                        <repofilter>
+                            <contains property="rango_cob_veg" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                    <autocomplete label="Daño: " id="danoTotal" forceSelection="true" repo="danoRepo" >
+                        <options labelExpression="${entity.rango_dano}" labelFilteringProperty="rango_dano" valueProperty="dano_id" />
+                        <repofilter>
+                            <contains property="rango_dano" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                </row>
+            </table>
+
+            <datalist id="datalistUnidadMuestral" repo="unidadMuestralRepo" allowsPartialRestore="false" border="true">
+                <repofilter>
+                    <eq property="transector_id" value="${entity.transector_id}"/>
+                </repofilter>
+                <datalistitem>
+                    <table weights="8, 23, 23, 23, 23">
+                        <row>
+                            <input value="${entity.num_unidad_muestral}" readonly="true"/>
+                            <autocomplete id="hura_id_${entity.num_unidad_muestral}" label="Hura: " forceSelection="true" repo="huraRepo" value="${entity.hura.hura_id}" validator="required">
+                                <options labelExpression="${entity.rango_hura}" labelFilteringProperty="rango_hura" valueProperty="hura_id" />
+                                <repofilter>
+                                    <and>
+                                        <contains property="rango_hura" value="${this.value}"/>
+                                    </and>
+                                </repofilter>
+                            </autocomplete>
+                            <autocomplete id="activa_id_${entity.num_unidad_muestral}" label="Activa: " forceSelection="true" repo="activaRepo" value="${entity.activa.activa_id}" validator="required">
+                                <options labelExpression="${entity.rango_activa}" labelFilteringProperty="rango_activa" valueProperty="activa_id" />
+                                <repofilter>
+                                    <contains property="rango_activa" value="${this.value}"/>
+                                </repofilter>
+                            </autocomplete>
+                            <autocomplete id="cob_veg_id_${entity.num_unidad_muestral}" label="Cob. Veg: " forceSelection="true" repo="cobVegRepo" value="${entity.cobVeg.cob_veg_id}" validator="required">
+                                <options labelExpression="${entity.rango_cob_veg}" labelFilteringProperty="rango_cob_veg" valueProperty="cob_veg_id" />
+                                <repofilter>
+                                    <contains property="rango_cob_veg" value="${this.value}"/>
+                                </repofilter>
+                            </autocomplete>
+                            <autocomplete id="dano_id_${entity.num_unidad_muestral}" label="Daño: " forceSelection="true" repo="danoRepo" value="${entity.dano.dano_id}" validator="required">
+                                <options labelExpression="${entity.rango_dano}" labelFilteringProperty="rango_dano" valueProperty="dano_id" />
+                                <repofilter>
+                                    <contains property="rango_dano" value="${this.value}"/>
+                                </repofilter>
+                            </autocomplete>
+                        </row>
+                    </table>
+                </datalistitem>
+            </datalist>
+
+            <button label="AÑADIR UNIDAD MUESTRAL">
+                <action type="js" controller="datalistUnidadMuestral" route="idTransector-editTransector" refresh="all">
+                    <param name="method" value="anadirUnidadMuestral" />
+                    <param name="entityId" value="${view.transector_id}"/>
+                    <param name="huraTotal" value="${view.huraTotal}"/>
+                    <param name="activaTotal" value="${view.activaTotal}"/>
+                    <param name="cobVegTotal" value="${view.cobVegTotal}"/>
+                    <param name="danoTotal" value="${view.danoTotal}"/>
+                </action>
+            </button>
+
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true" controller="datalistUnidadMuestral">
+                    <param name="entityId" value="${entity.visita_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${entity.visita_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.transector_id)}" readonlyMessage="No puede realizar esta acción: No existe el transecto" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false">
+                    <param name="entityId" value="${entity.visita_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

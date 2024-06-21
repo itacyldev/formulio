@@ -1,0 +1,39 @@
+<main id="formParam" name="Param" repo="pruebaRepo">
+    <list id="listParam" name="Param">
+        <buttonbar type="fab">
+            <button id="btnFab">
+                <action id="accionFAB" type="nav" route="formParam-editParam1">
+                    <param name="repo" value="pruebaRepo"/>
+                </action>
+            </button>
+        </buttonbar>
+    </list>
+    <edit id="editParam1">
+        <script>
+            function accionBotonFormulario(msg) {
+                vh.setWidgetValue('inputAccionFormulario',msg);
+            }
+        </script>
+        <form>
+            <input label="Input acción formulario: " id="inputAccionFormulario" />
+            <button label="Acción botón formulario">
+                <action type="js">
+                    <param name="method" value="accionBotonFormulario" />
+                    <param name="message" value="Acción botón formulario" />
+                </action>
+            </button>
+            <input id="param1" label="Parámetro 1: " value="Uno"/>
+            <input id="param2" label="Parámetro 2: " value="Dos"/>
+            <button label="Nav Edit Param 2" route="formParam-editParam2">
+                <param name="nameParam1" value="${view.param1}"/>
+                <param name="nameParam2" value="${view.param2}"/>
+            </button>
+         </form>
+    </edit>
+    <edit id="editParam2">
+        <form>
+            <input label="Parametro 1: " value="${params.nameParam1}"/>
+            <input label="Parametro 2: " value="${params.nameParam2}"/>
+        </form>
+    </edit>
+</main>

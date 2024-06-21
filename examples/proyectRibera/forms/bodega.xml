@@ -1,0 +1,26 @@
+<main name="bodegas" description="Bodegas" id="bodegas" repo="bodegaRepo">
+    <list name="Listado Bodegas">
+        <datatable properties="id,razon_social,direccion" />
+    </list>
+    <edit>
+        <form>
+            <text label="Id: " value="${entity.id}" readonly="true"/>
+            <text label="Razón Social: " value="${entity.razon_social}" validator="required"/>
+            <autocomplete forceSelection="true" id="provincia" label="Provincia: " repo="provRepo" value="${entity.prov_id}">
+                <options labelExpression="${entity.name}" labelFilteringProperty="name" valueProperty="id" />
+            </autocomplete>
+            <autocomplete forceSelection="true" id="provmuni" label="Municipio: " repo="muniRepo" value="${entity.provmuni_id}">
+                <options labelExpression="${entity.name}" labelFilteringProperty="name" valueProperty="provmuni" />
+                <repofilter>
+                    <eq property="prov" value="${view.provincia}" mandatory="true"/>
+                    <contains property="name" value="${this.value}"/>
+                </repofilter>
+            </autocomplete>
+            <text label="Dirección: " value="${entity.direccion}"/>
+            <text label="Teléfono: " value="${entity.telefono}"/>
+            <text label="Email: " value="${entity.email}" validator="email"/>
+            <text label="Alc. Actual: " value="${entity.alcance_actual}"/>
+            <text label="Alc. Solic.: " value="${entity.alcance_solicitado}"/>
+        </form>
+    </edit>
+</main>

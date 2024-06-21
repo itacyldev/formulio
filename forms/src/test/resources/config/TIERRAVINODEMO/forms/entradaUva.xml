@@ -1,0 +1,172 @@
+<main id="entradaUva" name="Entrada de Uva" repo="entradaUvaRepo" mainForm="false">
+    <list id="listPartida" name="Entrada de Uva" description="Listado entradas de uva">
+       <datatable>
+           <column id="column_fecha_entrada" headerText="Fecha entrada" filtering="true" ordering="true" value="${entity.fecha_entrada}">
+               <filter property="fecha_entrada" matching="contains" valueExpression="${this.column_fecha_entrada}"/>
+               <order property="fecha_entrada"/>
+           </column>
+           <column id="column_num_expediente" headerText="Expediente" filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+       </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editEntradaUva">
+        <form id="formEntradaUva">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="ENTRADA DE UVA"/>
+            <p value=""/>
+
+            <table headerText=" Id. Exp., Nº Exp., Id. DOP, DOP" weights="15, 25, 15, 45">
+                <row>
+                    <input id="expediente_id" value="${entity.trazabilidad.expediente_id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                    <input id="num_expediente" value="${entity.trazabilidad.expediente.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                    <input id="dop_id" value="${entity.trazabilidad.expediente.dop_id}" placeHolder="${params.dop_id}" readonly="true"/>
+                    <input id="dop" value="${entity.trazabilidad.expediente.dop.dop}" placeHolder="${params.dop}" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id. Partida, Partida, Id. Operador, Razón social" weights="15, 25, 15, 45">
+                <row>
+                    <input id="trazabilidad_id" value="${entity.trazabilidad_id}" placeHolder="${params.trazabilidad_id}" readonly="true"/>
+                    <input id="partida" value="${entity.trazabilidad.trazabilidad.partida}" placeHolder="${params.partida}" readonly="true"/>
+                    <input id="operador_id" value="${entity.trazabilidad.expediente.operador_id}" placeHolder="${params.operador_id}" readonly="true"/>
+                    <input id="razon_social" value="${entity.trazabilidad.expediente.operador.razon_social}" placeHolder="${params.razon_social}" readonly="true"/>
+                </row>
+            </table>
+
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="Entrada de uva"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false" weights="33, 33, 34">
+                <row>
+                    <date label="Fecha de entrada" value="${entity.fecha_entrada}"/>
+                    <date label="Año plantación" value="${entity.fecha_plantacion}"/>
+                    <input label="Viticultor" value="${entity.viticultor}"/>
+                </row>
+                <row>
+                    <autocomplete label="Provincia: " forceSelection="true" id="provincia_produccion_id" repo="provinciaProduccionRepo" value="${entity.provincia_produccion_id}">
+                        <options labelExpression="${entity.provincia_produccion}" labelFilteringProperty="provincia_produccion" valueProperty="provincia_produccion_id" />
+                        <repofilter>
+                            <eq property="dop_id" value="${view.dop_id}" mandatory="true"/>
+                            <contains property="provincia_produccion" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                    <autocomplete label="Municipio: " forceSelection="true" id="municipio_produccion_id" repo="municipioProduccionRepo" value="${entity.municipio_produccion_id}">
+                        <options labelExpression="${entity.municipio_produccion}" labelFilteringProperty="municipio_produccion" valueProperty="municipio_produccion_id" />
+                        <repofilter>
+                            <eq property="provincia_produccion_id" value="${view.provincia_produccion_id}" mandatory="true"/>
+                            <contains property="municipio_produccion" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                </row>
+
+                <row>
+                    <input label="Polígono" value="${entity.poligono}"/>
+                    <input label="Parcela" value="${entity.parcela}"/>
+                    <input label="Recinto" value="${entity.recinto}"/>
+                </row>
+                <row>
+                    <autocomplete label="Variedad: " forceSelection="true" id="variedad_id" repo="variedadRepo" value="${entity.variedad_id}">
+                        <options labelExpression="${entity.variedad}" labelFilteringProperty="variedad" valueProperty="variedad_id" />
+                        <repofilter>
+                            <contains property="variedad" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+
+                    <autocomplete label="Tipo uva: " forceSelection="true" id="tipo_uva_id" repo="tipoUvaRepo" value="${entity.tipo_uva_id}">
+                        <options labelExpression="${entity.tipo_uva}" labelFilteringProperty="tipo_uva" valueProperty="tipo_uva_id" />
+                        <repofilter>
+                            <eq property="dop_id" value="${view.dop_id}" mandatory="true"/>
+                            <eq property="variedad_id" value="${view.variedad_id}" mandatory="true"/>
+                            <contains property="tipo_uva" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                </row>
+                <row>
+                    <input id="grado_variedad" label="Grado variedad" value="${view.variedad_id}" onBeforeRender="udateGradoVariedad" readonly="true"/>
+                    <input id="grado_probable" label="Grado probable" value="${entity.grado_probable}" inputType="3"/>
+                    <radio label="Conforme grado: " value="${not emtpy(view.grado_probable) and not empty(view.grado_variedad)?(view.grado_probable ge view.grado_variedad?'SI':'NO'):null}" orientation="horizontal" readonly="true">
+                        <options>
+                            <option label="SI" value="SI" />
+                            <option label="NO" value="NO" />
+                        </options>
+                    </radio>
+                </row>
+
+                <row>
+                    <input id="kg_permitidos" label="kg permitidos" value="${view.variedad_id}" onBeforeRender="udateKgPermitidos" readonly="true"/>
+                    <input id="superficie" label="Superficie plantación" value="${entity.sup_plantacion}" inputType="3"/>
+                    <input id="kg_cupo" label="Cupo (kg)" value="${math:round(view.kg_permitidos*view.superficie)*math:pow(10,2)/math:pow(10,2)}" readonly="true"/>
+                </row>
+                <row>
+                    <input id="kg_totales_recepcionados" label="Kg. totales recepcionados" value="${entity.kg_totales_recepcionados}" inputType="3"/>
+                    <radio label="Conforme rendimiento: " value="${view.kg_totales_recepcionados+''+view.kg_cupo}" orientation="horizontal" onBeforeRender="updateConformeRendimiento" readonly="true">
+                        <options>
+                            <option label="SI" value="SI" />
+                            <option label="NO" value="NO" />
+                        </options>
+                    </radio>
+                </row>
+
+                <row>
+                    <radio label="Conforme registro vitícola : " value="${entity.registro_viticola}" orientation="horizontal"  >
+                        <options>
+                            <option label="SI" value="SI" />
+                            <option label="NO" value="NO" />
+                        </options>
+                    </radio>
+                    <radio label="Conforme estado sanitario: " value="${entity.estado_sanitario}" orientation="horizontal"  >
+                        <options>
+                            <option label="SI" value="SI" />
+                            <option label="NO" value="NO" />
+                        </options>
+                    </radio>
+                    <radio label="Conforme tickets de pesada: " value="${entity.tickets_pesada}" orientation="horizontal"  >
+                        <options>
+                            <option label="SI" value="SI" />
+                            <option label="NO" value="NO" />
+                        </options>
+                    </radio>
+                </row>
+                <row>
+                    <input label="DDA" value="${entity.dda}" inputType="3"/>
+                    <input label="Titular del registro vitícola" value="${entity.nombre_registro}"/>
+                    <!--input label="Depósito de destino" value="${entity.deposito_destino}"/-->
+                    <autocomplete label="Deposito de destino: " forceSelection="true" id="deposito_id" repo="depositoRepo" value="${entity.deposito_id}">
+                        <options labelExpression="${entity.numero}" labelFilteringProperty="numero" valueProperty="deposito_id" />
+                        <repofilter>
+                            <eq property="operador_id" value="${view.operador_id}" mandatory="true"/>
+                            <contains property="numero" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                </row>
+                <row>
+                    <textarea label="Observaciones" value="${entity.observaciones}"/>
+                </row>
+            </table>
+
+
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.trazabilidad_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.trazabilidad_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.entrada_uva_id)}" readonlyMessage="No puede realizar esta acción: No existe entrada de uva" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false">
+                    <param name="entityId" value="${params.trazabilidad_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>
+

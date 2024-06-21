@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:color="?attr/backgroundColor" android:state_pressed="false" android:state_selected="true" />
+<item android:color="?attr/backgroundColor" android:state_pressed="true" />
+<item android:color="@color/TRANSPARENT" />
+</selector>

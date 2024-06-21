@@ -1,0 +1,112 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+    elementFormDefault="qualified">
+    <xs:element name="repos" type="reposType" />
+    <xs:complexType name="propertyType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" type="xs:string" use="optional" />
+                <xs:attribute name="calculated" type="xs:string" use="optional" />
+                <xs:attribute name="calculatedOn" type="xs:string" use="optional" />
+                <xs:attribute name="columnName" type="xs:string" use="optional" />
+                <xs:attribute name="converter" type="xs:string" use="optional" />
+                <xs:attribute name="expression" type="xs:string" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="metaType">
+        <xs:sequence>
+            <xs:element name="property" maxOccurs="unbounded" minOccurs="0" type="propertyType" />
+        </xs:sequence>
+        <xs:attribute name="properties" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="mappingType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="deletable" type="xs:string" />
+                <xs:attribute name="fk" type="xs:string" />
+                <xs:attribute name="id" type="xs:string" />
+                <xs:attribute name="insertable" type="xs:string" />
+                <xs:attribute name="property" type="xs:string" />
+                <xs:attribute name="repo" type="xs:string" />
+                <xs:attribute name="retrieveMeta" type="xs:string" />
+                <xs:attribute name="updatable" type="xs:string" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="gtType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="property" type="xs:string" />
+                <xs:attribute name="value" type="xs:string" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="ltType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="property" type="xs:string" />
+                <xs:attribute name="value" type="xs:string" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="orType">
+        <xs:sequence>
+            <xs:element name="gt" type="gtType" />
+            <xs:element name="lt" type="ltType" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="startwithType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="property" type="xs:string" />
+                <xs:attribute name="value" type="xs:string" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="containsType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="property" type="xs:string" use="optional" />
+                <xs:attribute name="value" type="xs:string" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="andType">
+        <xs:sequence>
+            <xs:element name="contains" maxOccurs="unbounded" minOccurs="0" type="containsType" />
+            <xs:element name="or" minOccurs="0" type="orType" />
+            <xs:element name="startwith" minOccurs="0" type="startwithType" />
+            <xs:element name="and" minOccurs="0" type="andType" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="repofilterType">
+        <xs:sequence>
+            <xs:element name="and" type="andType" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="repoType">
+        <xs:sequence>
+            <xs:element name="meta" type="metaType" />
+            <xs:element name="mapping" type="mappingType" />
+            <xs:element name="repofilter" type="repofilterType" />
+        </xs:sequence>
+        <xs:attribute name="dbFile" type="xs:string" />
+        <xs:attribute name="dbTable" type="xs:string" />
+        <xs:attribute name="id" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="filerepoType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="defaultExtension" type="xs:string" />
+                <xs:attribute name="folder" type="xs:string" />
+                <xs:attribute name="id" type="xs:string" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="reposType">
+        <xs:sequence>
+            <xs:element name="repo" type="repoType" />
+            <xs:element name="filerepo" type="filerepoType" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

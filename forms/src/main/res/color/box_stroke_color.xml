@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<item android:color="?attr/onSurfaceColor" android:state_pressed="false" android:state_selected="true" />
+<item android:color="?attr/onSurfaceColor" android:state_pressed="true" />
+<item android:color="?attr/onSurface4Color"/>
+</selector>

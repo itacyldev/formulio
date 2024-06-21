@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="es.jcyl.ita.myapplication.MainActivity" >
+    <item android:id="@+id/action_dark_theme"
+        android:title="@string/action_dark_theme"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_dev_console"
+        android:title="@string/action_dev_console"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_about"
+        android:title="@string/action_about"
+        android:orderInCategory="300"
+        app:showAsAction="never" />
+</menu>

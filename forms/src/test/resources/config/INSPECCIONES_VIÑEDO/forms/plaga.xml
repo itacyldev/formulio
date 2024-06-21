@@ -1,0 +1,314 @@
+<main name="plaga" description="Plagas" id="idPlaga" repo="plagaRepo">
+    <list id="listPlaga" name="LISTADO DE INSPECCIONES" description="LISTADO DE INSPECCIONES">
+        <script>
+            function updateDatatable() {
+            //console.log("updateDatatable");
+            vh.updateWidget('datatableSincronizar');
+            }
+        </script>
+        <datatable id="datatableSincronizar">
+            <column id="column_plaga_id" headerText="Plaga" filtering="true" ordering="true" value="${entity.plaga_id}" />            
+            <column id="column_tipo" headerText="Tipo de plaga" filtering="false" ordering="false" value="${entity.tipoPlaga.tipo_plaga}"/>
+              <column id="column_fecha_inspeccion" headerText="Fecha inspección" filtering="true" ordering="true" value="${entity.fecha_inspeccion}">
+                <filter property="fecha_inspeccion" matching="contains" valueExpression="${this.column_fecha_inspeccion}"/>
+                <order property="fecha_inspeccion"/>
+            </column>
+            <action type="nav" route="idPlaga-editPlaga2"/>
+        </datatable>
+        <button id="syncButton" label="Sincronizar" refresh="datatableSincronizar">
+            <action id="compositeAction">
+                <action registerInHistory="false" type="job">
+                    <param name="jobId" value="inspeccionesvinedo_sync_job_cmd" />
+                    <param name="resourceFilter" value="none"/>
+                </action>
+                <action type="js" registerInHistory="false">
+                    <param name="method" value="updateDatatable" />
+                </action>
+            </action>
+        </button>
+
+        <buttonbar type="fab">
+            <button id="createButton">
+                <action id="createPlaga" type="create" route="idPlaga-editPlaga2" >
+                    <param name="repo" value="plagaRepo"/>
+                    <param name="fecha_inspeccion" value="${date.now}"/>
+                </action>
+            </button>
+        </buttonbar>
+
+    </list>
+
+    <edit id="editPlaga2">
+        <script src="scripts/inspeccionesvinedo.js"/>
+        <form>
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="OBSERVACIÓN DE PLAGAS"/>
+            <p value=""/>
+
+            <table>
+                <row>
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Inspección"/>
+                </row>
+                <row weights="30,70">
+                    <table border="false">
+                        <row>
+                            <input label="Id.: " id="plaga_id" value="${entity.plaga_id}" readonly="true"/>
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row>
+                            <date id="fecha_inspeccion" label="Fecha de inspección: " value="${entity.fecha_inspeccion}" converter="integer" placeholder="${param.fecha}" validator="required"/>
+                        </row>
+                    </table>
+                </row>
+            </table>
+            <table border="false" weights="30, 10, 60">
+                <row>
+                    <p bold="true" value="Añadir recinto SIGPAC a mano: " />
+                    <switcher id="switcherReferenciaSigPac" value="${not empty(entity.ref_sigpac)?1:0}"/>
+                    <p value=""/>
+                </row>
+            </table>
+
+            <table render="${view.switcherReferenciaSigPac eq 'true'}">
+                <row>
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Provincia"/>
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Municipio"/>
+                </row>
+                <row weights="18, 32, 18, 32">
+                    <input id="cod_provincia" label="Cód. provincia: " readonly="true"/>
+                    <autocomplete forceSelection="true" id="c_provincia_id" label="Provincia: " repo="provinciaRepo">
+                        <options labelExpression="${entity.d_provincia}" labelFilteringProperty="d_provincia" valueProperty="c_provincia_id" />
+                        <action type="js">
+                            <param name="method" value="updateCodigoProvincia" />
+                        </action>
+                    </autocomplete>
+                    <input id="cod_municipio" label="Cód. Municipio: " readonly="true"/>
+                    <autocomplete forceSelection="true" id="c_provmuni_id" label="Municipio: " repo="municipioRepo">
+                        <options labelExpression="${entity.d_nombre}" labelFilteringProperty="d_nombre" valueProperty="c_provmuni_id" />
+                        <repofilter>
+                            <eq property="c_provincia_id" value="${view.c_provincia_id}" mandatory="true"/>
+                            <contains property="d_nombre" value="${this.value}"/>
+                        </repofilter>
+                        <action type="js">
+                            <param name="method" value="updateCodigoMunicipio" />
+                        </action>
+                    </autocomplete>
+                </row>
+            </table>
+
+            <table render="${view.switcherReferenciaSigPac eq 'true'}">
+                <row>
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Recinto"/>
+                </row>
+                <row>
+                    <input id="c_agregado" label="Agregado: " inputType="3" >
+                    </input>
+                    <input id="c_zona" label="Zona: " inputType="3" >
+                    </input>
+                    <input id="c_poligono" label="Polígono: " inputType="3" >
+                    </input>
+                    <input id="c_parcela" label="Parcela: " inputType="3" >
+                    </input>
+                    <input id="c_recinto" label="Recinto: " inputType="3" >
+                    </input>
+                </row>
+            </table>
+            <table render="${view.switcherReferenciaSigPac eq 'true'}" border="false">
+                <row>
+                    <!--button label="DESGLOSAR REFERENCIA"  readonly="${empty (view.c_refrec)}" readonlyMessage="Debe rellenar el campo referencia referencia">
+                        <action type="js">
+                            <param name="method" value="updateCamposRecinto" />
+                        </action>
+                    </button-->
+                    <button label="GENERAR REFERENCIA"  readonly="${empty (view.c_provincia_id) or empty(view.c_provmuni_id) or empty(view.c_agregado) or empty(view.c_zona) or empty(view.c_poligono) or empty(view.c_parcela) or empty(view.c_recinto)}" readonlyMessage="Debe rellenar todos los datos para poder generar la referencia">
+                        <action type="js">
+                            <param name="method" value="updateReferencia" />
+                        </action>
+                    </button>
+                </row>
+            </table>
+            <table render="${view.switcherReferenciaSigPac eq 'true'}">
+                <row>
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Referencia"/>
+                </row>
+                <row>
+                    <input id="c_refrec" label="Referencia: " value="${entity.ref_sigpac}" inputType="3" />
+                </row>
+            </table>
+
+            <table>
+                <row>
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Detalle de la plaga"/>
+                </row>
+                <!--row>
+                    <table border="false">
+                        <row>
+                            <autocomplete label="Municipio: " forceSelection="true" repo="municipiosRepo" value="${entity.c_provmun}">
+                                <options labelExpression="${entity.d_nombre}" labelFilteringProperty="d_nombre" valueProperty="c_provmun"/>
+                                <repofilter>
+                                    <contains property="d_nombre" value="${this.value}"/>
+                                </repofilter>
+                            </autocomplete>
+                        </row>
+                    </table>
+                </row-->
+                <row weights="50,50">
+                    <table border="false">
+                        <row>
+                            <select id="estadoFenologico" label="Estado Fenológico: " value="${entity.estado_fenologico_id}">
+                                <options>
+                                    <option value="A" label="A: Yema de invierno"/>
+                                    <option value="B1" label="B1: Lloro"/>
+                                    <option value="B2" label="B2: Yema hinchada"/>
+                                    <option value="C" label="C: Punta verde"/>
+                                    <option value="D" label="D: Hojas incipientes"/>
+                                    <option value="E" label="E: Hojas extendidas"/>
+                                    <option value="F" label="F: Racimos visibles"/>
+                                    <option value="G" label="G: Racimos separados"/>
+                                    <option value="H" label="H: Botones florales separados"/>
+                                    <option value="I1" label="I1: Inicio de floración"/>
+                                    <option value="I2" label="I2: Plena floración"/>
+                                    <option value="J" label="J: Cuajado"/>
+                                    <option value="K" label="K: Grano tamaño guisante"/>
+                                    <option value="L" label="L: Cerramiento del racimo"/>
+                                    <option value="M1" label="M1: Inicio del envero"/>
+                                    <option value="M2" label="M2: Pleno envero"/>
+                                    <option value="N" label="N: Maduración"/>
+                                    <option value="O1" label="O1: Inicio de caída de hojas"/>
+                                    <option value="O2" label="O2: Plena caída de hojas"/>
+                                </options>
+                            </select>
+                        </row>
+                        <row>
+                            <autocomplete label="Variedad: " forceSelection="true" repo="variedadRepo" value="${entity.variedad_id}">
+                                <options labelExpression="${entity.nombre}" labelFilteringProperty="nombre" valueProperty="variedad_id"/>
+                                <repofilter>
+                                    <contains property="nombre" value="${this.value}"/>
+                                </repofilter>
+                            </autocomplete>
+                        </row>
+                    </table>
+                    <image id="estadoFenImage" repo="estadoFenImages" value="${view.estadoFenologico.toLowerCase()+'.jpg'}"
+                        render="${not empty(view.estadoFenologico)}" readonly="true" inputType="0"/>
+                </row>
+
+               <row weights="30,70">
+                    <!--autocomplete label="Tipo de plaga: " forceSelection="true" repo="tipoPlagaRepo" value="${entity.tipo_plaga_id}" validator="required">
+                        <options labelExpression="${entity.tipo_plaga}" labelFilteringProperty="tipo_plaga" valueProperty="tipo_plaga_id"/>
+                        <repofilter>
+                            <contains property="tipo_plaga" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete-->
+
+                    <table border="false">
+                        <row>
+                            <!--select id="tipo" label="Tipo de plaga: " value="${entity.tipo_plaga_id}">
+                                <options>
+                                    <option value="1" label="Polilla del racimo"/>
+                                    <option value="2" label="Piral"/>
+                                    <option value="3" label="Malduermes o gusanos grises"/>
+                                    <option value="4" label="Acariosis"/>
+                                    <option value="5" label="Black Rot o Podredumbre negra"/>
+                                    <option value="6" label="Botritis de la vid"/>
+                                    <option value="7" label="Erinosis en vid"/>
+                                    <option value="8" label="Mildiu en viñedo"/>
+                                    <option value="9" label="Mosquito verde"/>
+                                    <option value="10" label="Oídio de la vid"/>
+                                 </options>
+                            </select-->
+                            <autocomplete forceSelection="true" id="tipo_plaga_id" label="Tipo de plaga: " repo="tipoPlagaRepo" value="${entity.tipo_plaga_id}">
+                                <options labelExpression="${entity.tipo_plaga}" labelFilteringProperty="tipo_plaga" valueProperty="tipo_plaga_id" />
+                                <repofilter>
+                                    <contains property="tipo_plaga" value="${this.value}"/>
+                                </repofilter>
+                            </autocomplete>
+                        </row>
+                    </table>
+                   <table border="false">
+                       <row>
+                           <autocomplete forceSelection="true" id="severidad_id" label="Código severidad: " repo="severidadRepo" value="${entity.severidad_id}">
+                               <options labelExpression="${entity.descripcion_severidad}" labelFilteringProperty="descripcion_severidad" valueProperty="severidad_id" />
+                               <repofilter>
+                                   <eq property="tipo_plaga_id" value="${view.tipo_plaga_id}" mandatory="true"/>
+                                   <contains property="descripcion_severidad" value="${this.value}"/>
+                               </repofilter>
+                           </autocomplete>
+
+                            <!--select converter="long" id="severidad" label="Código severidad: " value="${entity.severidad_id}">
+                                <options>
+                                    <option value="0" label="0"/>
+                                    <option value="1" label="1"/>
+                                    <option value="2" label="2"/>
+                                    <option value="3" label="3"/>
+                                </options>
+                                <action type="js">
+                                    <param name="method" value="setDescripcionSeveridad" />
+                                    <param name="severidad_id" value="${view.severidad}" />
+                                </action>
+                            </select-->
+                        </row>
+                   </table>
+                </row>
+                <!--row>
+                    <table border="false">
+                        <row>
+                            <textarea label="Descripción serveridad: " id="descripcion_severidad" readonly="true"/>
+                        </row>
+                    </table>
+                </row-->
+
+              <row>
+                <table border="false">
+                    <row>
+                    <textarea label="Observaciones: " value="${entity.observaciones}"  />
+                    </row>
+                </table>
+                </row>
+            </table>
+
+            <button label="AÑADIR FOTO">
+                <action id="addPhoto" type="save" route="idPlagaPhoto-editPlagaPhoto" >
+                    <!--param name="repo" value="plagaImagesRepo"/-->
+                    <param name="plaga_id" value="${view.plaga_id}" />
+                    <param name="fecha_inspeccion" value="${view.fecha_inspeccion}" />
+                </action>
+            </button>
+            <table>
+                <row>
+                    <imagegallery repo="plagaImagesRepo" allowsPartialRestore="false">
+                        <repofilter>
+                            <and>
+                               <contains property="plaga_id" value="${entity.plaga_id}" />
+                            </and>
+                        </repofilter>
+                        <imagegalleryitem converter="b64Image" value="${entity.image}" />
+                    </imagegallery>
+                </row>
+            </table>
+          </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action id="compositeActionSave">
+                    <action type="js">
+                        <param name="method" value="setReferencia" />
+                        <param name="switcherReferenciaSigPac" value="${view.switcherReferenciaSigPac}" />
+                    </action>
+                    <action route="back" type="save" registerInHistory="false" popHistory="1"/>
+                </action>>
+            </button>
+            <button label="Cancel" route="back"/>
+            <button label="Delete">
+                <action id="compositeActionDelete">
+                    <action type="js">
+                        <param name="method" value="insertChangeRegistry" />
+                    </action>
+                    <action type="delete" route="back" registerInHistory="false" popHistory="1">
+                    </action>
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

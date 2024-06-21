@@ -1,0 +1,7 @@
+<repos>
+    <repo dbFile="ribera.sqlite" id="provRepo" dbTable="provincia" />
+    <repo dbFile="ribera.sqlite" id="muniRepo" dbTable="municipio" />
+    <repo dbFile="ribera.sqlite" id="auditoriasRepo" dbTable="auditoria" />
+    <repo dbFile="ribera.sqlite" id="bodegaRepo" dbTable="bodega" />
+    <repo dbFile="ribera.sqlite" id="auditorRepo" dbTable="auditor" />
+</repos>

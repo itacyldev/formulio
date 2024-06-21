@@ -1,0 +1,81 @@
+<main id="trazabilidadBarrica" name="Trazabilidad barrica" repo="trazabilidadBarricaRepo" mainForm="false">
+    <list id="listTrazabilidadBarrica" name="Trazabilidad barrica" description="Listado trazabilidad barrica">
+        <datatable/>
+           <buttonbar type="fab"/>
+    </list>
+    <edit id="editTrazabilidadBarrica">
+        <script src="scripts/control.js"/>
+        <form id="formTrazabilidadBarrica">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="ENVEJECIMIENTO BARRICA"/>
+            <p value=""/>
+
+            <table headerText=" Id. Exp., Nº Exp., Id. DOP, DOP" weights="25, 15, 15, 45">
+                <row>
+                    <input id="expediente_id" value="${entity.trazabilidad.expediente_id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                    <input id="num_expediente" value="${entity.trazabilidad.expediente.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                    <input id="dop_id" value="${entity.trazabilidad.expediente.dop_id}" placeHolder="${params.dop_id}" readonly="true"/>
+                    <input id="dop" value="${entity.trazabilidad.expediente.dop.dop}" placeHolder="${params.dop}" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id. Partida, Partida" weights="15, 85">
+                <row>
+                    <input id="trazabilidad_id" value="${entity.trazabilidad_id}" placeHolder="${params.trazabilidad_id}" readonly="true"/>
+                    <input id="partida" value="${entity.trazabilidad.trazabilidad.partida}" placeHolder="${params.partida}" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id. Tipo, Tipo Envejecimiento" weights="15, 85">
+                <row>
+                    <input id="tipo_envejecimiento_id" value="${params.tipo_envejecimiento_id}" readonly="true"/>
+                    <input onBeforeRender="updateTipoEnvejecimiento" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id. Operador, Razón social" weights="15, 85">
+                <row>
+                    <input id="operador_id" value="${entity.trazabilidad.expediente.operador_id}" placeHolder="${params.operador_id}" readonly="true"/>
+                    <input id="razon_social" value="${entity.trazabilidad.expediente.operador.razon_social}" placeHolder="${params.razon_social}" readonly="true"/>
+                </row>
+            </table>
+
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="Envejecimiento barricas"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+           <table>
+                <row>
+                    <date id="fecha_entrada_barrica" label="F. entrada barrica: " value="${entity.fecha_entrada_barrica}" hasTodayButton="false" validator="required" readonly="${empty(params.tipo_envejecimiento_id)}"/>
+                    <date id="fecha_salida_barrica" label="F. salida barrica: " value="${entity.fecha_salida_barrica}" hasTodayButton="false" validator="required" readonly="${empty(params.tipo_envejecimiento_id)}"/>
+                    <input id="tiempo_barrica" label="Meses en barrica: " value="${view.fecha_entrada_barrica+''+view.fecha_salida_barrica}" onBeforeRender="updateTiempoBarrica" readonly="true"/>
+                </row>
+               <row>
+                   <input id="numero_barricas" label="Número de barricas: " value="${entity.numero_barricas}" inputType="3" validator="required" readonly="${empty(params.tipo_envejecimiento_id)}"/>
+                   <input id="capacidad" label="Capacidad: " value="${entity.capacidad}" inputType="3" validator="required" readonly="${empty(params.tipo_envejecimiento_id)}"/>
+               </row>
+            </table>
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+               <action id="compositeSaveAction">
+                    <action type="save">
+                    </action>
+                    <action type="js" route="back" registerInHistory="false" restoreView="true">
+                        <param name="method" value="setMesesBarrica" />
+                        <param name="entityId" value="${params.trazabilidad_id}" />
+                    </action>
+                </action>
+            </button>
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.trazabilidad_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.trazabilidad_barrica_id)}" readonlyMessage="No puede realizar esta acción: No envejecimiento de la barrica" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.trazabilidad_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

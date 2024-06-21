@@ -1,0 +1,160 @@
+CREATE TABLE "bodega" (
+	"bodega_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"razon_social"	TEXT NOT NULL,
+	"direccion"	TEXT,
+	"provmuni_id"	TEXT,
+	"prov_id"	INTEGER,
+	"telefono"	TEXT,
+	"email"	TEXT,
+	"alcance_actual"	TEXT,
+	"alcance_solicitado"	TEXT,
+	"contacto"	TEXT,
+	FOREIGN KEY(prov_id) REFERENCES provincia(id),
+	FOREIGN KEY(provmuni_id) REFERENCES municipio(provmuni)
+);
+
+
+CREATE TABLE "auditoria" (
+	"auditoria_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"bodega_id"	INTEGER,
+	"fecha"	TEXT,
+	"alcance"	TEXT,
+	"tipo"	TEXT,
+	"num_visita"	INTEGER,
+	"interlocutores"	TEXT,
+	"auditores"	TEXT,
+	"q1_1_fecha1" TEXT,
+	"q1_1_fecha2" TEXT,
+	"q1_1_fecha3" TEXT,
+	"q1_1_fecha4" TEXT,
+	"q1_2_num_rgseaa" TEXT,
+	"q1_2_fecha" TEXT,
+	"q1_2_num_acta" TEXT,
+	"q1_2_fecha_ultima_inspeccion_sanitaria" TEXT,
+	"q1_complementarios"	TEXT,
+	"q3_2_dpo_tinto" TEXT,
+	"q3_2_dpo_rosado" TEXT,
+	"q3_2_dpo_blanco" TEXT,
+	"q3_2_dop_otros" TEXT,
+	"q3_2_total_tinto" TEXT,
+	"q3_2_total_rosado" TEXT,
+	"q3_2_total_blanco" TEXT,
+	"q3_2_total_otros" TEXT,
+	"q3_2_rend_dpo" TEXT,
+	"q3_2_rend_total" TEXT,
+	"q3_complementarios"	TEXT,
+	"q6_1_num_re" TEXT,
+	"q6_1_fecha" TEXT,
+	"q6_complementarios"	TEXT,
+	FOREIGN KEY(bodega_id) REFERENCES bodega(bodega_id)
+)
+
+CREATE TABLE "pregunta_auditoria" (
+	"pregunta_auditoria_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"auditoria_id" INTEGER,
+	"pregunta_id" INTEGER,
+	"tab_id" TEXT,
+	"respuesta" TEXT,
+	"observaciones" TEXT,
+	FOREIGN KEY(auditoria_id) REFERENCES auditoria(auditoria_id),
+	FOREIGN KEY(pregunta_id) REFERENCES pregunta(pregunta_id)
+)
+
+CREATE TRIGGER pregunta_auditoria AFTER INSERT ON auditoria
+BEGIN
+	INSERT INTO pregunta_auditoria (
+		auditoria_id,
+		pregunta_id,
+		tab_id
+	)
+	SELECT
+	  auditoria.auditoria_id,
+	  pregunta.pregunta_id,
+	  pregunta.tab_id
+	FROM auditoria
+	JOIN pregunta
+	WHERE 
+		auditoria.auditoria_id = (SELECT MAX(auditoria_id) FROM auditoria) and 
+		(SELECT MAX(auditoria_id) FROM auditoria) not in (select distinct auditoria_id from pregunta_auditoria);
+END;
+
+
+
+
+CREATE TABLE 'pregunta'(
+pregunta_id INTEGER PRIMARY KEY AUTOINCREMENT,
+tab_id TEXT,
+texto_pregunta TEXT,
+desc_observaciones TEXT)
+
+insert into pregunta (tab_id, texto_pregunta, desc_observaciones)
+values
+("datosGeneralesBodega", "1.1 ¿Coinciden los Registros del C.R. con el alcance solicitado?",""),
+("datosGeneralesBodega", "1.2 ¿Posee en vigor el Registro General Sanitario de Empresas Alimentarias para la instalación auditada?",""),
+("datosGeneralesBodega", "1.3 ¿Conoce la legislación vigente que  aplica a su sector?", "Comprobar registros de documentación recibida y cómo realiza las comunicaciones de la misma y sus cambios al personal."),
+("datosGeneralesBodega", "1.4 ¿Tienen un sistema de APPCC implantado?", "Verificar su existencia, modificaciones y procesos. Comprobar certificación con otros sistemas de calidad"),
+("datosGeneralesBodega", "1.5 ¿Disponen de un sistema de gestión de No Conformidades, Quejas y/o Reclamaciones?","Verificar su existencia, que éste incluya al menos las reclamaciones sobre el producto y comprobar si existe alguna queja y/o reclamación. Indicar responsable de esta gestión."),
+("datosGeneralesBodega", "1.6 ¿Mantiene los datos de declaración de bodega actualizados?", "Comprobar instalaciones según datos declarados al CR. Comprobar actualizaciones en CR y en IIAA."),
+("datosGeneralesBodega", "1.7 Comprobar vigencia de usuarios de aplicación y su responsabilidad (Derechos de Acceso firma).", "Comprobar contra listado extraído en CR  y exigir actualización de usuarios en su caso."),
+
+("entradaDeUva", "2.1 Criterio utilizado en la entrada de materia prima y requisitos establecidos por la bodega para calificar una recepción de uva.", "Comprobar existencia de un procedimiento para la diferenciación entre uva calificada y uva no calificada para proceder a la auto calificación de la uva."),
+("entradaDeUva", "2.2 ¿Están correctamente separadas las distintas variedades en la entrada de uva? ¿Cómo procede la bodega  a realizar los registros de las distintas entradas de uva?", "Variedades de uva: Tempranillo, o Tinto Fino, o Tinta del País, Cabernet Sauvignon, Garnacha tinta, Malbec, Merlot y Albillo Mayor. Variedades excepcionales procedentes de viñedos viejos. Comprobar si realiza los apuntes en tiempo real o si no lo hace. En el segundo caso comprobar registro con todos los puntos de cumplimiento del Pliego de Condiciones."),
+("entradaDeUva", "2.3 Evaluación de los tiques de báscula de entrada de uva.", "Revisión de tiques, comprobación de que los tiques son sin intervención humana en la captación de datos y de que existen."),
+("entradaDeUva", "2.4 ¿Tienen los proveedores de uva de la bodega sus parcelas vitícolas inscritas en el Registro Vitícola de la Administración?", "Comprobar fichas del Registro Vitícola actualizadas, debería incluirse mantenimiento de estos registros ya que a través de la tarjeta se infiere que en algún momento estuvo inscrita."),
+("entradaDeUva", "2.5 ¿Tienen los proveedores de uva de la bodega sus parcelas vitícolas inscritas en el Registro de Viñas del CRDOP Ribera del Duero?", "Comprobar el  Registro de Viñas del C.R., la tarjeta obligatoria por Normas de Vendimia acredita la inscripción, que no el mantenimiento."),
+("entradaDeUva", "2.6 ¿La bodega recibe uva procedente de parcelas situadas dentro de la zona de producción amparable pero no inscritas en el RV del Consejo Regulador? (S/N).", "Evaluar tiques de entrada de uva y comprobar la procedencia de las uvas, si es así, presentar Registro de Inscripción en JCyL de las parcelas. Solicitar la comunicación por parte de la bodega de la recepción de uva no inscrita en los RV del Consejo. Comprobar su solicitud a través de la aplicación (Normas Vendimia)."),
+("entradaDeUva", "2.7 ¿Las uvas utilizadas proceden de partidas de uva sana con una graduación natural mínima de 11", "Comprobar existencia de registros."),
+("entradaDeUva", "2.8 ¿Controlan el rendimiento máximo de producción de sus viticultores proveedores de uva previamente a la vendimia?", "Comprobar evidencias previas de esta comprobación. Ver si la bodega comprueba a posteriori que los datos son asimilables. Límites máximos de producción será de 7.000 Kg/ha de uva para todas las variedades, excepto para la variedad Albillo Mayor, que será de 9.500 kg/ha. En caso de que la vendimia se realice de forma mecánica, a la producción obtenida se le aplicará un incremento del 4%. Tener en consideración la posible aprobación, por parte del Consejo Regulador, de excepciones a la aplicación rendimientos máximos establecidos en el Pliego de Condiciones."),
+("entradaDeUva", "2.9 ¿Se han utilizado equipos específicos para realizar alguna medición?", "Comprobar los certificados de calibración de los equipos (p.ej. básculas, refractómetros, ...). Se intentará hacer una medición con medios propios para comprobar refractómetro. Comprobar mediciones, comprobar funcionamiento de refractómetro. Comprobar escala del refractómetro."),
+("entradaDeUva", "2.10 ¿Disponen de la Declaración de Entrega de Uva al Consejo Regulador presentada en tiempo y forma?", "Comprobar si se ha entregado y si se ha hecho como máximo 7 días tras el cierre de la campaña en la instalación."),
+("entradaDeUva", "2.11 ¿Disponen de la Declaración de Entrega de Uva entregada a la Junta de Castilla y León en tiempo y forma?", "Comprobar si se ha entregado y si se ha hecho como máximo el día 10 de diciembre del año de la cosecha. Comprobar coincidencia de datos con la anterior."),
+("entradaDeUva", "2.12 Traslados de uva entre instalaciones. Comprobar los documentos de acompañamiento.", "Comprobar documentos, verificar variedades, transporte en caja o granel y destino de la uva en depósito. Comprobación de fechas de realización y de pesadas vs traslados en su caso."),
+("entradaDeUva", "2.13 ¿Recibe la bodega uva de  Parcelas descalificadas en campo o por cambio de nivel de protección? (S/N).", "Verificar destino-depósito de la uva, separación del resto y su identificación indeleble."),
+("entradaDeUva", "2.14 ¿Las entradas de uva de vendimia mecánica han sido correctamente solicitadas y autorizadas por el C.R.D.O.?", "Verificar tiques de vendimias mecánicas."),
+("entradaDeUva", "2.15 ¿Las entradas de uva de vehículo rápido han sido correctamente solicitadas y autorizadas por el C.R.D.O.?", "Verificar tiques de vehículos rápidos."),
+("entradaDeUva", "2.16 Aforar depósitos contrastándolo con las entradas de uva registradas. (en fermentación y/o descubados).", "Debe calcularse llenado de los depósitos y posibles sangrados, inc fórmula."),
+
+("elaboracion", "3.1 ¿La extracción del mosto y del vino se realiza empleando sistemas mecánicos que no dañan o dislaceran los componentes sólidos del racimo?", "Prohibida la utilización de: Máquinas estrujadoras de acción centrífuga de alta velocidad y de prensas continuas."),
+("elaboracion", "3.2 ¿Disponen de las Declaraciones de Producción?", ""),
+("elaboracion", "3.3 ¿Los porcentajes de variedades de uva empleados  para la elaboración de los vinos respetan lo recogido en el Pliego de Condiciones?", "Debe evidenciarse que se cumple para los diferentes tipos de vinos. Vino tinto: mínimo de un 75% de variedad Tinta del País, y resto con las variedades Cabernet Sauvignon, Garnacha tinta, Malbec, Merlot y Albillo Mayor. En cualquier caso, la participación en estos vinos de la variedad Tinta del País sola o junto con Cabernet Sauvignon, Merlot y Malbec no deberá ser inferior al 95%. Vino rosado/clarete: al menos, un 50% de variedades tintas autorizadas (Tinta del País, Cabernet Sauvignon, Garnacha tinta, Malbec y Merlot). Vino blanco: mínimo 75% de la variedad Albillo Mayor."),
+
+("almacenamiento", "4.1 ¿Existen Registros adecuados de los movimientos de vino a granel entre las bodegas de procedencia o destino y la Instalación?", "Verificar movimientos en libros-registro de Administración y documentos de acompañamiento. Comprobar datos registrados con los declarados al CRDOP Ribera del Duero y los consignados en los EMCS."),
+("almacenamiento", "4.2 ¿Se encuentran los proveedores de vino certificados en el alcance de certificación correspondiente?", "Verificar la existencia de los certificados de bodega y vino DOP Ribera del Duero."),
+("almacenamiento", "4.3 ¿Tienen identificados los envases de almacenamiento de manera indeleble?", "Anotar la forma de identificación de los depósitos, comprobar nomenclatura de partida Bacchus."),
+("almacenamiento", "4.4 ¿Disponen de la Declaración de Existencias actualizada?", "Comprobar validez y fecha de la Declaración de Existencias (Parte Mensual) al CRDOP Ribera del Duero. Verificar datos declarados en las Declaraciones presentadas contra datos asentados en los libros-registro."),
+("almacenamiento", "4.5 ¿El aforo realizado sobre las existencias de vino es conforme?", "Realizar un aforo completo de vino."),
+
+("crianza", "5.1 ¿Se identifican las barricas y jaulones de manera indeleble o agrupados por lotes?", "Comprobar la identificación de barricas y jaulones. Anotar la forma de identificación y comprobar si se hace referencia al número de partida de Bacchus."),
+("crianza", "5.2 ¿Existen Registros adecuados de los tiempos de envejecimiento según cada tipo de vino?", "Comprobar lotes de vino DOP en periodo de envejecimiento (barricas y botellero), se hace en Aforo. Comprobar contra su sistema si lo tienen. El inicio del cómputo de los periodos de envejecimiento establecidos en el presente apartado no podrá contabilizarse antes del 1 de octubre del año de la vendimia (anexo IV)."),
+("crianza", "5.3 ¿Los métodos de envejecimiento son adecuados?", "Comprobar lotes de vino DOP en periodo de envejecimiento (barricas y botellero) se hace en Aforo (tamaño de barricas…) Comprobar Declaración al CRDOP Ribera del Duero con tipo y tamaño de barricas (anexo IV del cuestionario – punto 3)."),
+
+("embotelladoEtiquetado", "6.1 ¿Poseen el Registro Embotellador para la instalación y está inscrita como tal en los Registros del CRDO?", ""),
+("embotelladoEtiquetado", "6.2 ¿Poseen registros de control de análisis organolépticos de los lotes/partidas auto calificados?", "Verificar resultados de análisis organolépticos antes de la comercialización del vino DOP Ribera del Duero. Comprobar existencia de procedimiento de calificación/descalificación adecuado."),
+("embotelladoEtiquetado", "6.3 ¿Poseen registros de control de análisis físico-químicos de los lotes/partidas auto calificados?", "Verificar resultados de análisis físico-químicos antes de la comercialización del vino DOP Ribera del Duero. Anexo IV. Comprobar existencia de procedimiento de calificación/descalificación adecuado."),
+("embotelladoEtiquetado", "6.4 ¿Existen Registros adecuados de auto descalificación?", "Comprobar si la bodega dispone de registros internos de auto descalificación de partidas de vino en base a sus protocolos."),
+("embotelladoEtiquetado", "6.5 ¿Poseen registros de las Declaraciones de Aptitud de las Partidas auto calificadas emitidas?", "Verificar si mantienen las declaraciones de aptitud de las partidas que han auto calificado."),
+("embotelladoEtiquetado", "6.6 ¿Poseen registros de control de las operaciones de embotellados realizados sobre los lotes/partidas auto calificados?", "Verificar declaración al CRDOP Ribera del Duero (Parte Mensual), comprobarlo con asientos en libros registro JCyL. Verificar registros de las operaciones de embotellados de vino DOP Ribera del Duero, indicar si las calificaciones se realizan antes o después del embotellado."),
+("embotelladoEtiquetado", "6.7 ¿Los envases utilizados son de vidrio? ¿Las capacidades de los envases son las autorizadas por la legislación vigente?", "Verificar utilización de envases y registrar los tipos de envases utilizados y sus capacidades. En caso de utilizar otro tipo de envases, o cierres especiales, verificar si han sido autorizados por el Consejo Regulador."),
+("embotelladoEtiquetado", "6.8 ¿Poseen adecuados registros de control de las operaciones de etiquetados realizados sobre los lotes de embotellado?", "Verificar declaración al CRDOP Ribera del Duero (Parte Mensual). Verificar registros de las operaciones de etiquetados de vino DOP Ribera del Duero comparados con las declaraciones realizadas al CR."),
+("embotelladoEtiquetado", "6.9 ¿Poseen adecuados registros de control de las contraetiquetas utilizadas en cada operación de etiquetado?", "Verificar declaración al CRDOP Ribera del Duero (partes mensuales) comprobar coincidencia de series y numeraciones. Verificar registros de control de la utilización de las contraetiquetas del CRDOP y comprobar que la entrega por parte del Consejo ha sido a esa instalación."),
+("embotelladoEtiquetado", "6.10 ¿Poseen un adecuado Registro de etiquetas?", "Verificar si las etiquetas evaluadas están autorizadas por el CRDOP. Contrastar etiquetas originales utilizadas por la bodega con el registro de etiquetas autorizadas por el CRDOP. Comprobar leyendas de las etiquetas que puedan parecer inadecuadas o de difícil comprobación."),
+("embotelladoEtiquetado", "6.11 ¿En las etiquetas figura de forma destacada el nombre de la DOP Ribera del Duero y los datos que determina la legislación vigente? ¿Han sido comunicadas al CR?", "Verificar que en las etiquetas utilizadas aparecen las menciones que determina la legislación vigente. Términos permitidos: Crianza, Reserva, Gran Reserva y Roble/Barrica según condiciones establecidas en el Pliego de Condiciones."),
+("embotelladoEtiquetado", "6.12 ¿En las etiquetas utiliza como indicación facultativa el nombre geográfico de las unidades menores incluidas en el Pliego de Condiciones?", "Verificar, en su caso, que el 85% de las variedades utilizadas en la elaboración del vino etiquetado con indicación facultativa procede de parcelas ubicadas en la unión geográfica indicada."),
+("embotelladoEtiquetado", "6.13 Comprobar que no se utiliza indebidamente el logotipo de la DOP en marcas que no están amparadas por la DOP o en información comercial y publicitaria.", "Comprobar especialmente lo relativo a otros vinos y el empleo del logotipo en productos no amparados o en su publicidad."),
+("embotelladoEtiquetado", "6.14 ¿Poseen un adecuado Registro de salida de producto terminado?", "Verificar sistema de gestión de salida del producto terminado. Verificar si anotan el lote de embotellado en sus albaranes de salida. Comprobar marcas comercializadas de vino DOP. Comprobar declaraciones al CR (Partes Mensuales) y su correspondencia con los libros de JCyL."),
+("embotelladoEtiquetado", "6.15 ¿Coincide la duración del envejecimiento declarada con lo indicado en la etiqueta, así como otras características?", "Comprobar partidas en aplicación en cuanto a su envejecimiento, procedencia de viñedos singulares (tipo prefiloxéricos, centenarios….), etc.")
+
+INSERT INTO pregunta_auditoria (
+	autitoria_id,
+	pregunta_id
+)
+SELECT
+  auditoria.auditoria_id,
+  pregunta.pregunta_id
+FROM auditoria
+JOIN pregunta
+WHERE 
+	auditoria.auditoria_id = (SELECT MAX(auditoria_id) FROM auditoria);
+
+insert into auditoria (fecha) values ("2021-03-19 10:57:16")
+

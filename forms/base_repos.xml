@@ -1,0 +1,31 @@
+<repos>
+    <repo dbFile="" dbTable="" id="DbuZQEEn">
+        <meta properties="all|*|col1,col2,col3">
+            <property name="fCreacion" calculated="jexl" calculatedOn="insert" columnName="col1"
+                converter="string" expression="${date.now}" />
+            <property name="location" calculated="jexl" calculatedOn="insert" columnName="position"
+                converter="string" expression="${location.asLatLong}" />
+            <property name="p1" columnName="col1" converter="string" />
+        </meta>
+        <mapping deletable="" fk="" id="QWllFFil" insertable="" property="" repo="" retrieveMeta=""
+            updatable="" />
+        <repofilter>
+            <and>
+                <or>
+                    <gt property="property1" value="${view.fechaini}" />
+                    <lt property="property1" value="${view.fechafin}" />
+                </or>
+                <startwith property="property2" value="${this.field2}" />
+                <and>
+                    <contains property="p1" value="${this.c1}" />
+                    <contains property="p2" value="this.c2" />
+                    <contains property="p3" value="this.c3" />
+                    <contains property="p4" value="this.c4" />
+                    <contains property="p5" value="this.c5" />
+                </and>
+            </and>
+        </repofilter>
+    </repo>
+    <filerepo defaultExtension="" folder="" id="GlIgbVRB" />
+
+</repos>

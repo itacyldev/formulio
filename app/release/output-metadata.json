@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "es.jcyl.ita.formic",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 48,
+      "versionName": "0.7.26",
+      "outputFile": "Formic_release_0.7.26.apk"
+    }
+  ],
+  "elementType": "File"
+}

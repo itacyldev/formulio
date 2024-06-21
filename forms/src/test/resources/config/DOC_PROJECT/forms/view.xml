@@ -1,0 +1,14 @@
+<main id="formView" name="View" repo="pruebaRepo">
+    <list id="listView" name="View">
+        <buttonbar type="fab">
+            <button id="btnFab">
+                <action id="accionFAB" type="nav" route="formView-view1">
+                    <param name="repo" value="pruebaRepo"/>
+                </action>
+            </button>
+        </buttonbar>
+    </list>
+    <view id="view1">
+        <p value="Paragraph" />
+    </view>
+</main>

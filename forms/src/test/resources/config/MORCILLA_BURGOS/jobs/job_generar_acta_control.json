@@ -1,0 +1,756 @@
+{
+  "description": "Acta de Control",
+  "requiredContexts": [
+    "user",
+    "job"
+  ],
+  "globalParams": {
+    "endpoint": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/files/",
+    "apikey": "USER-MUNGARRO-UQSERV",
+    "jobType": "FormicGenerarActaControlMorcillaBurgos",
+    "endpointActa": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/jobs/"
+  },
+  "executionMode": "FG_ASYNC",
+  "tasks": [
+    {
+      "name": "t1",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(calidad.num_expediente,'') NUM_EXPEDIENTE, ifnull(calidad.fecha,'') FECHA_INSPECCION, ifnull(operador.razon_social,'') RAZON_SOCIAL, ifnull(instalacion.nombre_instalacion,'') || ' ' || ifnull(instalacion.direccion_instalacion,'') || ' ' || ifnull(instalacion.codigo_postal_instalacion,'') || ' ' || ifnull(municipio_instalacion.name,'') || ' ' || ifnull(provincia_instalacion.name,'') DIRECCION_INSTALACION, ifnull(calidad.auditor,'') AUDITOR, '' DNI_AUDITOR, ifnull(calidad.auditor2,'') AUDITOR2, '' DNI_AUDITOR2, ifnull(calidad.auditado,'') AUDITADO, '' NIF_REPRESENTANTE, '', '' DOP, ifnull(calidad.conforme,'') CONFORME, ifnull(operador.responsable,'') NOMBRE_REPRESENTANTE, ifnull('A ' || strftime('%d',calidad.fecha_firma) || ' de ' || case strftime('%m',calidad.fecha_firma) when '01' then 'enero' when '02' then 'febrero' when '03' then 'marzo' when '04' then 'abril' when '05' then 'mayo' when '06' then 'junio' when '07' then 'julio' when '08' then 'agosto' when '09' then 'septiembre' when '10' then 'octubre' when '11' then 'noviembre' when '12' then 'diciembre' end || ' de ' || strftime('%Y',calidad.fecha_firma),'') FECHA_FIRMA, ifnull(calidad.alegaciones_auditado, '') ALEGACIONES_AUDITADO, ifnull(calidad.notas_aclaratorias_datos_generales, '') OBSERVACIONES_ADICIONALES, case when calidad.auditor is not null then 'Auditor' else '' end CARGO, case when calidad.auditor2 is not null then 'Auditor' else '' end CARGO2, ifnull(calidad.cargo_representante,'') CARGO_REPRESENTANTE, case when calidad.auditor is not null then 'Instituto Tecnológico Agrario de Castilla y León' else '' end EMPRESA, case when calidad.auditor2 is not null then 'Instituto Tecnológico Agrario de Castilla y León' else '' end EMPRESA2 FROM calidad LEFT OUTER JOIN operador ON calidad.operador_id = operador.operador_id LEFT OUTER JOIN instalacion ON calidad.instalacion_id = instalacion.instalacion_id and operador.operador_id = instalacion.operador_id LEFT OUTER JOIN provincia provincia_instalacion ON instalacion.prov_id_instalacion = provincia_instalacion.id LEFT OUTER JOIN municipio municipio_instalacion ON instalacion.provmuni_id_instalacion = municipio_instalacion.provmuni WHERE calidad.id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "control.csv"
+      }
+    },
+    {
+      "name": "t2",
+      "processor": {
+        "inputFile": "${t1.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t3",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(q3_num_lote,'') NUM_LOTE, CASE WHEN q3_1_1_cebolla_peso is null THEN '' ELSE printf('%.2f', q3_1_1_cebolla_peso) END CEBOLLA_PESO, CASE WHEN q3_1_2_arroz_peso is null THEN '' ELSE printf('%.2f',q3_1_2_arroz_peso) END ARROZ_PESO, CASE WHEN q3_1_3_sangre_peso is null THEN '' ELSE printf('%.2f',q3_1_3_sangre_peso) END SANGRE_PESO, CASE WHEN q3_1_4_manteca_peso is null THEN '' ELSE printf('%.2f',q3_1_4_manteca_peso) END MANTECA_PESO, CASE WHEN q3_1_5_sal_peso is null THEN '' ELSE printf('%.2f',q3_1_5_sal_peso) END SAL_PESO, CASE WHEN q3_1_6_especias_peso is null THEN '' ELSE printf('%.2f',q3_1_6_especias_peso) END ESPECIAS_PESO, printf('%.2f', total_peso.total) TOTAL_PESO, printf('%.2f',round(ifnull(q3_1_1_cebolla_peso, 0)*100/total_peso.total, 2)) CEBOLLA_PORCENTAJE, printf('%.2f',round(ifnull(q3_1_2_arroz_peso, 0)*100/total_peso.total, 2)) ARROZ_PORCENTAJE, printf('%.2f',round(ifnull(q3_1_3_sangre_peso, 0)*100/total_peso.total, 2)) SANGRE_PORCENTAJE, printf('%.2f',round(ifnull(q3_1_4_manteca_peso, 0)*100/total_peso.total, 2)) MANTECA_PORCENTAJE, printf('%.2f',round(ifnull(q3_1_5_sal_peso, 0)*100/total_peso.total, 2)) SAL_PORCENTAJE, printf('%.2f',round(ifnull(q3_1_6_especias_peso, 0)*100/total_peso.total, 2)) ESPECIAS_PORCENTAJE FROM calidad, (select SUM(ifnull(q3_1_1_cebolla_peso, 0) + ifnull(q3_1_2_arroz_peso,0) + ifnull(q3_1_3_sangre_peso,0) + ifnull(q3_1_4_manteca_peso, 0) + ifnull(q3_1_6_especias_peso,0) + ifnull(q3_1_5_sal_peso,0)) total from calidad WHERE calidad.id='${params.expediente_id}') total_peso WHERE calidad.id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "procesodefabricacioninsitu.csv"
+      }
+    },
+    {
+      "name": "t4",
+      "processor": {
+        "inputFile": "${t3.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t5",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || 'Lote: ' || num_lote), '') NUM_LOTE FROM lote WHERE materia_prima_id = 1 and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "materiaprimacebollafresca.csv"
+      }
+    },
+    {
+      "name": "t6",
+      "processor": {
+        "inputFile": "${t5.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+
+    {
+      "name": "t7",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote WHERE materia_prima_id = 2 and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "materiaprimacebollaprocesada.csv"
+      }
+    },
+    {
+      "name": "t8",
+      "processor": {
+        "inputFile": "${t7.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t9",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote WHERE materia_prima_id = 3 and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "materiaprimaarroz.csv"
+      }
+    },
+    {
+      "name": "t10",
+      "processor": {
+        "inputFile": "${t9.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t11",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote WHERE materia_prima_id = 4 and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "materiaprimamanteca.csv"
+      }
+    },
+    {
+      "name": "t12",
+      "processor": {
+        "inputFile": "${t11.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t13",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote WHERE materia_prima_id = 5 and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "materiaprimasebo.csv"
+      }
+    },
+    {
+      "name": "t14",
+      "processor": {
+        "inputFile": "${t13.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+
+    {
+      "name": "t15",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote WHERE materia_prima_id = 6 and expediente_id='${params.expediente_id}'"
+       },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "materiaprimasangre.csv"
+      }
+    },
+    {
+      "name": "t16",
+      "processor": {
+        "inputFile": "${t15.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+
+    {
+      "name": "t17",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote WHERE materia_prima_id = 7 and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "materiaprimasal.csv"
+      }
+    },
+    {
+      "name": "t18",
+      "processor": {
+        "inputFile": "${t17.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t19",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote WHERE materia_prima_id = 8 and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "materiaprimatripas.csv"
+      }
+    },
+
+    {
+      "name": "t20",
+      "processor": {
+        "inputFile": "${t19.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t21",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote WHERE materia_prima_id = 9 and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "materiaprimaespecias.csv"
+      }
+    },
+
+    {
+      "name": "t22",
+      "processor": {
+        "inputFile": "${t21.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t23",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM producto_terminado WHERE expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "productoterminado.csv"
+      }
+    },
+
+    {
+      "name": "t24",
+      "processor": {
+        "inputFile": "${t23.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t25",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM producto_transformado WHERE expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "productotransformado.csv"
+      }
+    },
+
+    {
+      "name": "t26",
+      "processor": {
+        "inputFile": "${t25.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t27",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT num_lote NUM_LOTE, nombre_marca MARCA, grasa_formato_1 GRASA_FORMATO_1, azucares_formato_1 AZUCARES_FORMATO_1, fibra_formato_1 FIBRA_FORMATO_1, sal_formato_1 SAL_FORMATO_1, grasa_formato_2 GRASA_FORMATO_2, azucares_formato_2 AZUCARES_FORMATO_2, fibra_formato_2 FIBRA_FORMATO_2, sal_formato_2 SAL_FORMATO_2, grasa_formato_3 GRASA_FORMATO_3, azucares_formato_3 AZUCARES_FORMATO_3, fibra_formato_3 FIBRA_FORMATO_3, sal_formato_3 SAL_FORMATO_3 FROM producto_etiquetado, marca WHERE producto_etiquetado.marca_id = marca.marca_id and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "productoetiquetado.csv"
+      }
+    },
+
+    {
+      "name": "t28",
+      "processor": {
+        "inputFile": "${t27.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t29",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT tipo TIPO, serie SERIE, desde DESDE, hasta HASTA, (hasta - desde +1) UNIDADES FROM existencia_etiquetado WHERE expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "existenciaetiquetado.csv"
+      }
+    },
+
+    {
+      "name": "t30",
+      "processor": {
+        "inputFile": "${t29.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t31",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || equipo),'') EQUIPO_MEDIDA FROM verificacion_equipo_medida, equipo_medida WHERE verificacion_equipo_medida.equipo_medida_id = equipo_medida.equipo_medida_id and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "equiposdemedida.csv"
+      }
+    },
+
+    {
+      "name": "t32",
+      "processor": {
+        "inputFile": "${t31.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t33",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM producto_no_conforme WHERE expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "productonoconfore.csv"
+      }
+    },
+
+    {
+      "name": "t34",
+      "processor": {
+        "inputFile": "${t33.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t35",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote_control_cebolla_fresca, procedimiento_autocontrol WHERE procedimiento_autocontrol.procedimiento_autocontrol_id = lote_control_cebolla_fresca.procedimiento_autocontrol_id and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "lotecontrolcebollafresca.csv"
+      }
+    },
+
+    {
+      "name": "t36",
+      "processor": {
+        "inputFile": "${t35.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t37",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote_control_cebolla_procesada, procedimiento_autocontrol WHERE procedimiento_autocontrol.procedimiento_autocontrol_id = lote_control_cebolla_procesada.procedimiento_autocontrol_id and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "lotecontrolcebollaprocesada.csv"
+      }
+    },
+
+    {
+      "name": "t38",
+      "processor": {
+        "inputFile": "${t37.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t39",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote_control_resultados_fq, procedimiento_autocontrol WHERE procedimiento_autocontrol.procedimiento_autocontrol_id = lote_control_resultados_fq.procedimiento_autocontrol_id and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "verificacionesfisicaquimica.csv"
+      }
+    },
+
+    {
+      "name": "t40",
+      "processor": {
+        "inputFile": "${t39.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t41",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote_control_resultados_morfologicos, procedimiento_autocontrol WHERE procedimiento_autocontrol.procedimiento_autocontrol_id = lote_control_resultados_morfologicos.procedimiento_autocontrol_id and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "verificacionesmorfologicas.csv"
+      }
+    },
+    {
+      "name": "t42",
+      "processor": {
+        "inputFile": "${t41.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t43",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote_control_resultados_organolepticos, procedimiento_autocontrol WHERE procedimiento_autocontrol.procedimiento_autocontrol_id = lote_control_resultados_organolepticos.procedimiento_autocontrol_id and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "verificacionesorganolepticas.csv"
+      }
+    },
+    {
+      "name": "t44",
+      "processor": {
+        "inputFile": "${t43.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t45",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || marca_comunicada_nota), '') NOTA FROM marca_comunicada, procedimiento_autocontrol WHERE procedimiento_autocontrol.procedimiento_autocontrol_id = marca_comunicada.procedimiento_autocontrol_id and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "comunicacionesorganogestion.csv"
+      }
+    },
+    {
+      "name": "t46",
+      "processor": {
+        "inputFile": "${t45.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t47",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM registro_producto_no_conforme, procedimiento_autocontrol WHERE procedimiento_autocontrol.procedimiento_autocontrol_id = registro_producto_no_conforme.procedimiento_autocontrol_id and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "registroproductonoconforme.csv"
+      }
+    },
+    {
+      "name": "t48",
+      "processor": {
+        "inputFile": "${t47.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t49",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM compra_producto_entre_operadores, procedimiento_autocontrol WHERE procedimiento_autocontrol.procedimiento_autocontrol_id = compra_producto_entre_operadores.procedimiento_autocontrol_id and expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "compraproductoentreoperadores.csv"
+      }
+    },
+    {
+      "name": "t50",
+      "processor": {
+        "inputFile": "${t49.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t51",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(group_concat(' ' || num_lote), '') NUM_LOTE FROM lote_control_documental WHERE expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "controllote.csv"
+      }
+    },
+    {
+      "name": "t52",
+      "processor": {
+        "inputFile": "${t51.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t53",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+          "sqlQuery": "SELECT descripcion_apartado APARTADO, documento_normativo DOCUMENTO_NORMATIVO, ifnull(requisito, '') REQUISITO, ifnull(hallazgo, '') HALLAZGO, ifnull(notas_aclaratorias, '') OBSERVACIONES FROM desviacion de WHERE de.expediente_id='${params.expediente_id}' and cumple='N' order by orden"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "evidencias.csv"
+      }
+    },
+    {
+      "name": "t54",
+      "processor": {
+        "inputFile": "${t53.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t55",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/morcillaburgos.sqlite",
+        "sqlQuery": "SELECT ifnull(firma_auditor,'iVBORw0KGgoAAAANSUhEUgAAAyAAAAJYCAYAAACadoJwAAAgAElEQVR4XsS9WZClaXIldO6') firma1, ifnull(firma_auditor2,'iVBORw0KGgoAAAANSUhEUgAAAyAAAAJYCAYAAACadoJwAAAgAElEQVR4XsS9WZClaXIldO6') firma2, ifnull(firma_auditado,'iVBORw0KGgoAAAANSUhEUgAAAyAAAAJYCAYAAACadoJwAAAgAElEQVR4XsS9WZClaXIldO6') firma3 FROM calidad WHERE calidad.id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "firmas.csv"
+      }
+    },
+    {
+      "name": "t56",
+      "processor": {
+        "inputFile": "${t55.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t57",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "url": "${gparams.endpointActa}?jobType=${gparams.jobType}&apikey=${gparams.apikey}&inputFile=${t2.responseHeaders['Location']}&inputFile=${t4.responseHeaders['Location']}&inputFile=${t6.responseHeaders['Location']}&inputFile=${t8.responseHeaders['Location']}&inputFile=${t10.responseHeaders['Location']}&inputFile=${t12.responseHeaders['Location']}&inputFile=${t14.responseHeaders['Location']}&inputFile=${t16.responseHeaders['Location']}&inputFile=${t18.responseHeaders['Location']}&inputFile=${t20.responseHeaders['Location']}&inputFile=${t22.responseHeaders['Location']}&inputFile=${t24.responseHeaders['Location']}&inputFile=${t26.responseHeaders['Location']}&inputFile=${t28.responseHeaders['Location']}&inputFile=${t30.responseHeaders['Location']}&inputFile=${t32.responseHeaders['Location']}&inputFile=${t34.responseHeaders['Location']}&inputFile=${t36.responseHeaders['Location']}&inputFile=${t38.responseHeaders['Location']}&inputFile=${t40.responseHeaders['Location']}&inputFile=${t42.responseHeaders['Location']}&inputFile=${t44.responseHeaders['Location']}&inputFile=${t46.responseHeaders['Location']}&inputFile=${t48.responseHeaders['Location']}&inputFile=${t50.responseHeaders['Location']}&inputFile=${t52.responseHeaders['Location']}&inputFile=${t54.responseHeaders['Location']}&inputFile=${t56.responseHeaders['Location']}"
+      }
+    },
+    {
+      "name": "t58",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t57.responseHeaders['Location']}?apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t59",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t58.outputJson['resources'][0]}?apikey=${gparams.apikey}",
+        "outputFile": "Acta_Control_Morcilla_Burgos.docx",
+        "outputFileExtension": "docx"
+      }
+    }
+  ]
+}

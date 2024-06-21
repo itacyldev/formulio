@@ -1,0 +1,106 @@
+<main id="especia" name="Especias" repo="loteRepo" mainForm="false">
+    <list id="listEspecia" name="Especias" description="Listado especias">
+        <datatable>
+            <repofilter>
+                <or>
+                        <eq property="materia_prima_id" value="10" />
+                        <eq property="materia_prima_id" value="11" />
+                        <eq property="materia_prima_id" value="12" />
+                        <eq property="materia_prima_id" value="13" />
+                        <eq property="materia_prima_id" value="14" />
+                        <eq property="materia_prima_id" value="15" />
+                        <eq property="materia_prima_id" value="16" />
+                        <eq property="materia_prima_id" value="17" />
+                        <eq property="materia_prima_id" value="18" />
+                        <eq property="materia_prima_id" value="19" />
+                </or>
+            </repofilter>
+            <column id="column_nombre_materia_prima" headerText="Materia prima" filtering="false" ordering="false" value="${entity.materiaPrima.nombre_materia_prima}"/>
+            <column id="column_num_expediente" headerText="Nº Exp." filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+            <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.expediente.operador.razon_social}"/>
+            <column id="column_num_lote" headerText="Nº Lote" filtering="true" ordering="true" value="${entity.num_lote}">
+                <filter property="num_lote" matching="contains" valueExpression="${this.column_num_lote}"/>
+                <order property="num_lote"/>
+            </column>
+            <column id="column_proveedor" headerText="Proveedor" filtering="true" ordering="true" value="${entity.proveedor}">
+                <filter property="proveedor" matching="contains" valueExpression="${this.column_proveedor}"/>
+                <order property="proveedor"/>
+            </column>
+            <column id="column_notas_aclaratorias" headerText="Notas aclaratorias" filtering="true" ordering="true" value="${entity.notas_aclaratorias}">
+                <filter property="notas_aclaratorias" matching="contains" valueExpression="${this.column_notas_aclaratorias}"/>
+                <order property="notas_aclaratorias"/>
+            </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editEspecia">
+        <form id="formEspecia">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="MATERIA PRIMA. ESPECIA"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="EXPEDIENTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. Exp., Nº Expediente, Operador" weights="25, 35, 40" >
+                        <row>
+                            <input value="${entity.expediente_id}" placeHolder="${not empty(params.expediente_id)?params.expediente_id:null}" readonly="true"/>
+                            <textarea value="${entity.expediente.num_expediente}" placeHolder="${not empty(params.num_expediente)?params.num_expediente:null}" readonly="true" />
+                            <textarea value="${entity.expediente.operador.razon_social}" placeHolder="${not empty(params.operador)?params.operador:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="MATERIA PRIMA"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <select label="Especia: " value="${entity.materia_prima_id}" placeHolder="${params.materia_prima_id}">
+               <options>
+                    <option value="10" label="Pimentón"/>
+                    <option value="11" label="Orégano" />
+                    <option value="12" label="Comino" />
+                    <option value="13" label="Clavo" />
+                    <option value="14" label="Ajo" />
+                    <option value="15" label="Alcarevea" />
+                    <option value="16" label="Perejil" />
+                    <option value="17" label="Anís" />
+                    <option value="19" label="Canela" />
+                    <option value="18" label="Otros" />
+                </options>
+            </select>
+
+            <input label="Proveedor: " value="${entity.proveedor}" validator="required"/>
+
+            <input label="Nº Lote: " value="${entity.num_lote}" validator="required"/>
+
+            <textarea label="Notas aclaratorias" value="${entity.notas_aclaratorias}"/>
+
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.lote_id)}" readonlyMessage="No puede realizar esta acción: No existe el lote">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

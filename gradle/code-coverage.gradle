@@ -1,0 +1,19 @@
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    jacocoAggregation project(':forms:debug')
+}
+
+reporting {
+    reports {
+        testCodeCoverageReport(JacocoCoverageReport) {
+            testType = TestSuiteType.UNIT_TEST
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('testCodeCoverageReport', JacocoReport)
+}

@@ -1,0 +1,219 @@
+<main id="productoEtiquetado" name="Producto etiquetado" repo="productoEtiquetadoRepo">
+    <list id="listEtiquetado" name="Producto etiquetado" description="Listado productos etiquetados">
+       <!--<datatable properties="num_lote, expediente.num_expediente, marca.nombre_marca, expediente.operador.razon_social, presentacion, ingredientes, notas_aclaratorias_material_etiquetado, cumple_material_etiquetado, notas_aclaratorias_valor_nutricional, cumple_valor_nutricional, peso1, peso2, peso3, cumple_producto_etiquetado, notas_aclaratorias" />-->
+        <datatable>
+            <column id="column_num_lote" headerText="Nº Lote" filtering="true" ordering="true" value="${entity.num_lote}">
+                <filter property="num_lote" matching="contains" valueExpression="${this.column_num_lote}"/>
+                <order property="num_lote"/>
+            </column>
+            <column id="column_num_expediente" headerText="Nº Exp." filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+            <column id="column_nombre_marca" headerText="Marca" filtering="false" ordering="false" value="${entity.marca.nombre_marca}"/>
+            <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.expediente.operador.razon_social}"/>
+            <column id="column_presentacion" headerText="Presentación" filtering="true" ordering="true" value="${entity.presentacion}">
+                <filter property="presentacion" matching="contains" valueExpression="${this.column_presentacion}"/>
+                <order property="presentacion"/>
+            </column>
+            <column id="column_ingredientes" headerText="Ingredientes" filtering="true" ordering="true" value="${entity.ingredientes}">
+                <filter property="ingredientes" matching="contains" valueExpression="${this.column_ingredientes}"/>
+                <order property="ingredientes"/>
+            </column>
+            <column id="column_notas_aclaratorias_material_etiquetado" headerText="Notas aclaratorias material etiquetado" filtering="true" ordering="true" value="${entity.notas_aclaratorias_material_etiquetado}">
+                <filter property="notas_aclaratorias_material_etiquetado" matching="contains" valueExpression="${this.column_notas_aclaratorias_material_etiquetado}"/>
+                <order property="notas_aclaratorias_material_etiquetado"/>
+            </column>
+            <column id="column_cumple_material_etiquetado" headerText="Cumple material etiquetado" filtering="true" ordering="true" value="${entity.cumple_material_etiquetado}">
+                <filter property="cumple_material_etiquetado" matching="contains" valueExpression="${this.column_cumple_material_etiquetado}"/>
+                <order property="cumple_material_etiquetado"/>
+            </column>
+            <column id="column_notas_aclaratorias_valor_nutricional" headerText="Notas aclaratorias valor nutricional" filtering="true" ordering="true" value="${entity.notas_aclaratorias_valor_nutricional}">
+                <filter property="notas_aclaratorias_valor_nutricional" matching="contains" valueExpression="${this.column_notas_aclaratorias_valor_nutricional}"/>
+                <order property="notas_aclaratorias_valor_nutricional"/>
+            </column>
+            <column id="column_cumple_valor_nutricional" headerText="Cumple valor nutricional" filtering="true" ordering="true" value="${entity.cumple_valor_nutricional}">
+                <filter property="cumple_valor_nutricional" matching="contains" valueExpression="${this.column_cumple_valor_nutricional}"/>
+                <order property="cumple_valor_nutricional"/>
+            </column>
+            <column id="column_peso1" headerText="Peso 1" filtering="true" ordering="true" value="${entity.peso1}">
+                <filter property="peso1" matching="contains" valueExpression="${this.column_peso1}"/>
+                <order property="peso1"/>
+            </column>
+            <column id="column_peso2" headerText="Peso 2" filtering="true" ordering="true" value="${entity.peso2}">
+                <filter property="peso2" matching="contains" valueExpression="${this.column_peso2}"/>
+                <order property="peso2"/>
+            </column>
+            <column id="column_peso3" headerText="Peso 3" filtering="true" ordering="true" value="${entity.peso3}">
+                <filter property="peso3" matching="contains" valueExpression="${this.column_peso3}"/>
+                <order property="peso3"/>
+            </column>
+            <column id="column_cumple_producto_etiquetado" headerText="Cumple producto etiquetado" filtering="true" ordering="true" value="${entity.cumple_producto_etiquetado}">
+                <filter property="cumple_producto_etiquetado" matching="contains" valueExpression="${this.column_cumple_producto_etiquetado}"/>
+                <order property="cumple_producto_etiquetado"/>
+            </column>
+            <column id="column_notas_aclaratorias_producto_etiquetado" headerText="Notas aclaratorias" filtering="true" ordering="true" value="${entity.notas_aclaratorias}">
+                <filter property="notas_aclaratorias" matching="contains" valueExpression="${this.column_notas_aclaratorias_producto_etiquetado}"/>
+                <order property="notas_aclaratorias"/>
+            </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editProductoEtiquetado">
+        <form id="formProductoEtiquetado">
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="EXPEDIENTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. Exp., Nº Expediente, Id. Oper, Operador" weights="15, 25, 15, 45" >
+                        <row>
+                            <input value="${entity.expediente_id}" placeHolder="${not empty(params.expediente_id)?params.expediente_id:null}" readonly="true"/>
+                            <textarea value="${entity.expediente.num_expediente}" placeHolder="${not empty(params.num_expediente)?params.num_expediente:null}" readonly="true" />
+                            <input id="operador_id" value="${entity.expediente.operador.operador_id}" placeHolder="${not empty(params.operador_id)?params.operador_id:null}" readonly="true"/>
+                            <textarea value="${entity.expediente.operador.razon_social}" placeHolder="${not empty(params.operador)?params.operador:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="LOTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <input label="6.1 Nº Lote: " value="${entity.num_lote}" validator="required" />
+
+            <autocomplete id="nombre_marca" label="6.2 Marca: " forceSelection="true" repo="marcaRepo" value="${entity.marca_id}" validator="required">
+                <options labelExpression="${entity.nombre_marca}" labelFilteringProperty="nombre_marca" valueProperty="marca_id" />
+                <repofilter>
+                    <eq property="operador_id" value="${view.operador_id}" mandatory="true"/>
+                    <contains property="nombre_marca" value="${this.value}"/>
+                </repofilter>
+            </autocomplete>
+
+            <input label="6.3 Presentación/Delimitación: " value="${entity.presentacion}" />
+
+            <textarea label="6.4 Ingredientes: " value="${entity.ingredientes}" />
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="6.5 Material etiquetado: Contraetiqueta, Logo IGP, Logo Europeo(Ø > 16mm), Mención IGP: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <textarea label="6.5.1 Notas aclaratorias material etiquetado : " value="${entity.notas_aclaratorias_material_etiquetado}" />
+            <radio label="6.5.2 Cumple material etiquetado: " value="${entity.cumple_material_etiquetado}" orientation="horizontal" weights="15, 85">
+                <options>
+                    <option label="Sí" value="S" />
+                    <option label="No" value="N" />
+                </options>
+            </radio>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="6.6 Valor nutricional: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <p value=""/>
+            <table headerText=" , Formato 1, Formato 2, Formato 3 " weights="16, 28, 28, 28">
+                <row>
+                    <textarea readonly="true" value=" Grasa:" />
+                    <input value="${entity.grasa_formato_1}" hasDeleteButton="false" inputType="3" />
+                    <input value="${entity.grasa_formato_2}" hasDeleteButton="false" inputType="3" />
+                    <input value="${entity.grasa_formato_3}" hasDeleteButton="false" inputType="3" />
+                </row>
+                <row>
+                    <textarea readonly="true" value=" Azúcares:" />
+                    <input id="azucares_formato_1" value="${entity.azucares_formato_1}" hasDeleteButton="false" inputType="3" />
+                    <input value="${entity.azucares_formato_2}" hasDeleteButton="false" inputType="3" />
+                    <input value="${entity.azucares_formato_3}" hasDeleteButton="false" inputType="3" />
+                </row>
+                <row>
+                    <textarea readonly="true" value=" Fibra:" />
+                    <input value="${entity.fibra_formato_1}" hasDeleteButton="false" inputType="3" />
+                    <input value="${entity.fibra_formato_2}" hasDeleteButton="false" inputType="3" />
+                    <input value="${entity.fibra_formato_3}" hasDeleteButton="false" inputType="3" />
+                </row>
+                <row>
+                    <textarea readonly="true" value=" Sal:" />
+                    <input value="${entity.sal_formato_1}" hasDeleteButton="false" inputType="3" />
+                    <input value="${entity.sal_formato_2}" hasDeleteButton="false" inputType="3" />
+                    <input value="${entity.sal_formato_3}" hasDeleteButton="false" inputType="3" />
+                </row>
+            </table>
+
+            <textarea label="6.6.1 Notas aclaratorias valor nutricional: " value="${entity.notas_aclaratorias_valor_nutricional}" />
+            <radio label="6.6.2 Cumple valor nutricional: " value="${entity.cumple_valor_nutricional}" orientation="horizontal" weights="15, 85">
+                <options>
+                    <option label="Sí" value="S" />
+                    <option label="No" value="N" />
+                </options>
+            </radio>
+
+            <divisor color="#00766C" strokeWidth="4" />
+            <p value=""/>
+
+            <p bold="true" value="   6.7 Peso: "/>
+
+            <table border="false">
+                <row>
+                    <table headerText=" Peso 1, Peso 2, Peso 3 ">
+                        <row>
+                            <input id="peso1" value="${entity.peso1}" hasDeleteButton="false" inputType="3"/>
+                            <input id="peso2" value="${entity.peso2}" hasDeleteButton="false" inputType="3"/>
+                            <input id="peso3" value="${entity.peso3}" hasDeleteButton="false" inputType="3"/>
+                        </row>
+                    </table>
+                </row>
+                <row>
+                    <table headerText=" Unidades/Kg.">
+                        <row>
+                            <input value="${(view.peso1 + view.peso2 + view.peso3) gt 0? math:round(math:pow(10,2)*3/(view.peso1 + view.peso2 + view.peso3))/math:pow(10,2):null}" hasDeleteButton="false" readonly="true" inputType="3"/>
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <radio label="6.8 Cumple producto etiquetado: " value="${entity.cumple_producto_etiquetado}" orientation="horizontal" weights="15, 85">
+                <options>
+                    <option label="Sí" value="S" />
+                    <option label="No" value="N" />
+                </options>
+            </radio>
+
+            <textarea label="6.9 Notas aclaratorias producto etiquetado: " value="${entity.notas_aclaratorias}" />
+        </form>
+        <!--<actions>
+            <save label="Save" route="back" registerInHistory="false" restoreView="true">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                <param name="entityId" value="${params.expediente_id}" />
+            </save>
+            <cancel label="Cancel" route="back" restoreView="true">
+                <param name="entityId" value="${params.expediente_id}" />
+            </cancel>
+            <delete label="Delete" route="back" registerInHistory="false" message="No puede realizar esta acción: No existe lote producto etiquetado" restoreView="true">
+                <param name="entityId" value="${params.expediente_id}" />
+            </delete>
+        </actions>-->
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.producto_etiquetado_id)}" readonlyMessage="No puede realizar esta acción: No existe lote producto etiquetado">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+
+    </edit>
+</main>

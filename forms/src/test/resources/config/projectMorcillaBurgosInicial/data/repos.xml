@@ -1,0 +1,64 @@
+<repos>
+    <repo dbFile="calidad.sqlite" id="provRepo" dbTable="provincia" />
+    <repo dbFile="calidad.sqlite" id="muniRepo" dbTable="municipio" />
+    <repo dbFile="calidad.sqlite" id="operadorRepo" dbTable="operador">
+        <mapping fk="prov_id_social" property="provincia" repo="provRepo" updatable="false"/>
+        <mapping fk="provmuni_id_social" property="municipio" repo="muniRepo" updatable="false"/>
+    </repo>
+    <repo dbFile="calidad.sqlite" id="instalacionRepo" dbTable="instalacion">
+        <mapping fk="operador_id" property="operador" repo="operadorRepo" />
+        <mapping fk="prov_id_instalacion" property="provincia" repo="provRepo" updatable="false"/>
+        <mapping fk="provmuni_id_instalacion" property="municipio" repo="muniRepo" updatable="false"/>
+    </repo>
+    <repo dbFile="calidad.sqlite" id="equipoMedidaRepo" dbTable="equipo_medida">
+        <mapping fk="instalacion_id" property="instalacion" repo="instalacionRepo"/>
+    </repo>
+    <repo dbFile="calidad.sqlite" id="actasControlRepo" dbTable="calidad">
+        <mapping fk="operador_id" property="operador" repo="operadorRepo" updatable="false"/>
+        <mapping fk="instalacion_id" property="instalacion" repo="instalacionRepo" updatable="false"/>
+        <mapping fk="q2_1_1_1_identif_bascula" property="equipoMedida" repo="equipoMedidaRepo" updatable="false"/>
+    </repo>
+    <repo dbFile="calidad.sqlite" id="marcaRepo" dbTable="marca">
+        <mapping fk="operador_id" property="operador" repo="operadorRepo" />
+    </repo>
+    <repo dbFile="calidad.sqlite" id="materiaPrimaRepo" dbTable="materia_prima"/>
+    <repo dbFile="calidad.sqlite" id="verificacionEquipoMedidaRepo" dbTable="verificacion_equipo_medida">
+        <mapping fk="equipo_medida_id" property="equipoMedida" repo="equipoMedidaRepo" updatable="false"/>
+        <mapping fk="expediente_id" property="expediente" repo="actasControlRepo" />
+        <mapping fk="instalacion_id" property="instalacion" repo="instalacionRepo"/>
+    </repo>
+    <repo dbFile="calidad.sqlite" id="productoTerminadoRepo" dbTable="producto_terminado">
+        <mapping fk="expediente_id" property="expediente" repo="actasControlRepo" />
+    </repo>
+    <repo dbFile="calidad.sqlite" id="tipoMorcillaRepo" dbTable="tipo_morcilla">
+        <mapping fk="expediente_id" property="expediente" repo="actasControlRepo" />
+    </repo>
+    <repo dbFile="calidad.sqlite" id="productoTransformadoRepo" dbTable="producto_transformado">
+        <mapping fk="expediente_id" property="expediente" repo="actasControlRepo" />
+    </repo>
+    <repo dbFile="calidad.sqlite" id="productoEtiquetadoRepo" dbTable="producto_etiquetado">
+        <mapping fk="expediente_id" property="expediente" repo="actasControlRepo" />
+        <mapping fk="marca_id" property="marca" repo="marcaRepo" />
+    </repo>
+    <repo dbFile="calidad.sqlite" id="existenciaEtiquetadoRepo" dbTable="existencia_etiquetado">
+        <mapping fk="expediente_id" property="expediente" repo="actasControlRepo" />
+        <mapping fk="marca_id" property="marca" repo="marcaRepo" />
+    </repo>
+    <repo dbFile="calidad.sqlite" id="productoNoConformeRepo" dbTable="producto_no_conforme">
+        <mapping fk="expediente_id" property="expediente" repo="actasControlRepo" />
+    </repo>
+    <repo dbFile="calidad.sqlite" id="desviacionRepo" dbTable="desviacion">
+        <mapping fk="expediente_id" property="expediente" repo="actasControlRepo" />
+    </repo>
+    <repo dbFile="calidad.sqlite" id="loteRepo" dbTable="lote">
+        <mapping fk="expediente_id" property="expediente" repo="actasControlRepo" />
+        <mapping fk="materia_prima_id" property="materiaPrima" repo="materiaPrimaRepo" />
+    </repo>
+
+    <repo dbFile="calidad.sqlite" id="especiaRepo" dbTable="especia">
+        <mapping fk="expediente_id" property="expediente" repo="actasControlRepo" />
+    </repo>
+    <repo dbFile="calidad.sqlite" id="tipoCebollaRepo" dbTable="tipo_cebolla">
+        <mapping fk="lote_id" property="lote" repo="loteRepo" />
+    </repo>
+</repos>

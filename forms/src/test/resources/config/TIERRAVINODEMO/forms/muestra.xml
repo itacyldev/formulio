@@ -1,0 +1,108 @@
+<main name="muestra" description="Muestra" id="idMuestra" repo="muestraRepo" mainForm="false">
+    <list id="listMuestra" name="ACTA DE TOMA DE MUESTRAS">
+        <datatable  route="idMuestra-editMuestra"/>
+        <buttonbar type="fab"/>
+    </list>
+
+    <edit id="editMuestra">
+        <form>
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="MUESTRA"/>
+            <p value=""/>
+
+            <table headerText=" Id. Acta, Acta, Id. Exp., Nº Exp." weights="20, 30, 20, 30">
+                <row>
+                    <input id="acta_id" value="${entity.acta_id}" placeHolder="${params.acta_id}" readonly="true"/>
+                    <input id="acta" value="${entity.acta.acta}" placeHolder="${params.acta}" readonly="true"/>
+                    <input id="expediente_id" value="${entity.acta.expediente_id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                    <input id="num_expediente" value="${entity.acta.expediente.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id. Operador, Razón social" weights="20, 80">
+                <row>
+                    <input id="operador_id" value="${entity.acta.expediente.operador_id}" placeHolder="${params.operador_id}" readonly="true"/>
+                    <input id="razon_social" value="${entity.acta.expediente.operador.razon_social}" placeHolder="${params.razon_social}" readonly="true"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="DATOS DE LA MUESTRA: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p value=""/>
+
+            <table weights="33, 67">
+                <row>
+                    <input label="Muestra: " readonly="true"/>
+                    <input value="${entity.muestra}" />
+                </row>
+                <row>
+                    <input label="Tipo de muestra (materia prima, producto elaborado): " readonly="true"/>
+                    <input value="${entity.tipo_muestra}" />
+                </row>
+                <row>
+                    <input label="La muestra está dispuesta para su comercialización: " readonly="true"/>
+                    <radio value="${entity.dispuesta_comercializacion}" orientation="horizontal" weights="20, 20">
+                        <options>
+                            <option label="SI" value="SI" />
+                            <option label="NO" value="NO" />
+                        </options>
+                    </radio>
+                </row>
+                <row>
+                    <input label="Denominación de venta: " readonly="true"/>
+                    <input value="${entity.denominacion_venta}" />
+                </row>
+                <row>
+                    <input label="Marca comercial: " readonly="true"/>
+                    <input value="${entity.marca_comercial}" />
+                </row>
+                <row>
+                    <input label="Lote: " readonly="true"/>
+                    <input value="${entity.lote}" />
+                </row>
+                <row>
+                    <input label="Fecha consumo preferente: " readonly="true"/>
+                    <date value="${entity.fecha_consumo_preferente}" />
+                </row>
+                <row>
+                    <input label="Nº contraetiqueta: " readonly="true"/>
+                    <input value="${entity.num_contraetiqueta}" />
+                </row>
+                <row>
+                    <input label="Cantidad producto muestreado: " readonly="true"/>
+                    <input value="${entity.cantidad_producto_muestreado}" inputType="3"/>
+                </row>
+                <row weights="33, 21, 25, 21">
+                    <input label="Identificación de la muestra: " readonly="true"/>
+                    <input label="Inicial: " value="${entity.id_muestra_inicial}" />
+                    <input label="Contradictorio: " value="${entity.id_muestra_contradictorio}" />
+                    <input label="Dirimento: " value="${entity.id_muestra_dirimente}" />
+                </row>
+                <row>
+                    <input label="Tipo de deteminaciones a realizar: " readonly="true"/>
+                    <input value="${entity.tipo_deteminaciones}" />
+                </row>
+            </table>
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.acta_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.acta_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.muestra_id)}" readonlyMessage="No puede realizar esta acción: No existe muestra" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false">
+                    <param name="entityId" value="${params.acta_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

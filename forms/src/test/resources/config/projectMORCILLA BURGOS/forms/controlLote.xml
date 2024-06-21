@@ -1,0 +1,127 @@
+<main id="controlLote" name="Control lote" repo="actasControlRepo">
+    <list id="listLote" name=" CONTROL LOTE">
+        <datatable route="controlLote-editControlLote">
+            <column id="column_id" headerText="Id Exp." filtering="true" ordering="true" value="${entity.id}">
+                <filter property="id" matching="contains" valueExpression="${this.column_id}"/>
+                <order property="id"/>
+            </column>
+            <column id="column_num_expediente" headerText="Nº Exp." filtering="true" ordering="true" value="${entity.num_expediente}">
+                <filter property="num_expediente" matching="contains" valueExpression="${this.column_num_expediente}"/>
+                <order property="num_expediente"/>
+            </column>
+            <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.operador.razon_social}"/>
+            <column id="column_fecha" headerText="Fecha" filtering="true" ordering="true" value="${entity.fecha}">
+                <filter property="fecha" matching="contains" valueExpression="${this.column_fecha}"/>
+                <order property="fecha"/>
+            </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editControlLote">
+        <form id="formControlLote">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="CONTROL LOTE"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="EXPEDIENTE"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <input id="expediente_id" label="Id. Expediente: " value="${entity.id}" readonly="true" render="${not empty(entity.id)}"/>
+                    <input id="num_expediente" label="Nº Expediente: " value="${entity.num_expediente}" readonly="true"/>
+                    <input label="Fecha: " value="${entity.fecha}" readonly="true" />
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="AUDITORES"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <input label="Equipo auditor: " value="${entity.equipo_auditor_id}" readonly="true" />
+                    <textarea label="Otros auditores: " value="${entity.otros_auditores}" readonly="true"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="DATOS DEL OPERADOR"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <input label="Operador: " value="${entity.operador.razon_social}" readonly="true" />
+                    <input label="CIF: " value="${entity.operador.cif}" readonly="true" />
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="CONTROL LOTE"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <button label="Añadir" readonly="${empty (entity.id)}" readonlyMessage="No puede añadir un lote. Antes debe guardar el expediente">
+                <action type="create" route="loteControlDocumental-editLoteControlDocumental">
+                    <param name="repo" value="loteControlDocumentalRepo"/>
+                    <param name="expediente_id" value="${entity.id}" />
+                    <param name="num_expediente" value="${entity.num_expediente}" />
+                    <param name="operador" value="${entity.operador.razon_social}" />
+                    <param name="instalacion_id" value="${entity.instalacion_id}" />
+                    <param name="nombre_instalacion" value="${entity.instalacion.nombre_instalacion}" />
+                </action>
+            </button>
+
+            <datatable
+                allowsPartialRestore="false"
+                route="loteControlDocumental-editLoteControlDocumental"
+                numVisibleRows="3"
+                properties="num_lote, fecha_fabricacion"
+                repo="loteControlDocumentalRepo">
+                <param name="expediente_id" value="${entity.expediente_id}" />
+                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                <param name="instalacion_id" value="${entity.expediente.instalacion.instalacion_id}" />
+                <param name="nombre_instalacion" value="${entity.expediente.instalacion.nombre_instalacion}" />
+                <repofilter>
+                    <and>
+                        <eq property="expediente_id" value="${empty(entity.id) ? '-1' : entity.id}" />
+                    </and>
+                </repofilter>
+            </datatable>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="FIRMA"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false" weights="30, 20, 50">
+                <row>
+                    <p bold="true" value="Firma"/>
+                    <switcher id="switcherFirmaControlLote" value="${not empty(entity.firmaControlDocumental)?1:0}"/>
+                    <p value=""/>
+                </row>
+            </table>
+            <table border="false" weights="10, 90">
+                <row>
+                    <p value=""/>
+                    <image id="imageFirmaControlLote" converter="b64Image" embedded="true" value="${entity.firmaControlDocumental}" render="${view.switcherFirmaControlLote eq 'true'}" hasDeleteButton="false" inputType="4"/>
+                </row>
+            </table>
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>firmaControlDocumental
+            </button>
+            <button label="Cancel">
+                <action type="cancel" route="back"/>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

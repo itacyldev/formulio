@@ -1,0 +1,10 @@
+<repos>
+    <repo dbFile="docproject.sqlite" id="provinciaRepo" dbTable="provincia" />
+    <repo dbFile="docproject.sqlite" id="municipioRepo" dbTable="municipio">
+        <mapping fk="c_provincia_id" property="provincia" repo="provinciaRepo"/>
+    </repo>
+
+    <repo dbFile="docproject.sqlite" id="pruebaRepo" dbTable="prueba" />
+
+
+</repos>

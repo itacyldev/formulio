@@ -1,0 +1,91 @@
+-dontobfuscate
+
+-keep public class org.apache.commons.** { *; }
+
+-keep public class org.apache.poi.** { *; }
+
+-keep public class ch.qos.logback.** { *; }
+
+-keep public class org.mozilla.javascript.** { *; }
+
+-keep class jsqlite.** { *; }
+-keep class org.xmlpull.** { *; }
+
+-keep class org.codehaus.groovy.vmplugin.**
+-keep class org.codehaus.groovy.runtime.dgm*
+
+-keepclassmembers class org.greenrobot.greendao.database.** {*;}
+
+-keepclassmembers class org.codehaus.groovy.runtime.dgm* {*;}
+-keepclassmembers class ** implements org.codehaus.groovy.runtime.GeneratedClosure {*;}
+-keepclassmembers class org.codehaus.groovy.reflection.GroovyClassValue* {*;}
+-keepclassmembers class groovyx.example.** {*;}
+-keepclassmembers class com.arasthel.swissknife.utils.Finder {*;}
+
+#forms
+-keepclassmembers class ** implements es.jcyl.ita.formic.forms.config.AttributeResolver {*;}
+-keepclassmembers class ** extends es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.forms.config.builders.ComponentBuilder {*;}
+-keepclassmembers class ** extends es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder {*;}
+-keep class es.jcyl.ita.formic.forms.components.** {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.forms.repo.meta.Identificable {*;}
+-keep class es.jcyl.ita.formic.forms.config.elements.** {*;}
+-keep class es.jcyl.ita.formic.forms.controllers.** {*;}
+-keep class es.jcyl.ita.formic.forms.scripts.** {*;}
+
+
+#repo
+-keepclassmembers class ** extends es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder {*;}
+-keep class es.jcyl.ita.formic.repo.db.source.DBTableEntitySource$DBTableEntitySourceBuilder {*;}
+-keep class es.jcyl.ita.formic.repo.db.source.NativeSQLEntitySource$NativeSQLEntitySourceBuilder {*;}
+-keep class es.jcyl.ita.formic.repo.media.source.FileEntitySource$FileEntitySourceBuilder {*;}
+-keep class es.jcyl.ita.formic.repo.source.** {*;}
+-keep class es.jcyl.ita.formic.repo.EntityMapping {*;}
+
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.meta.MetaModeler {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.converter.PropertyConverter {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.EntitySourceBuilder {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.RepositoryBuilder {*;}
+-keepclassmembers class ** extends es.jcyl.ita.formic.repo.builders.AbstractRepositoryBuilder {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.Repository {*;}
+-keepclassmembers class com.android.dx.dex.cf.** {*;}
+
+-keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
+
+# com.fasterxml.jackson
+#-keep class com.fasterxml.jackson.databind.ObjectMapper {
+#    public <methods>;
+#    protected <methods>;
+#}
+#-keep class com.fasterxml.jackson.databind.ObjectWriter {
+#    public ** writeValueAsString(**);
+#}
+#-keepnames class com.fasterxml.jackson.** { *; }
+
+#-keepnames class com.fasterxml.jackson.databind.** { *; }
+#-dontwarn com.fasterxml.jackson.databind.**
+#-keep class com.fasterxml.jackson.annotation.** { *; }
+
+-keep class es.jcyl.ita.formic.jayjobs.jobs.** {*;}
+-keep class es.jcyl.ita.formic.jayjobs.task.** {*;}
+#-keep class es.jcyl.ita.formic.jayjobs.utils.** {*;}
+
+
+
+
+
+# General
+-keepattributes SourceFile,LineNumberTable,*Annotation*,EnclosingMethod,Signature,Exceptions,InnerClasses
+
+
+-dontwarn org.codehaus.groovy.**
+-dontwarn groovy**
+-dontnote org.codehaus.groovy.**
+-dontnote groovy**
+-dontwarn javax.swing.**
+-dontwarn javax.mail.**
+-dontwarn java.awt.**
+-dontwarn org.mozilla.**
+-dontwarn org.greenrobot.**
+-dontwarn org.apache.**
+

@@ -1,0 +1,199 @@
+<main name="auditoria" description="Auditorias" id="idAuditoria" repo="auditoriaRepo">
+    <list id="listAuditoria" name="AUDITORÍA" description="Listado auditorias">
+        <datatable properties="auditoria_id,fecha">
+            <action type="nav" route="idAuditoria-editAuditoria2"/>
+        </datatable>
+
+        <buttonbar type="fab">
+            <button id="createButton">
+                <action id="createAuditoria" type="create" route="idAuditoria-editAuditoria2" >
+                    <param name="repo" value="auditoriaRepo"/>
+                    <param name="fecha" value="${date.now}"/>
+                </action>
+            </button>
+        </buttonbar>
+
+    </list>
+    <edit id="editAuditoria2">
+        <form>
+            <table border="false">
+                <row>
+                    <input label="Id. auditoria: " id="newAuditoria" readonly="true" placeHolder="${params.entityId}" value="${entity.auditoria_id}" />
+                    <button label="Cuestionario">
+                        <action type="save" route="idPreguntaAuditoria-editPreguntaAuditoria">
+                            <param name="auditoria_id" value="${entity.auditoria_id}"/>
+                        </action>
+                    </button>
+                </row>
+            </table>
+            <tab>
+                <tabitem label="Datos de registro">
+                    <autocomplete converter="integer" forceSelection="true" label="1. Bodega" repo="bodegaRepo" value="${entity.bodega_id}" validator="required">
+                        <options labelExpression="${entity.razon_social}" labelFilteringProperty="razon_social" valueProperty="bodega_id" />
+                    </autocomplete>
+                    <date label="2. Fecha" value="${entity.fecha}"/>
+                    <input label="3. Alcance" value="${entity.alcance}"/>
+                    <select label="4. Tipo" value="${entity.tipo}">
+                        <options>
+                            <option label="Tipo 1" value="T1"/>
+                            <option label="Tipo 2" value="T2"/>
+                            <option label="Tipo 3" value="T3"/>
+                        </options>
+                    </select>
+                    <input label="5. Num. visita" value="${entity.num_visita}" inputType="4"/>
+                    <textarea label="6. Interlocutores" value="${entity.interlocutores}"/>
+                    <textarea label="7. Auditores" value="${entity.auditores}"/>
+
+                    <table border="false" weights="30, 20, 50">
+                        <row>
+                            <p bold="true" value="8. Firma"/>
+                            <switcher id="switcherFirma" value="${not empty(entity.firma)?1:0}"/>
+                            <p value=""/>
+                        </row>
+                    </table>
+                    <table border="false" weights="10, 90">
+                        <row>
+                            <p value=""/>
+                            <image id="imageFirma" converter="b64Image" embedded="true" value="${entity.firma}" render="${view.switcherFirma eq 'true'}" inputType="4" hasDeleteButton="false"/>
+                        </row>
+                    </table>
+
+                </tabitem>
+
+                <tabitem label="Datos complementarios">
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="DATOS GENERALES DE BODEGA AUDITADA "/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+
+                    <table weights="40, 60" headerText=" 1.1 ¿Coinciden los Registros del C.R. con el alcance solicitado?">
+                        <row colspans="2">
+                            <p value="Comprobar inscripción en los Registros del C.R."/>
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Fecha 1: "/>
+                            <date converter="string" value="${entity.q1_1_fecha1}" hasDeleteButton="false" hasTodayButton="false" />
+                        </row>
+
+                        <row>
+                            <textarea readonly="true" value="Fecha 2: "/>
+                            <date converter="string" value="${entity.q1_1_fecha2}" hasDeleteButton="false" hasTodayButton="false"/>
+                        </row>
+
+                        <row>
+                            <textarea readonly="true" value="Fecha 3: "/>
+                            <date converter="string" value="${entity.q1_1_fecha3}" hasDeleteButton="false" hasTodayButton="false"/>
+                        </row>
+
+                        <row>
+                            <textarea readonly="true" value="Fecha 4: "/>
+                            <date converter="string" value="${entity.q1_1_fecha4}" hasDeleteButton="false" hasTodayButton="false"/>
+                        </row>
+                    </table>
+
+                    <p value=""/>
+
+                    <table weights="40, 60" headerText=" 1.2. ¿Posee en vigor el Registro General Sanitario de Empresas Alimentarias para la instalación auditada?">
+                        <row colspans="2">
+                            <p value="Comprobar inscripción en el RGSEAA (puede hacerse vía AESAN o IREA) o solicitud de inscripción junto con declaración responsable del solicitante. Comprobar último acta de inspección emitido por la Administración." />
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Nº RGSEAA:" />
+                            <textarea value="${entity.q1_2_num_rgseaa}" hasDeleteButton="false" inputType="4" />
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Fecha:" />
+                            <date converter="string" value="${entity.q1_2_fecha}" hasDeleteButton="false" hasTodayButton="false"/>
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Nº Acta:" />
+                            <textarea value="${entity.q1_2_num_acta}" hasDeleteButton="false" />
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="F. últ. insp. san.:" />
+                            <date converter="string" value="${entity.q1_2_fecha_ultima_inspeccion_sanitaria}" hasDeleteButton="false" hasTodayButton="false"/>
+                        </row>
+                    </table>
+
+                    <textarea label="Datos complementarios a la auditoria." hint="Actividad/es en desarrollo en la bodega durante la auditoría." value="${entity.q1_complementarios}"/>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="ELABORACIÓN "/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+
+                    <table headerText=" 3.2. ¿Disponen de las Declaraciones de Producción?" weights="32, 37, 31">
+                        <row colspans="3">
+                            <p value="Comprobar Declaración de Producción de vino del CRDOP. Comprobar coincidencia con Declaración de Producción de la Administración y asiento en libros-registro. Comprobar Rendimiento extracción para vino amparado  ≤ 70 (ó 72) litros de vino / 100 kg de uva."/>
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Cosecha"/>
+                            <textarea readonly="true" value="Vino DPO"/>
+                            <textarea readonly="true" value="TOTAL"/>
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Tinto"/>
+                            <textarea value="${entity.q3_2_dpo_tinto}" hasDeleteButton="false" inputType="4"/>
+                            <textarea value="${entity.q3_2_total_tinto}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Rosado"/>
+                            <textarea value="${entity.q3_2_dpo_rosado}" hasDeleteButton="false" inputType="4"/>
+                            <textarea value="${entity.q3_2_total_rosado}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Blanco"/>
+                            <textarea value="${entity.q3_2_dpo_blanco}" hasDeleteButton="false" inputType="4"/>
+                            <textarea value="${entity.q3_2_total_blanco}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Otros"/>
+                            <textarea value="${entity.q3_2_dop_otros}" hasDeleteButton="false" inputType="4"/>
+                            <textarea value="${entity.q3_2_total_otros}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row colspans="3">
+                            <textarea label="Rend. DOP:" value="${entity.q3_2_rend_dpo}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspans="3">
+                            <textarea label="Rend. DOP:" value="${entity.q3_2_rend_total}" hasDeleteButton="false"/>
+                        </row>
+                    </table>
+
+                    <textarea label="Datos complementarios a la auditoria." hint="Tipos y Clases de vino elaborados y su coincidencia con lo indicado en Solicitud de certificación." value="${entity.q3_complementarios}"/>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="EMBOTELLADO Y ETIQUETADO "/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+
+                    <table weights="40, 60" headerText=" 6.1¿Poseen el Registro Embotellador para la instalación y está inscrita como tal en los Registros del CRDO?">
+                        <row colspans="2">
+                            <p value="Comprobar inscripción en el Registro de Envasadores y Embotelladores de Vino y Bebidas Alcohólicas. Se comprobará igualmente su inscripción como instalación embotelladora en los Registros del CRDO." />
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Nº RE:" />
+                            <textarea value="${entity.q6_1_num_re}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="Fecha:" />
+                            <date converter="string" value="${entity.q6_1_fecha}" hasDeleteButton="false" hasTodayButton="false"/>
+                        </row>
+                    </table>
+
+                    <textarea label="Datos complementarios a la auditoria." hint="Métodos y equipos utilizados en laboratorio para realizar análisis físico-químicos." value="${entity.q6_complementarios}"/>
+                </tabitem>
+            </tab>
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action route="idAuditoria-listAuditoria" type="save" registerInHistory="false" popHistory="1"/>
+            </button>
+            <button label="Cancel" route="back"/>
+        </buttonbar>
+    </edit>
+</main>

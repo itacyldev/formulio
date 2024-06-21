@@ -1,0 +1,12 @@
+<main name="bbb" description="bbb" id="asdfasfasf" repo="contacts">
+    <edit>
+        <radio id="radioFirstName" label="First name" orientation="horizontal" validator="required"
+            value="${entity.first_name}">
+            <options>
+                <option id="optionFirstNameJQAMBGBOTE" label="JQAMBGBOTE" value="aaaaa" />
+                <option id="optionFirstNameKDNBQDXOWF" label="KDNBQDXOWF" value="aaaaaa" />
+                <option id="optionFirstNameLGSPZCIYOQ" label="LGSPZCIYOQ" value="asdfasdf" />
+            </options>
+        </radio>
+    </edit>
+</main>

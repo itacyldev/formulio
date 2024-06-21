@@ -1,0 +1,15 @@
+<main id="formSelect" name="Select" repo="pruebaRepo">
+    <edit>
+        <form>
+            <select label="Select: " value="${entity.d_prueba}">
+                <options>
+                    <option value="1" label="Valor 1"/>
+                    <option value="2" label="Valor 2" />
+                    <option value="3" label="Valor 3" />
+                    <option value="4" label="Valor 4" />
+                    <option value="5" label="Valor 5" />
+                </options>
+            </select>
+        </form>
+    </edit>
+</main>

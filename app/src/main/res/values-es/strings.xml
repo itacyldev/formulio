@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="projects">Proyectos</string>
+    <string name="forms">Formularios</string>
+    <string name="permissions">Permisos</string>
+    <string name="mustacceptallpermits">Debe aceptar todos los permisos.</string>
+    <string name="no_projects">No hay proyectos</string>
+    <string name="project_opening_init">Abriendo proyecto %1$s ...</string>
+    <string name="project_opening">Abriendo proyecto ...</string>
+    <string name="project_opening_finish">Proyecto %1$s abierto.</string>
+    <string name="no_projects_found">No se han encontrado proyectos. Importa un proyecto pulsando el ícono +</string>
+    <string name="project_opening_error">Ocurrió un error al intentar abrir el proyecto %1$s, compruebe la consola de desarrollador.</string>
+    <string name="projects_of">"Proyectos de "</string>
+    <string name="forms_of">"Formularios de "</string>
+    <string name="no_current_project">No hay proyecto activo</string>
+    <string name="export">Exportar</string>
+    <string name="log">Log</string>
+    <string name="detail">Detalle</string>
+    <string name="share">Compartir</string>
+    <string name="synchro">Sincronización</string>
+    <string name="action_delete_success">Entidad eliminada con éxito.</string>
+    <string name="action_delete_error">Ocurrió un error al intentar eliminar la entidad. Compruebe la consola de desarrollador.</string>
+    <string name="loading">Cargando...</string>
+    <string name="not_found">Valor no encontrado</string>
+    <string name="close">Cerrar</string>
+    <string name="specificDirectoryAccessPermission">Esta aplicación requiere el
+        permiso para el acceso al contenido de un directorio específico</string>
+    <string name="allFilesAccessPermission">Esta aplicación requiere el
+        permiso para gestionar el almacenamiento externo. Sólo se utilizarán los ficheros definidos en la configuración de cada proyecto dentro de la aplicación</string>
+    <string name="file_to_load">Fichero a cargar</string>
+    <string name="error_filemanager">No se ha encontrado ningún gestor de ficheros</string>
+    <string name="error_fileload_extension">El fichero a cargar debe ser de tipo</string>
+    <string name="project_import_file_incorrect">La estructura del fichero no es correcta.\nCompruebe que existen los siguientes directorios:\n</string>
+    <string name="projectimportfail">No ha sido posible importar el
+        proyecto.\nPruebe a abrir el fichero desde un explorador de\n
+                        archivos o impórtelo directamente</string>
+    <string name="project_import_files">Y los ficheros:\n</string>
+    <string name="project_import_existing_files">Los siguientes ficheros ya existen en el dispositivo:</string>
+    <string name="project_import_overwrite_files">Si continúa se guardará una copia en projects/bak y se sobreescribirán"</string>
+    <string name="back">Volver</string>
+    <string name="process_finish">El proceso ha finalizado.</string>
+    <string name="job_result">Resultado del trabajo</string>
+    <string name="exporting">Exportando...</string>
+    <string name="project_import_continue">Se va a importar el proyecto. ¿Desea continuar?</string>
+    <string name="confirmation">Confirmación</string>
+    <string name="information">Información</string>
+    <string name="job_error_publishing">Se ha producido un error al intentar publicar los recursos del job</string>
+</resources>

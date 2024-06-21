@@ -1,0 +1,74 @@
+// ignore any subproject, if required `subprojects.findAll{ it.name != 'customSubProject' }`
+def coveredProjects = subprojects
+
+// configure() method takes a list as an argument and applies the configuration to the projects in this list.
+subprojects { p ->
+
+    // Here we apply jacoco plugin to every project
+    apply plugin: 'jacoco'
+    // Set Jacoco version
+    jacoco {
+        toolVersion = "0.8.7"
+    }
+
+    // Here we create the task to generate Jacoco report
+    // It depends to unit test task we don't have to manually running unit test before the task
+    task jacocoReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+
+        // Define what type of report we should generate
+        // If we don't want to process the data further, html should be enough
+        reports {
+            xml {
+                enabled true
+            }
+            html {
+                enabled true
+            }
+        }
+
+        // Setup the .class, source, and execution directories
+        final fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', 'android/**/*.*']
+
+        sourceDirectories.setFrom files(["${p.projectDir}/src/main/java"])
+        classDirectories.setFrom files([
+                fileTree(dir: "${p.buildDir}/classes", excludes: fileFilter),
+                fileTree(dir: "${p.buildDir}/intermediates/javac/debug", excludes: fileFilter),
+        ])
+        executionData.setFrom fileTree(dir: p.buildDir, includes: [
+                'jacoco/*.exec', 'outputs/unit_test_code_coverage/debugUnitTest/*.exec'
+        ])
+    }
+}
+
+apply plugin: 'jacoco'
+
+task jacocoTestReport(name: 'jacocoTestReport', type: JacocoReport, group: 'Coverage reports') {
+    group = 'Reporting'
+    description = 'Generates an aggregate report from all subprojects'
+
+    def projects = coveredProjects
+
+    // Here we depend on the jacocoReport task that we created before
+    dependsOn(projects.jacocoReport)
+
+    final source = files(projects.jacocoReport.sourceDirectories)
+
+    additionalSourceDirs.setFrom source
+    sourceDirectories.setFrom source
+
+    classDirectories.setFrom files(projects.jacocoReport.classDirectories)
+    executionData.setFrom files(projects.jacocoReport.executionData)
+
+    reports {
+        html {
+            enabled true
+            destination file("$buildDir/reports/jacoco/test/html")
+        }
+        xml {
+            enabled true
+            destination file("$buildDir/reports/jacoco/test/jacocoTestReport.xml")
+        }
+    }
+
+}
+

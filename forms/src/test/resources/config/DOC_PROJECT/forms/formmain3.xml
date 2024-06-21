@@ -1,0 +1,5 @@
+<main id="prueba3" name="Name prueba 3" description="Description prueba 3" repo="pruebaRepo" mainForm="true">
+    <list name="Name prueba 3" description="Description prueba 3" id="listPrueba3"/>
+    <edit id="editPrueba3"/>
+</main>
+
