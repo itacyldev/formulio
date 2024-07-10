@@ -1,4 +1,4 @@
-# ![Icono de la aplicación](logo.png) Formulio
+# ![Icono de la aplicación](images/logo.png) Formulio
 
 Empower developers to efficiently and effortlessly create form-based applications by designing the interface with XML templates and coding the application logic with JavaScript. Build your survey or data collection forms with minimal coding.
 
@@ -7,5 +7,5 @@ The application includes interface components to cover most cases that arise whe
 Formulio also includes a configurable background process execution module called jayjobs, which allows defining steps to execute in JSON for tasks such as exporting data, synchronizing data with a remote REST API, etc.
 
 <div align="center">
-    <img src="itacyl3.png">
+    <img src="images/itacyl3.png">
 </div>
