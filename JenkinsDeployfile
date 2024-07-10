@@ -103,7 +103,8 @@ pipeline {
                          sh "git push github ${RELEASE_TAG}"
 
                          // Empujar la rama master a GitHub
-                         sh "git push github master"
+                         sh "git push github master --force"
+
                      }
                  }
              }
