@@ -67,3 +67,5 @@ e --continue
 taq
 q
 Task
+resources/
+examples/
