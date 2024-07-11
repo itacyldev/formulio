@@ -80,11 +80,13 @@ pipeline {
                  echo "Using RELEASE_TAG: ${RELEASE_TAG}"
                  withCredentials([usernamePassword(credentialsId: 'github_credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
                      echo "Using GitHub credentials with username ${GITHUB_USERNAME}"
+                     
                      sh '''
                      if ! git remote | grep github; then
                          git remote add github https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/itacyldev/formulio.git
                      fi
                      '''
+
                      sh "git fetch github"
                      sh "git checkout master"
 
