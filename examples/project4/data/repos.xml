@@ -1,4 +1,0 @@
-<repos>
-    <repo dbFile="prueba.sqlite" dbTable="fechas" id="fechasRepo" >
-    </repo>
-</repos>
