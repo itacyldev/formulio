@@ -61,7 +61,6 @@ JenkinsDeployfile
 Jenkinsfile
 dependencies.txt
 gradle.properties
-README.md
 develop
 e --continue
 taq
