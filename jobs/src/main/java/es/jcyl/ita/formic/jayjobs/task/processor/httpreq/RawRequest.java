@@ -82,6 +82,7 @@ public class RawRequest extends Request<HttpEntity> {
         String start = //"Content-Type: "+ contentType + "\"--"+  boundary + "\"\r\n\r\n"+
                 "--"+  boundary + "\r\n"+
                         "Content-Type: application/octet-stream; name="+contentName + "\r\n"+
+                        "Content-Transfer-Encoding: binary"+"\r\n"+
                         "Content-Disposition: form-data; name=\"contentFile\"; filename=\"" + contentName + "\"\r\n\r\n";
 
         String end = "\r\n--" + boundary + "--";
