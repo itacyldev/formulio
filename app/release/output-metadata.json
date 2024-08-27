@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 48,
-      "versionName": "0.7.26",
-      "outputFile": "Formic_release_0.7.26.apk"
+      "versionCode": 91,
+      "versionName": "0.7.69",
+      "outputFile": "app-release.apk"
     }
   ],
   "elementType": "File"

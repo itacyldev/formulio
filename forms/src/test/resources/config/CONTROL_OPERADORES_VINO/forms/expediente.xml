@@ -65,6 +65,18 @@
                             </action>
                         </action>
                     </button>
+                    <button label="Generar Excel Resumen">
+                        <action id="compositeActionExcelResumen">
+                            <action type="save">
+                            </action>
+                            <action registerInHistory="false" type="job">
+                                <param name="jobId" value="job_generar_excel_resumen_control" />
+                                <param name="expediente_id" value="${entity.expediente_id}"/>
+                                <param name="dop_id" value="${view.dop_id}"/>
+                                <param name="operador_id" value="${view.operador_id}"/>
+                            </action>
+                        </action>
+                    </button>
                     <button label="Cuestionario">
                         <action type="save" route="idCuestionarioExpediente-editCuestionarioExpediente">
                             <param name="expediente_id" value="${entity.expediente_id}"/>
