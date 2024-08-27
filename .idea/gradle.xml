@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/repo" />
             <option value="$PROJECT_DIR$/repoAndroidTests" />
             <option value="$PROJECT_DIR$/repoTestUtils" />
+            <option value="$PROJECT_DIR$/sharedTest" />
           </set>
         </option>
       </GradleProjectSettings>

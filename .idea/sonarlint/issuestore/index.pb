@@ -11,8 +11,6 @@ u
 Eforms/src/main/java/es/jcyl/ita/formic/forms/view/widget/IWidget.java,0\d\0dc644af7bf79385d2a49bd25951b505c5c76497
 Å
 Qforms/src/test/java/es/jcyl/ita/formic/forms/utils/dummy/DummyStatefulWidget.java,2\1\2115422e4c27592badf6b49f6c1f00909c7a3bb5
-<
-build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 |
 Lforms/src/test/java/es/jcyl/ita/formic/forms/components/TabRendererTest.java,7\2\72ed4f14d406b41c7e92e3895f93e928df2ae967
 Ü
@@ -25,8 +23,6 @@ Kforms/src/main/java/es/jcyl/ita/formic/forms/project/ProjectRepository.java,b\
 [forms/src/main/java/es/jcyl/ita/formic/forms/view/activities/FCItemRecyclerViewAdapter.java,0\3\03c66378a84eaddcf874a77f44c2c9306e5b2e28
 x
 Hjobs/src/main/java/es/jcyl/ita/formic/jayjobs/jobs/config/JobConfig.java,d\8\d8a2805556b0c31cd4199c96b833065b0b002ba5
-x
-Hjobs/src/main/java/es/jcyl/ita/formic/jayjobs/jobs/exec/JobResource.java,6\1\617989509a3dc21603f8049e99c5c3bdbb728951
 w
 Gapp/src/main/java/es/jcyl/ita/formic/app/projects/ProjectRVAdapter.java,c\b\cb3c24e2770f474f836e922ff6fd38845f5c239a
 x
@@ -117,8 +113,6 @@ r
 Bjobs/src/main/java/es/jcyl/ita/formic/jayjobs/utils/JsonUtils.java,9\0\9062e2a410bcd96eba605e1f831431eae06d465f
 
 Ojobs/src/test/java/es/jcyl/ita/formic/jayjobs/jobs/JobActaTomaMuestrasTest.java,8\4\84f6060355afaf5c767785ef9a0117f3ed128be2
-f
-6repo/src/main/java/es/jcyl/ita/formic/repo/Entity.java,f\1\f1a1fac66f3122275b8653aee01a5b5f6170bebf
 ä
 Zforms/src/main/java/es/jcyl/ita/formic/forms/components/autocomplete/AutoCompleteView.java,1\3\137c57112997010a97b8da9c41d3c06eead69bf1
 |
@@ -139,12 +133,8 @@ Jforms/src/main/java/es/jcyl/ita/formic/forms/config/meta/AttributeDef.java,9\b
 Vforms/src/main/java/es/jcyl/ita/formic/forms/components/datatable/DatatableWidget.java,e\a\ea27ae1ca1ebd561f5aab42d0b6ae1339e7c4fce
 å
 \forms/src/main/java/es/jcyl/ita/formic/forms/config/builders/repo/RepoMetaConfigBuilder.java,9\d\9d966689fbb242b68135c6e79c121e72ca6133be
-j
-:app/src/main/java/es/jcyl/ita/formic/app/MainActivity.java,4\6\4653c1a6bf28d46b8481e202eb3dbace1a5ec8ff
 t
 Dapp/src/main/java/es/jcyl/ita/formic/app/dialog/JobResultDialog.java,b\1\b131cdce7e0ebf7281061ffe50b864d0893be836
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 ~
 Nforms/src/main/java/es/jcyl/ita/formic/forms/view/activities/BaseActivity.java,c\0\c02a16c89aea4c495b2020f062332a07dbf8fd91
 }
@@ -171,3 +161,5 @@ p
 @forms/src/main/java/es/jcyl/ita/formic/forms/MainController.java,2\1\21f843c20018ca042de93899e2a4cdb0cef04160
 |
 Lrepo/src/main/java/es/jcyl/ita/formic/repo/db/sqlite/greendao/EntityDao.java,b\3\b3bab91985374ce11ed63c47773e630c09df7919
+f
+6repo/src/main/java/es/jcyl/ita/formic/repo/Entity.java,f\1\f1a1fac66f3122275b8653aee01a5b5f6170bebf
