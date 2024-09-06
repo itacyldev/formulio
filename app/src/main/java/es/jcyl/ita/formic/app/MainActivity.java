@@ -1,5 +1,9 @@
 package es.jcyl.ita.formic.app;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -64,10 +68,6 @@ import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
 public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
 
     private final Activity activity = this;
@@ -94,7 +94,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     private void checkDeviceFeatures() {
         Context context = getApplicationContext();
-        /** Check if this device has a camera */
+        /* Check if this device has a camera */
         if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             DevConsole.warn("Camera not available in this device.");
         }
@@ -160,7 +160,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     }
 
     private void initFormicBackend() {
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         FloatingActionButton import_project = findViewById(es.jcyl.ita.formic.forms.R.id.import_project);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -283,13 +283,24 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     protected void checkPermissions() {
         List<String> permsList = new ArrayList<>();
 
-        String[] permissions = new String[]{
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-        };
+        String[] permissions;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissions = new String[]{
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            };
+        } else {
+            permissions = new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            };
+        }
+
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(this,
                     permission)
@@ -297,7 +308,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 permsList.add(permission);
             }
         }
-        if (permsList.size() > 0) {
+        if (!permsList.isEmpty()) {
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
@@ -373,8 +384,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder
                             (this);
-                    builder.setTitle(R.string.permissions);
-                    builder.setMessage(R.string.mustacceptallpermits)
+                    builder.setTitle(R.string.permissions)
+                            .setMessage(R.string.mustacceptallpermits)
                             .setPositiveButton(R.string.accept, new
                                     DialogInterface.OnClickListener() {
                                         @Override
@@ -416,7 +427,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
                     final ContentResolver contentResolver = getContentResolver();
 
-                    final Uri treeUri = data != null ? data.getData() : null;
+                    final Uri treeUri = data.getData();
                     try {
                         contentResolver.takePersistableUriPermission(treeUri,
                                 Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -492,7 +503,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
 
         protected String doInBackground(final Uri... params) {
-            String text = "";
+            String text;
 
             projectImporter = ProjectImporter.getInstance();
 
@@ -664,20 +675,17 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     public void importFromUri(Uri uri) {
         if (uri != null) {
             final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
-            if (path != null) {
-                final String extension = FilenameUtils.getExtension(path);
-
-                if (extension == null || extension.isEmpty() || PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension)) {
-                    Uri fileUri = Uri.fromFile(new File(path));
-                    ImportTask importTask = new ImportTask(this);
-                    importTask.execute(fileUri);
-                } else {
-                    Toast.makeText(
-                            this,
-                            getString(R.string.error_fileload_extension)
-                                    + " " + PROJECT_IMPORT_EXTENSION,
-                            Toast.LENGTH_SHORT).show();
-                }
+            final String extension = FilenameUtils.getExtension(path);
+            if (extension.isEmpty() || PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension)) {
+                Uri fileUri = Uri.fromFile(new File(path));
+                ImportTask importTask = new ImportTask(this);
+                importTask.execute(fileUri);
+            } else {
+                Toast.makeText(
+                        this,
+                        getString(R.string.error_fileload_extension)
+                                + " " + PROJECT_IMPORT_EXTENSION,
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
