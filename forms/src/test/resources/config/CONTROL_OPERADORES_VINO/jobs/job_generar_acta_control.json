@@ -112,7 +112,6 @@
         "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
       }
     },
-
     {
       "name": "t9",
       "reader": {
@@ -213,14 +212,13 @@
         "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
       }
     },
-
     {
       "name": "t17",
       "reader": {
         "type": "sqlreader",
         "dbFile": "data/controloperadoresvino.sqlite",
         "sqlQuery": "select ifnull('Ejercicio/s de trazabilidad completa, que permite verificar: condiciones de envasado y cierre, indicaciones obligatorias y facultativas de etiquetado, correcto uso de contraetiquetas, condiciones de elaboración y envejecimiento, autocontrol. Para ello se ha seleccionado la/s partidas: ' || (select group_concat(partida)) || ' con número de contraetiqueta: ' || (select group_concat(num_contraetiqueta)), '') REQUISITO FROM trazabilidad WHERE trazabilidad.expediente_id='${params.expediente_id}' GROUP BY trazabilidad.expediente_id"
-       },
+      },
       "writer": {
         "type": "csvWriter",
         "outputFile": "trazabilidad.csv"
@@ -239,7 +237,6 @@
         "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
       }
     },
-
     {
       "name": "t19",
       "reader": {
@@ -277,7 +274,6 @@
         "outputFile": "hallazgos.csv"
       }
     },
-
     {
       "name": "t22",
       "processor": {
@@ -291,7 +287,6 @@
         "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
       }
     },
-
     {
       "name": "t23",
       "reader": {
@@ -304,7 +299,6 @@
         "outputFile": "tiposvino.csv"
       }
     },
-
     {
       "name": "t24",
       "processor": {
@@ -318,7 +312,6 @@
         "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
       }
     },
-
     {
       "name": "t25",
       "reader": {
