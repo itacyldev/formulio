@@ -34,7 +34,8 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            testCoverageEnabled true
+            enableUnitTestCoverage true
+            enableAndroidTestCoverage true
         }
         release {
             signingConfig signingConfigs.release
@@ -148,10 +149,6 @@ dependencies {
 // Excluir logback en los test unitarios
 configurations.testImplementation {
     exclude module: 'logback-android'
-}
-
-task sourceJar(type: Jar) {
-    classifier "source"
 }
 
 publishing {
