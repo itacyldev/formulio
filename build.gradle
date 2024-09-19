@@ -13,11 +13,12 @@ buildscript {
             dirs 'libs'
         }
         google()
-        jcenter()
+        mavenLocal()
+        mavenCentral()
         maven {
-            url 'https://maven.google.com'
+            name "ITACyL - thirdparty"
+            url "https://servicios.itacyl.es/nexus/repository/thirdparty/"
         }
-
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
@@ -105,8 +106,8 @@ ext {
     versionCode = 92
     versionName = '0.7.70'
     applicationId = "es.jcyl.ita.formic"
-    compileSdkVersion = 33
-    targetSdkVersion = 33
+    compileSdkVersion = 34
+    targetSdkVersion = 34
     minSdkVersion = 21
     buildToolsVersion = '33.0.0'
     encoding = "UTF-8"
