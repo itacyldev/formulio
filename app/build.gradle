@@ -45,7 +45,7 @@ android {
         release {
             signingConfig signingConfigs.release
             resValue "string", "app_name", "Formic"
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     'proguard-rules.txt'
         }
