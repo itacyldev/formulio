@@ -80,18 +80,29 @@ pipeline {
                  echo "Using RELEASE_TAG: ${RELEASE_TAG}"
                  withCredentials([usernamePassword(credentialsId: 'github_credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
                      echo "Using GitHub credentials with username ${GITHUB_USERNAME}"
+                     
                      sh '''
                      if ! git remote | grep github; then
                          git remote add github https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/itacyldev/formulio.git
                      fi
                      '''
+
                      sh "git fetch github"
                      sh "git checkout master"
 
-                     script {
-                         // Limpiar el área de trabajo de archivos ignorados
-                         sh 'git ls-files -z --ignored --exclude-standard --exclude-from=.gitignore_github | xargs -0 git rm --cached'
+                     // Eliminar archivos ignorados del índice de Git
+                     sh 'git ls-files -z --ignored --exclude-standard --exclude-from=.gitignore_github | xargs -0 git rm --cached'
 
+                     // Cometer los cambios para eliminar archivos ignorados
+                     sh '''
+                     if git diff --cached --quiet; then
+                         echo "No changes to commit"
+                     else
+                         git commit -m "Remove ignored files from Git index"
+                     fi
+                     '''
+
+                    script {
                          def existsTag = sh(script: "git ls-remote --tags github | grep ${RELEASE_TAG} | wc -l", returnStdout: true).trim()
                          if ("${existsTag}" == "1") {
                              echo "Eliminando etiqueta en GitHub: ${RELEASE_TAG}"
@@ -103,7 +114,8 @@ pipeline {
                          sh "git push github ${RELEASE_TAG}"
 
                          // Empujar la rama master a GitHub
-                         sh "git push github master"
+                         sh "git push github master --force"
+
                      }
                  }
              }

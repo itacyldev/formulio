@@ -13,14 +13,15 @@ buildscript {
             dirs 'libs'
         }
         google()
-        jcenter()
+        mavenLocal()
+        mavenCentral()
         maven {
-            url 'https://maven.google.com'
+            name "ITACyL - thirdparty"
+            url "https://servicios.itacyl.es/nexus/repository/thirdparty/"
         }
-
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'com.android.tools.build:gradle:8.5.2'
         classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.0'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1'
         classpath 'org.jacoco:org.jacoco.core:0.8.7'
@@ -102,20 +103,20 @@ allprojects {
 //}
 
 ext {
-    versionCode = 87
-    versionName = '0.7.65'
+    versionCode = 93
+    versionName = '0.7.71'
     applicationId = "es.jcyl.ita.formic"
-    compileSdkVersion = 33
-    targetSdkVersion = 33
+    compileSdkVersion = 34
+    targetSdkVersion = 34
     minSdkVersion = 21
-    buildToolsVersion = '33.0.0'
+    buildToolsVersion = '34.0.0'
     encoding = "UTF-8"
 
     espressoVersion = '3.5.1'
     androidTestVersion= '1.2.0'
 
     group = 'es.jcyl.ita.formic'
-    version = '0.7.65'
+    version = '0.7.71'
     artifactId = 'Formic'
 
     sharedDeps = [

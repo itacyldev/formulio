@@ -78,14 +78,13 @@ public class RawRequest extends Request<HttpEntity> {
         return body;
     }
 
-    private byte[] addPart(byte[] data, String boundary,  String contentName) throws IOException {
-        String start = //"Content-Type: "+ contentType + "\"--"+  boundary + "\"\r\n\r\n"+
-                "--"+  boundary + "\r\n"+
-                        "Content-Type: application/octet-stream; name="+contentName + "\r\n"+
-                        "Content-Transfer-Encoding: binary"+"\r\n"+
-                        "Content-Disposition: form-data; name=\"contentFile\"; filename=\"" + contentName + "\"\r\n\r\n";
+    private byte[] addPart(byte[] data, String boundary, String contentName) throws IOException {
+        String start = "--" + boundary + "\r\n" +
+                "Content-Disposition: form-data; name=\"contentFile\"; filename=\"" + contentName + "\"\r\n" +
+                "Content-Type: application/octet-stream\r\n\r\n";
 
         String end = "\r\n--" + boundary + "--";
+
         byte[] bytesFileContent = ArrayUtils.addAll(start.getBytes(), ArrayUtils.addAll(data, end.getBytes()));
         return bytesFileContent;
     }
