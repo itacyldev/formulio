@@ -1,8 +1,0 @@
-<repos>
-    <repo dbFile="dbTest.sqlite" dbTable="contacts" id="contacts" />
-    <repo dbFile="dbTest.sqlite" dbTable="assigned_agents" id="assignaments" />
-    <repo dbFile="ribera.sqlite" id="provRepo" dbTable="provincia" />
-    <repo dbFile="ribera.sqlite" id="muniRepo" dbTable="municipio" />
-    <repo dbFile="ribera.sqlite" id="bodegaRepo" dbTable="bodega" />
-    <repo dbFile="testsyn.sqlite" dbTable="data1" id="data1" />
-</repos>
