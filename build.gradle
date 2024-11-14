@@ -22,7 +22,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.5.2'
-        classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.0'
+        //classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.0'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1'
         classpath 'org.jacoco:org.jacoco.core:0.8.7'
     }
@@ -103,8 +103,8 @@ allprojects {
 //}
 
 ext {
-    versionCode = 98
-    versionName = '0.7.76'
+    versionCode = 99
+    versionName = '0.7.77'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 34
     targetSdkVersion = 34
@@ -116,7 +116,7 @@ ext {
     androidTestVersion= '1.2.0'
 
     group = 'es.jcyl.ita.formic'
-    version = '0.7.76'
+    version = '0.7.77'
     artifactId = 'Formic'
 
     sharedDeps = [
