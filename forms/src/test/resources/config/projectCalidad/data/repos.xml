@@ -1,5 +1,0 @@
-<repos>
-    <repo dbFile="calidad.sqlite" id="provRepo" dbTable="provincia" />
-    <repo dbFile="calidad.sqlite" id="muniRepo" dbTable="municipio" />
-    <repo dbFile="calidad.sqlite" id="actasControlRepo" dbTable="calidad" />
-</repos>
