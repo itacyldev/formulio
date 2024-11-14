@@ -44,8 +44,10 @@ public class AutoCompleteWidget extends InputWidget<UIAutoComplete, AutoComplete
     @Override
     public void load(RenderingEnv env) {
         // reload autocomplete adapter values
-        this.getInputView().load(env);
-        getInputView().setValue(null);
+        if (this.getInputView() != null) {
+            this.getInputView().load(env);
+            getInputView().setValue(null);
+        }
     }
 
 }

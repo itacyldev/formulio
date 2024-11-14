@@ -27,6 +27,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -93,15 +95,31 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     public void showImage(View view){
         ImageView imageView = (ImageView) view;
         Drawable drawable = imageView.getDrawable();
+
+        // Crear un AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
 
+        // Crear un nuevo ImageView para el diálogo
         ImageView alertImageView = new ImageView(this.getContext());
         alertImageView.setImageDrawable(drawable);
-        builder.setView(alertImageView);
-        builder.create().show();
 
+        // Ajustar las dimensiones del ImageView
+        alertImageView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,   // Anchura que ocupe todo el espacio
+                LinearLayout.LayoutParams.WRAP_CONTENT    // Altura que se ajuste a la imagen
+        ));
+        alertImageView.setAdjustViewBounds(true); // Permite que se ajuste sin deformarse
 
+        // (Opcional) Envolver en un ScrollView para permitir el desplazamiento si la imagen es muy grande
+        ScrollView scrollView = new ScrollView(this.getContext());
+        scrollView.addView(alertImageView);
 
+        // Configurar la vista del AlertDialog
+        builder.setView(scrollView);
+
+        // Mostrar el diálogo
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void setCameraButton(RenderingEnv env) {
