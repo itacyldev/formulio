@@ -1,5 +1,16 @@
 package jsqlite;
 
+import android.content.Context;
+import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Main class wrapping an SQLite database.
  */
@@ -13,6 +24,12 @@ public class Database {
 	protected long handle = 0;
 
 	/**
+	 * Internal bool to check if proj have benn initialized.
+	 */
+	private static boolean projInitialized = false;
+
+
+	/**
 	 * Internal last error code for exec() methods.
 	 */
 
@@ -20,7 +37,7 @@ public class Database {
 
 	/**
 	 * Open an SQLite database file.
-	 * 
+	 *
 	 * @param filename
 	 *            the name of the database file
 	 * @param mode
@@ -54,6 +71,66 @@ public class Database {
 			}
 		}
 	}
+
+	// Método nativo para configurar la ruta de PROJ
+	private static native void setProjDataPath(String path);
+
+
+	// Llamar ANTES de abrir cualquier base de datos
+	// Solo utilizado para versiones de 64 bits, para poder inicializar linkear proj con proj.db
+	public static void initializeProjData(Context context) {
+
+		if (projInitialized) return;
+
+		String[] appSupported = {"x86_64", "arm64-v8a"};
+		List<String> deviceAbis = Arrays.asList(android.os.Build.SUPPORTED_ABIS);
+
+		String chosenAbi = deviceAbis.stream()
+				.filter(abi -> Arrays.asList(appSupported).contains(abi))
+				.findFirst()
+				.orElse(null);
+
+		if (chosenAbi != null) {
+			try {
+				// Crear directorio para proj.db
+				File projDir = new File(context.getFilesDir(), "proj");
+				if (!projDir.exists()) {
+					projDir.mkdirs();
+				}
+
+				File projDb = new File(projDir, "proj.db");
+
+				// Copiar desde assets si no existe o está desactualizado
+				if (!projDb.exists()) {
+					Log.d("jsqlite", "Extrayendo proj.db desde assets...");
+
+					InputStream in = context.getAssets().open("proj.db");
+					OutputStream out = new FileOutputStream(projDb);
+
+					byte[] buffer = new byte[8192];
+					int read;
+					while ((read = in.read(buffer)) != -1) {
+						out.write(buffer, 0, read);
+					}
+
+					in.close();
+					out.close();
+
+					Log.d("jsqlite", "proj.db extraído correctamente");
+				}
+
+				// Configurar la ruta en el JNI
+				setProjDataPath(projDir.getAbsolutePath());
+				projInitialized = true;
+
+			} catch (IOException e) {
+				Log.e("jsqlite", "Error inicializando proj.db", e);
+			}
+		} else {
+			projInitialized = true; //Si no usamos una version de 64 bits, ignoramos esta funcion.
+		}
+	}
+
 
 	/**
 	 * Open an SQLite database file.
@@ -149,7 +226,7 @@ public class Database {
 	 */
 
 	private native void _open4(String filename, int mode, String vfs,
-			boolean ver2) throws jsqlite.Exception;
+							   boolean ver2) throws jsqlite.Exception;
 
 	/**
 	 * Open SQLite auxiliary database file for temporary tables.
@@ -669,7 +746,7 @@ public class Database {
 	}
 
 	private static native void _backup(Backup b, Database dest,
-                                       String destName, Database src, String srcName)
+									   String destName, Database src, String srcName)
 			throws jsqlite.Exception;
 
 	/**
@@ -800,7 +877,7 @@ public class Database {
 	 */
 
 	public Blob open_blob(String db, String table, String column, long row,
-			boolean rw) throws jsqlite.Exception {
+						  boolean rw) throws jsqlite.Exception {
 		synchronized (this) {
 			Blob blob = new Blob();
 			_open_blob(db, table, column, row, rw, blob);
@@ -871,7 +948,7 @@ public class Database {
 	 */
 
 	private native void _open_blob(String db, String table, String column,
-			long row, boolean rw, Blob blob) throws jsqlite.Exception;
+								   long row, boolean rw, Blob blob) throws jsqlite.Exception;
 
 	/**
 	 * Establish a progress callback method which gets called after N SQLite VM
@@ -1016,7 +1093,7 @@ public class Database {
 
 	/**
 	 * Make julian date value from java.lang.Date
-	 * 
+	 *
 	 * @param ms
 	 *            millisecond value of java.lang.Date
 	 * @return double

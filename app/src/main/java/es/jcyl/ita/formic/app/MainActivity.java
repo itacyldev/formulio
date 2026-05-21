@@ -663,6 +663,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     @Override
     protected void onResume() {
         super.onResume();
+        jsqlite.Database.initializeProjData(this);
         int id = this.getTitle().toString().startsWith(getString(R.string.projects_of)) ? R.id.action_projects : R.id.action_forms;
         checkNavigationButton(id);
     }
