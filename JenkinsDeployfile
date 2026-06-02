@@ -17,11 +17,11 @@ pipeline {
 
     stages {
         stage("Clone sources"){
-                    steps {
-                        echo "Clonando repositorio ${GIT_URL} rama ${params.BRANCH_TO_DEPLOY}"
-                        git branch: "${params.BRANCH_TO_DEPLOY}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
-                    }
-                }
+            steps {
+                echo "Clonando repositorio ${GIT_URL} rama ${params.BRANCH_TO_DEPLOY}"
+                git branch: "${params.BRANCH_TO_DEPLOY}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
+            }
+        }
 
         stage("Merge, tag and push to master") {
             steps {
@@ -74,54 +74,51 @@ pipeline {
            }
         }
 
-         stage("Push to GitHub") {
-             steps {
-                 echo "Pushing to GitHub"
-                 echo "Using RELEASE_TAG: ${RELEASE_TAG}"
-                 withCredentials([usernamePassword(credentialsId: 'github_credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
-                     echo "Using GitHub credentials with username ${GITHUB_USERNAME}"
-                     
-                     sh '''
-                     if ! git remote | grep github; then
-                         git remote add github https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/itacyldev/formulio.git
-                     fi
-                     '''
+        // --- STAGE CORREGIDO Y SEGURO ---
+        stage("Push to GitHub") {
+            steps {
+                echo "Pushing to GitHub"
+                echo "Using RELEASE_TAG: ${RELEASE_TAG}"
+                withCredentials([usernamePassword(credentialsId: 'github_credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
+                    echo "Using GitHub credentials with username ${GITHUB_USERNAME}"
 
-                     sh "git fetch github"
-                     sh "git checkout master"
+                    // Usamos comillas simples para evitar inyección/warnings de secretos en Groovy
+                    sh '''
+                    if ! git remote | grep github; then
+                        git remote add github https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/itacyldev/formulio.git
+                    fi
+                    '''
 
-                     // Eliminar archivos ignorados del índice de Git
-                     sh 'git ls-files -z --ignored --exclude-standard --exclude-from=.gitignore_github | xargs -0 git rm --cached'
+                    sh '''
+                    git fetch github
+                    git checkout master
 
-                     // Cometer los cambios para eliminar archivos ignorados
-                     sh '''
-                     if git diff --cached --quiet; then
-                         echo "No changes to commit"
-                     else
-                         git commit -m "Remove ignored files from Git index"
-                     fi
-                     '''
+                    git ls-files -z -c --ignored --exclude-standard --exclude-from=.gitignore_github | xargs -0 --no-run-if-empty git rm --cached
 
-                    script {
-                         def existsTag = sh(script: "git ls-remote --tags github | grep ${RELEASE_TAG} | wc -l", returnStdout: true).trim()
-                         if ("${existsTag}" == "1") {
-                             echo "Eliminando etiqueta en GitHub: ${RELEASE_TAG}"
-                             sh "git tag -d ${RELEASE_TAG}"
-                             sh "git push --delete github ${RELEASE_TAG}"
-                         }
+                    if git diff --cached --quiet; then
+                        echo "No changes to commit"
+                    else
+                        git commit -m "Remove ignored files from Git index"
+                    fi
+                    '''
 
-                         // Empujar la etiqueta específica a GitHub
-                         sh "git push github ${RELEASE_TAG}"
+                    // Pasamos la variable RELEASE_TAG de forma segura al entorno del script
+                    withEnv(["TARGET_TAG=${RELEASE_TAG}"]) {
+                        script {
+                            def existsTag = sh(script: 'git ls-remote --tags github | grep "${TARGET_TAG}" | wc -l', returnStdout: true).trim()
+                            if ("${existsTag}" == "1") {
+                                echo "Eliminando etiqueta en GitHub: ${RELEASE_TAG}"
+                                sh 'git tag -d "${TARGET_TAG}"'
+                                sh 'git push --delete github "${TARGET_TAG}"'
+                            }
 
-                         // Empujar la rama master a GitHub
-                         sh "git push github master --force"
-
-                     }
-                 }
-             }
-         }
-
-
+                            sh 'git push github "${TARGET_TAG}"'
+                            sh 'git push github master --force'
+                        }
+                    }
+                }
+            }
+        }
 
         stage('Setup Tools') {
             steps{
@@ -133,7 +130,7 @@ pipeline {
             }
         }
 
-         stage("Build Apk") {
+        stage("Build Apk") {
             steps{
                 script {
                     withCredentials([file(credentialsId: 'android_keystore', variable: 'KEYFILE')]) {
@@ -146,26 +143,14 @@ pipeline {
             }
         }
 
-
-         stage('Upload to Play Store') {
+        stage('Upload to Play Store') {
             steps{
-                // Archive the AABs so that they can be downloaded from Jenkins
                 archiveArtifacts '**/build/outputs/**/*.aab'
 
-                // Upload the AAB to Google Play
                 androidApkUpload googleCredentialsId: 'Google Play Key',
                 apkFilesPattern: '**/build/outputs/**/*.aab', trackName:
                 "${params.ENV_TYPE}",  rolloutPercentage: '100'
             }
         }
-
    }
-    //post {
-        //failure {
-        //    emailext body: '''${SCRIPT, template="groovy-html.template"}''',
-        //    recipientProviders: [culprits()],
-        //    subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-        //    mimeType: 'text/html'
-       // }
-    //}
 }
