@@ -29,11 +29,11 @@ import com.android.volley.toolbox.HttpResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class MockHttpStack extends BaseHttpStack {
 
