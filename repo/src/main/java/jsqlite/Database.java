@@ -77,7 +77,7 @@ public class Database {
 
 
 	// Llamar ANTES de abrir cualquier base de datos
-	// Solo utilizado para versiones de 64 bits, para poder inicializar linkear proj con proj.db
+	// Solo utilizado para versiones de 64 bits, para poder inicializar proj con proj.db
 	public static void initializeProjData(Context context) {
 
 		if (projInitialized) return;
