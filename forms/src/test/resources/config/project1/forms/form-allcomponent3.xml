@@ -67,20 +67,7 @@
 
                      <p value=""/>
                      <p backgroundColor="#26a69a" fontSize="16" fontColor="#FFFFFF" bold="true" value="Employment history"/>
-                     <datatable id="datatableTrabajo" repo="trabajoRepo" numVisibleRows="3">
-                         <column id="column_emplyer" headerText="Employer" filtering="true" ordering="true" value="${entity.emplyer}">
-                             <filter property="emplyer" matching="contains" valueExpression="${this.column_emplyer}"/>
-                             <order property="emplyer"/>
-                         </column>
-                         <column id="column_job" headerText="Job Title" filtering="true" ordering="true" value="${entity.job_title}">
-                             <filter property="job_title" matching="contains" valueExpression="${this.column_job}"/>
-                             <order property="job_title"/>
-                         </column>
-                         <column id="column_date" headerText="Start-End Date" filtering="true" ordering="true" value="${entity.start_date}-${entity.end_date}">
-                             <filter property="start_date" matching="contains" valueExpression="${this.column_date}"/>
-                             <order property="start_date"/>
-                         </column>
-                     </datatable>
+
 
                      <p value=""/>
                      <p backgroundColor="#26a69a" fontSize="16" fontColor="#FFFFFF" bold="true" value="Sign"/>
