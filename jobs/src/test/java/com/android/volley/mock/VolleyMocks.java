@@ -15,11 +15,8 @@ package com.android.volley.mock;
  * limitations under the License.
  */
 
-import static org.mockito.Mockito.mock;
-
 import com.android.volley.Header;
 import com.android.volley.Network;
-import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
 import com.android.volley.ResponseDelivery;
 import com.android.volley.toolbox.BasicNetwork;
@@ -27,9 +24,7 @@ import com.android.volley.toolbox.HttpResponse;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.NoCache;
 
-import org.codehaus.plexus.util.StringUtils;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
