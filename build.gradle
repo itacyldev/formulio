@@ -103,8 +103,8 @@ allprojects {
 //}
 
 ext {
-    versionCode = 99
-    versionName = '0.7.77'
+    versionCode = 100
+    versionName = '0.8.0'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 35
     targetSdkVersion = 35
