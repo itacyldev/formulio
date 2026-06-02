@@ -1,8 +1,0 @@
-<main id="formSwitcher" name="Switcher" repo="pruebaRepo">
-    <edit>
-        <form>
-            <switcher label="Switcher true: " value="true" />
-            <switcher label="Switcher false: " value="false" />
-        </form>
-    </edit>
-</main>

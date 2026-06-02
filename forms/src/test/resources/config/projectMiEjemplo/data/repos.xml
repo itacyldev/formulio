@@ -1,6 +1,0 @@
-<repos>
-    <repo dbFile="test.sqlite" id="collRepo" dbTable="collTabla" />
-    <repo dbFile="test.sqlite" id="provRepo" dbTable="testTabla">
-        <mapping fk="coll_tabla_id" property="auto" repo="collRepo"/>
-    </repo>
-</repos>

@@ -1,12 +1,0 @@
-
-U
-java:S1118":Add a private constructor to hide the implicit public one.(Œ×éêþÿÿÿÿ
-A
-java:S1172"&Remove these unused method parameters.(ôšºžýÿÿÿÿ
-V	java:S125"<This block of commented-out lines of code should be removed.(¬€Ö¯þÿÿÿÿ
-?
-java:S1481P")Remove this unused "last" local variable.(Ñ÷³¸
-Q
-java:S1068"6Remove this unused "NUM_ZIPPING_RETRYS" private field.(¦µÅüþÿÿÿÿ
-C
-java:S1604E"(Make this anonymous inner class a lambda(‡íÏ¸þÿÿÿÿ

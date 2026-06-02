@@ -1,6 +1,0 @@
-<main id="formForm" name="Form" repo="provinciaRepo">
-    <edit id="editForm">
-        <form properties="c_provincia_id, d_provincia">
-        </form>
-    </edit>
-</main>

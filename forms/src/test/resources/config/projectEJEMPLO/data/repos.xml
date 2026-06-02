@@ -1,9 +1,0 @@
-<repos>
-    <repo dbFile="calidad.sqlite" id="provRepo" dbTable="provincia" />
-    <repo dbFile="calidad.sqlite" id="muniRepo" dbTable="municipio" />
-    <repo dbFile="calidad.sqlite" id="auditoriaRepo" dbTable="auditoria">
-        <mapping fk="prov_id" property="provincia" repo="provRepo" updatable="false"/>
-        <mapping fk="provmuni_id" property="municipio" repo="muniRepo" updatable="false"/>
-    </repo>
-</repos>
-
