@@ -55,7 +55,22 @@ pipeline {
             }
             post {
                 success {
-                    jacoco(execPattern: '**/build/jacoco/*.exec')
+                    jacoco(
+                        execPattern: '**/build/jacoco/*.exec, **/build/outputs/unit_test_code_coverage/**/*.exec',
+                        classPattern: '**/build/intermediates/javac/debug/*/classes, **/build/classes/java/main',
+                        sourcePattern: '**/src/main/java',
+                        // Evitamos a toda costa que analice clases ya instrumentadas o autogeneradas por Android
+                        exclusionPattern: '''
+                            **/jacocoDebug/**,
+                            **/transformed/**,
+                            **/intermediates/classes/**,
+                            **/*$1*.*,
+                            **/R.class,
+                            **/R$*.class,
+                            **/BuildConfig.*,
+                            **/Manifest*.*
+                        '''
+                    )
                 }
             }
         }
